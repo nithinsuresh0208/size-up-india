@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Guess the real size of Indian monuments, rides and everyday things. A daily puzzle plus Karnataka, Tamil Nadu, Kerala and All India packs.">
+<meta property="og:title" content="Size Up India">
+<meta property="og:description" content="Guess the real size of Indian monuments, rides and everyday things. A daily puzzle plus Karnataka, Tamil Nadu, Kerala and All India packs.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2C46A4">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Size Up India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Hind:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one centred column. Home = daily card + pack grid; Game = measuring-sheet stage, controls, reveal. */
+:root{
+  --bg:#EDF0F6; --card:#FFFFFF; --ink:#151A2C; --muted:#586078; --line:#D3D8E5; --grid:#E7EBF3; --earth:#DCE1EC;
+  --ref:#2C46A4; --tgt:#D1362A; --gold:#A86F00; --good:#1C7F47; --on-tgt:#FFFFFF; --tint:#E3E8F6;
+  --f-display:"Rozha One",Georgia,serif;
+  --f-body:"Hind","Noto Sans",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F121B; --card:#171B27; --ink:#E7E9F2; --muted:#9BA2B9; --line:#2A3042; --grid:#1F2433; --earth:#202638;
+  --ref:#7F98F2; --tgt:#FF6B57; --gold:#F0B43C; --good:#4CC983; --on-tgt:#1A0D0B; --tint:#1C2236; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F121B; --card:#171B27; --ink:#E7E9F2; --muted:#9BA2B9; --line:#2A3042; --grid:#1F2433; --earth:#202638;
+  --ref:#7F98F2; --tgt:#FF6B57; --gold:#F0B43C; --good:#4CC983; --on-tgt:#1A0D0B; --tint:#1C2236; color-scheme:dark}
+
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+.wrap{max-width:780px;margin:0 auto;padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(2.3rem,7vw,3.3rem);line-height:1;margin:0;letter-spacing:-.01em}
+h1 .q{color:var(--tgt)}
+.lede{margin:-6px 0 0;color:var(--muted);max-width:60ch}
+.eyebrow{font:500 .75rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.view{display:flex;flex-direction:column;gap:18px}
+
+/* home */
+.daily{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
+@media (max-width:520px){.daily{grid-template-columns:1fr}}
+.daily h2{font:400 1.7rem/1.1 var(--f-display);margin:4px 0}
+.daily p{margin:0;color:var(--muted)}
+.daily .score{color:var(--good);font-weight:600}
+.sec{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:4px}
+.sec h2{font:400 1.6rem var(--f-display);margin:0}
+.sec span{color:var(--muted);font-size:.95rem}
+.packs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:540px){.packs{grid-template-columns:1fr}}
+.pack{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:2px;min-width:0;transition:border-color .15s,transform .15s}
+.pack:hover{border-color:var(--ref);transform:translateY(-2px)}
+.pack:focus-visible{outline:2px solid var(--ref);outline-offset:2px}
+.pack canvas{display:block;width:100%;height:92px;margin-bottom:10px;background:var(--tint);border-radius:9px}
+.pk-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pk-name{font:600 1.15rem var(--f-body)}
+.pk-n{font:500 .75rem var(--f-mono);color:var(--muted)}
+.pk-sub{color:var(--muted);font-size:.92rem}
+.pk-best{font:500 .8rem var(--f-mono);color:var(--muted);margin-top:6px}
+.pk-best.has{color:var(--good)}
+
+/* game */
+.gbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.gbar .eyebrow{flex:1 1 auto}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.stage-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots span{width:18px;height:8px;border-radius:4px;background:var(--grid);border:1px solid var(--line)}
+.dots span.now{border-color:var(--ink)}
+.dots span.t1{background:var(--good);border-color:var(--good)}
+.dots span.t2{background:var(--gold);border-color:var(--gold)}
+.dots span.t3{background:var(--tgt);border-color:var(--tgt)}
+#prompt{font:600 1.2rem/1.35 var(--f-body);margin:0;text-wrap:balance}
+#prompt b{font-weight:700}
+#prompt .r{color:var(--ref)} #prompt .t{color:var(--tgt)}
+.cvwrap{position:relative;width:100%;aspect-ratio:16/10;max-width:100%;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--grid)}
+@media (max-width:560px){.cvwrap{aspect-ratio:1/1}}
+#cv{display:block;width:100%;height:100%;touch-action:none;cursor:ns-resize}
+#cv.locked{cursor:default}
+#hint{position:absolute;right:10px;top:8px;font:500 .72rem var(--f-mono);color:var(--muted);letter-spacing:.04em;pointer-events:none}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.chips{grid-template-columns:1fr}}
+.chip{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.chip i{flex:none;width:12px;height:12px;border-radius:3px;margin-top:6px}
+.chip.ref i{background:var(--ref)} .chip.tgt i{background:var(--tgt)}
+.chip div{min-width:0}
+.chip strong{display:block;font-weight:600}
+.chip small{font:500 .82rem var(--f-mono);color:var(--muted)}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.step{flex:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 1.3rem var(--f-body);cursor:pointer}
+#size{flex:1 1 160px;min-width:0;accent-color:var(--tgt);height:28px}
+.primary{font:700 1rem var(--f-body);border:0;border-radius:10px;padding:10px 20px;background:var(--tgt);color:var(--on-tgt);cursor:pointer}
+.ghost{font:600 .95rem var(--f-body);border:1px solid var(--line);border-radius:10px;padding:9px 16px;background:transparent;color:var(--ink);cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--ref);outline-offset:2px}
+button:disabled{opacity:.45;cursor:default}
+.result{border-top:1px dashed var(--line);padding-top:14px;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:start}
+@media (max-width:480px){.result{grid-template-columns:1fr}}
+.pts{font-family:var(--f-display);font-size:3rem;line-height:1;font-variant-numeric:tabular-nums}
+.pts small{font:500 .8rem var(--f-mono);color:var(--muted);display:block;margin-top:4px}
+.pts.t1{color:var(--good)} .pts.t2{color:var(--gold)} .pts.t3{color:var(--tgt)}
+.res-body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.verdict{font-weight:700;font-size:1.1rem}
+.nums{font:500 .9rem var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.fact{margin:0;max-width:62ch}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.result .actions{grid-column:1/-1;margin-top:6px}
+.summary{border-top:1px dashed var(--line);padding-top:14px;display:flex;flex-direction:column;gap:12px}
+.total{font-family:var(--f-display);font-size:2.6rem;line-height:1}
+.total span{font:500 .9rem var(--f-mono);color:var(--muted)}
+.within{font-weight:600}
+.rows{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none}
+.rows li{display:grid;grid-template-columns:1fr auto;gap:10px;padding:6px 0;border-bottom:1px solid var(--grid)}
+.rows li span{min-width:0}
+.rows b{font:500 .95rem var(--f-mono);font-variant-numeric:tabular-nums}
+.stats{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font:500 .85rem var(--f-mono)}
+#shareBox{width:100%;font:500 .9rem var(--f-mono);border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg);color:var(--ink);resize:none}
+.toast{font:500 .85rem var(--f-mono);color:var(--good)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:620px){.how{grid-template-columns:1fr}}
+.how div{min-width:0}
+.how h3{font:600 1rem var(--f-body);margin:0 0 2px}
+.how p{margin:0;color:var(--muted);font-size:.95rem}
+.how .n{font:500 .75rem var(--f-mono);color:var(--tgt);letter-spacing:.06em}
+.note{color:var(--muted);font-size:.85rem;margin:0;max-width:70ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Size Up <span class="q">India</span></h1>
+  </header>
+
+  <section class="view" id="home" aria-label="Home">
+    <p class="lede">Guess the real size of Indian monuments, rides and everyday things.</p>
+    <div class="daily">
+      <div>
+        <span class="eyebrow" id="dcLabel">Daily #1</span>
+        <h2>Today’s five</h2>
+        <p id="dcStatus">5 rounds, the same for everyone. A new puzzle every midnight.</p>
+      </div>
+      <button class="primary" id="dcPlay">Play today’s puzzle</button>
+    </div>
+    <div class="sec"><h2>Packs</h2><span>10 rounds each · score out of 1000</span></div>
+    <div class="packs" id="packs"></div>
+    <section class="how" aria-label="How to play">
+      <div><span class="n">STEP 1</span><h3>Look at the blue one</h3><p>Its real size is shown below it. Use it as your ruler.</p></div>
+      <div><span class="n">STEP 2</span><h3>Resize the red one</h3><p>Drag on the picture or use the slider until the sizes look right.</p></div>
+      <div><span class="n">STEP 3</span><h3>Lock it in</h3><p>Within 6% of the real size scores 100. Half or double scores about 45.</p></div>
+    </section>
+    <p class="note">Sizes come from official and widely published figures. Where things vary, like animals or boats, the fact card says which number we use.</p>
+  </section>
+
+  <section class="view" id="game" aria-label="Game" hidden>
+    <div class="gbar">
+      <button class="ghost" id="back">← Home</button>
+      <span class="eyebrow" id="roundLabel"></span>
+    </div>
+    <div class="stage">
+      <div class="stage-head">
+        <h2 id="prompt">Loading…</h2>
+      </div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="cvwrap" id="cvwrap">
+        <canvas id="cv" role="img" aria-label="Size comparison"></canvas>
+        <span id="hint">DRAG UP / DOWN</span>
+      </div>
+      <div class="chips">
+        <div class="chip ref"><i></i><div><strong id="refName"></strong><small id="refSize"></small></div></div>
+        <div class="chip tgt"><i></i><div><strong id="tgtName"></strong><small id="tgtSize"></small></div></div>
+      </div>
+      <div class="controls" id="controls">
+        <button class="step" id="minus" aria-label="Make smaller">−</button>
+        <input type="range" id="size" min="0" max="1000" step="1" value="500" aria-label="Size of the red shape">
+        <button class="step" id="plus" aria-label="Make bigger">+</button>
+        <button class="primary" id="lock">Lock it in</button>
+      </div>
+      <div class="result" id="result" hidden aria-live="polite">
+        <div class="pts" id="pts">0<small>of 100</small></div>
+        <div class="res-body">
+          <span class="verdict" id="verdict"></span>
+          <span class="nums" id="nums"></span>
+          <p class="fact" id="fact"></p>
+        </div>
+        <div class="actions"><button class="primary" id="next">Next round</button></div>
+      </div>
+      <div class="summary" id="summary" hidden aria-live="polite">
+        <span class="eyebrow" id="sumLabel"></span>
+        <div class="total" id="total"></div>
+        <span class="within" id="within"></span>
+        <ul class="rows" id="rows"></ul>
+        <div class="stats" id="stats"></div>
+        <div class="actions">
+          <button class="primary" id="copy">Copy result</button>
+          <button class="ghost" id="again">Play again</button>
+          <button class="ghost" id="home2">Home</button>
+          <span class="toast" id="toast" hidden>Copied</span>
+        </div>
+        <textarea id="shareBox" rows="3" readonly hidden aria-label="Result to share"></textarea>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+/*SHAPES*/
+/* ---------- path helpers (SVG path strings, y grows downward, ground = bottom of viewBox) ---------- */
+const R=(x,y,w,h)=>`M${x},${y}h${w}v${h}h${-w}Z`;
+const RR=(x,y,w,h,r)=>`M${x+r},${y}h${w-2*r}a${r},${r} 0 0 1 ${r},${r}v${h-2*r}a${r},${r} 0 0 1 ${-r},${r}h${-(w-2*r)}a${r},${r} 0 0 1 ${-r},${-r}v${-(h-2*r)}a${r},${r} 0 0 1 ${r},${-r}Z`;
+const CI=(cx,cy,r)=>`M${cx-r},${cy}a${r},${r} 0 1 0 ${2*r},0a${r},${r} 0 1 0 ${-2*r},0Z`;
+const EL=(cx,cy,rx,ry)=>`M${cx-rx},${cy}a${rx},${ry} 0 1 0 ${2*rx},0a${rx},${ry} 0 1 0 ${-2*rx},0Z`;
+const PA=(x,yb,w,h)=>{const t=yb-h;return `M${x},${yb}V${t+w*0.55}C${x},${t+w*0.2} ${x+w*0.35},${t+w*0.08} ${x+w/2},${t}C${x+w*0.65},${t+w*0.08} ${x+w},${t+w*0.2} ${x+w},${t+w*0.55}V${yb}Z`;};
+const RA=(x,yb,w,h)=>`M${x},${yb}V${yb-h+w/2}A${w/2},${w/2} 0 0 1 ${x+w},${yb-h+w/2}V${yb}Z`;
+const ON=(cx,yb,w,h)=>`M${cx-w/2},${yb}C${cx-w*0.72},${yb-h*0.35} ${cx-w*0.45},${yb-h*0.7} ${cx},${yb-h}C${cx+w*0.45},${yb-h*0.7} ${cx+w*0.72},${yb-h*0.35} ${cx+w/2},${yb}Z`;
+const DO=(cx,yb,w,h)=>`M${cx-w/2},${yb}C${cx-w/2},${yb-h*1.33} ${cx+w/2},${yb-h*1.33} ${cx+w/2},${yb}Z`;
+const L=(...p)=>'M'+p.reduce((s,v,i)=>s+(i%2?','+v:(i?' L':'')+v),'');
+const PG=(...p)=>L(...p)+'Z';
+/* ops: F fill · X cut through · O lighter cut (detail) · S stroke · OS lighter stroke · XS cut stroke · T lighter text */
+const F=d=>['f',d],X=d=>['x',d],O=d=>['o',d],S=(d,w)=>['s',d,w],OS=(d,w)=>['os',d,w],XS=(d,w)=>['xs',d,w],T=(s,x,y,z,a='c')=>['t',s,x,y,z,a];
+
+function paintShape(c,it,W,H,color){
+  const [vw,vh]=it.vb;c.save();c.setTransform(W/vw,0,0,H/vh,0,0);c.fillStyle=color;c.strokeStyle=color;c.lineCap='round';c.lineJoin='round';
+  for(const op of it.ops){const k=op[0];
+    if(k==='push'){c.save();c.translate(op[1],op[2]);c.scale(op[3],op[4]);continue;}
+    if(k==='pop'){c.restore();continue;}
+    if(k==='t'){c.globalCompositeOperation='destination-out';c.globalAlpha=0.55;c.font='700 '+op[4]+'px Hind, "Noto Sans", Arial, sans-serif';c.textAlign=op[5]==='l'?'left':op[5]==='r'?'right':'center';c.textBaseline='alphabetic';c.fillText(op[1],op[2],op[3]);continue;}
+    const p=op.p||(op.p=new Path2D(op[1]));
+    const soft=k==='o'||k==='os',cut=soft||k==='x'||k==='xs',stroke=k==='s'||k==='os'||k==='xs';
+    c.globalCompositeOperation=cut?'destination-out':'source-over';c.globalAlpha=soft?0.55:1;
+    if(stroke){c.lineWidth=op[2];c.stroke(p);}else c.fill(p);
+  }
+  c.restore();
+}
+
+/* ---------- shapes ---------- */
+const SH={};
+SH.unity=[ // Sardar Patel: bald head, shawl over shoulders and arms, knee-length kurta, dhoti with the open V between the legs, on a stepped base
+  ['push',2,0,1,1],
+  F(EL(30,10,6.6,9.6)),F(R(27,17,6,6)),
+  F('M24,21 C17,21.5 11,24.5 9,30.5 C7.6,35 7.4,42 7.6,50 L6.6,100 C6.4,105 7.4,109.5 9.6,110.5 C11.6,111.2 12.6,108.6 12.6,105 L12.8,72 L14,72.5 L14.4,124 L45.6,124 L46,72.5 L47.2,72 L47.4,105 C47.4,108.6 48.4,111.2 50.4,110.5 C52.6,109.5 53.6,105 53.4,100 L52.4,50 C52.6,42 52.4,35 51,30.5 C49,24.5 43,21.5 36,21 Z'),
+  F('M14.4,122 L30,122 L30,142 L22.5,191 L6,191 C8,170 11,145 14.4,122 Z'),F('M30,122 L45.6,122 C49,145 52,170 54,191 L37.5,191 L30,142 Z'),
+  F('M3,200 C3,195.5 6,192.5 10,191.5 L22,191 L23,200 Z'),F('M37,200 L38,191 L50,191.5 C54,192.5 57,195.5 57,200 Z'),
+  OS('M21,24 C24,40 28,56 37,72 C39.5,77 40.5,90 40,104',1.3),OS('M39,24 C37,34 36,44 37,56',0.8),OS(L(14.6,121,45.4,121),1.2),
+  OS(L(18,127,12,188),0.7),OS(L(24,127,19.5,188),0.7),OS(L(36,127,40.5,188),0.7),OS(L(42,127,48,188),0.7),
+  ['pop'],
+  F(R(10,200,44,3.2)),F(R(7,203,50,15)),F(R(3,218,58,20)),F(R(0,238,64,25)),
+  OS(L(7,210.5,57,210.5),0.8),OS(L(3,228,61,228),0.8)
+].concat([...Array(9)].map((_,i)=>O(R(5+i*6.5,243,3,16))));
+SH.qutub=(()=>{const o=[],w=y=>6+14*(y-4)/96,x0=y=>(20-w(y))/2;
+  o.push(F(PG(0,100,20,100,13,4,7,4)));
+  const bands=[71,49,31,16];
+  bands.forEach(y=>{o.push(F(PG(x0(y)-1.4,y+0.4,x0(y)+w(y)+1.4,y+0.4,x0(y)+w(y),y+2.6,x0(y),y+2.6)),F(R(x0(y)-1.5,y-1.1,w(y)+3,1.6)));});
+  const st=[100,71,49,31,16,4];
+  for(let s=0;s<5;s++){const yb=st[s]-1,yt=st[s+1]+3;for(const f of [0.2,0.4,0.6,0.8])o.push(OS(L(x0(yb)+w(yb)*f,yb,x0(yt)+w(yt)*f,yt),0.28));
+    const ym=(yb+yt)/2;o.push(OS(L(x0(ym),ym,x0(ym)+w(ym),ym),0.5));}
+  o.push(F(R(6.5,3,7,1.2)),F(R(8,0.8,4,2.4)),O(RA(9.2,3.2,1.6,2)));return o;})();
+SH.taj=(()=>{const o=[F(R(0,91,130,9))];
+  for(let i=0;i<13;i++)o.push(O(RA(3.5+i*9.6,99,5,5.5)));
+  for(const cx of [6,124]){o.push(F(PG(cx-3.6,91,cx+3.6,91,cx+2.6,46,cx-2.6,46)));
+    for(const y of [78,64,50]){o.push(F(R(cx-4.6,y-1,9.2,1.6)),F(PG(cx-4.2,y+0.6,cx+4.2,y+0.6,cx+3,y+2.2,cx-3,y+2.2)));}
+    o.push(F(R(cx-4.4,44,8.8,2)),F(R(cx-3.6,39,1,5)),F(R(cx+2.6,39,1,5)),F(R(cx-0.5,39,1,5)),F(R(cx-4.2,38.6,8.4,1)),F(DO(cx,38.8,7.6,4.2)),F(R(cx-0.3,32,0.6,3.5)));}
+  o.push(F(R(30,58,70,33)),F(R(29,57,72,1.6)));
+  for(const x of [33,41,85,93]){o.push(O(PA(x,90,6,13)),O(PA(x,74,6,11)));}
+  o.push(OS(L(38,59,38,90),0.5),OS(L(92,59,92,90),0.5));
+  o.push(F(R(49,51,32,40)),O(PA(54,91,22,34)),O(RA(60,91,10,13)));
+  o.push(F(R(48.4,46,1.4,6)),F(R(80.2,46,1.4,6)),F(DO(49.1,46,2,1.6)),F(DO(80.9,46,2,1.6)));
+  for(const cx of [39,91]){o.push(F(R(cx-6,49,12,1.5)),F(R(cx-5,50,1.2,7.5)),F(R(cx+3.8,50,1.2,7.5)),F(R(cx-0.6,50,1.2,7.5)),F(DO(cx,49.2,11,5.5)),F(R(cx-0.3,40.5,0.6,3.5)));}
+  o.push(F(R(51,43,28,9)),F(ON(65,44,30,34)),F(EL(65,10.5,2.6,1.4)),F(R(64.4,0,1.2,10)),F(EL(65,6,1.4,1.1)),F(EL(65,3.2,1,0.9)));
+  return o;})();
+SH.brihad=(()=>{const o=[F(R(1,95,48,5)),F(R(3,72,44,24)),F(R(1,84,48,2)),F(R(1,70,48,3))];
+  for(const x of [7,13,19,31,37,43])o.push(OS(L(x,75,x,93),0.6));
+  o.push(O(RA(22,93,6,15)),O(RA(22,82,6,8)));
+  for(let i=0;i<13;i++){const yb=70-i*3.9,w=42-i*2.25,x=25-w/2;
+    o.push(F(R(x,yb-3.9,w,3.9)),F(R(x-0.8,yb-2.4,2.2,2)),F(R(x+w-1.4,yb-2.4,2.2,2)),OS(L(x+1,yb-0.5,x+w-1,yb-0.5),0.5),O(RA(23.6,yb-0.7,2.8,2.6)));}
+  o.push(F(R(18.5,15,13,5.5)),F('M13.5,16 C12.5,8 18.5,3.6 25,3.6 C31.5,3.6 37.5,8 36.5,16 Z'),F(R(13,15,24,1.6)));
+  o.push(F(EL(13.6,13,1.3,2.2)),F(EL(36.4,13,1.3,2.2)),F(EL(25,2.6,1.6,1.4)),F(R(24.6,0,0.8,4)));
+  o.push(OS(L(16,10,34,10),0.4));return o;})();
+SH.charminar=(()=>{const o=[F(R(4,44,37,56))];
+  o.push(X(PA(10,100,25,42)));
+  o.push(OS('M10,74 C10,66 18,62 22.5,58 C27,62 35,66 35,74',0.6));
+  o.push(F(R(1,51,43,1.6)),F(PG(2,52.6,43,52.6,41,54.2,4,54.2)));
+  for(let i=0;i<6;i++)o.push(O(PA(7.6+i*5.2,50.5,3.4,5.5)));
+  o.push(F(R(4,40,37,4)));for(let i=0;i<10;i++)o.push(O(PA(6+i*3.3,43.5,2,3)));
+  o.push(F(R(3,39,39,1.2)));
+  for(const cx of [3.6,41.4]){o.push(F(PG(cx-3.6,100,cx+3.6,100,cx+2.6,14,cx-2.6,14)));
+    for(const y of [52,33,21]){o.push(F(R(cx-4.3,y-1,8.6,1.8)),F(PG(cx-3.8,y+0.8,cx+3.8,y+0.8,cx+2.6,y+2.6,cx-2.6,y+2.6)));}
+    o.push(O(PA(cx-1,31,2,5)),O(PA(cx-1,47,2,5)),O(PA(cx-1,19,2,4)),F(R(cx-2.4,10.2,4.8,4)),O(PA(cx-0.9,14,1.8,3)),F(R(cx-3,9.6,6,1)),F(ON(cx,10,5.6,7)),F(R(cx-0.25,0,0.5,3.6)));
+    for(const y of [64,76,88])o.push(OS(L(cx-3.2,y,cx+3.2,y),0.4));}
+  return o;})();
+SH.victoria=(()=>{const o=[F(R(0,93,185,7)),F(R(70,89.5,45,3.6)),F(R(6,62,173,31)),F(R(5,61,175,1.6))];
+  for(let i=0;i<4;i++){const xl=34+i*7,xr=124+i*7;o.push(O(RA(xl,89,4.6,12)),O(RA(xr,89,4.6,12)),O(RA(xl,74,4.6,9)),O(RA(xr,74,4.6,9)));}
+  for(const [x,cx] of [[6,18],[155,167]]){o.push(F(R(x,50,24,43)),F(R(x-1,49,26,1.6)),O(RA(x+5,89,5,14)),O(RA(x+14,89,5,14)),O(RA(x+9.5,70,5,10)),F(R(cx-8,44,16,5.4)),F(DO(cx,44.2,16,9)),F(R(cx-0.4,30,0.8,5.4)),F(EL(cx,34.6,1.2,1)));}
+  o.push(F(R(58,52,69,41)),F(R(57,51,71,1.6)),O(R(75,60,35,30)));
+  for(let i=0;i<6;i++)o.push(F(R(75.5+i*6.6,60,2,30)));
+  o.push(F(R(74,58,37,2.4)),F(PG(70,52,92.5,44.5,115,52)),F(R(66,46.5,53,6)));
+  o.push(F(R(75,37,35,10)),F(R(74,46,37,1.4)));for(let i=0;i<7;i++)o.push(O(RA(77.2+i*4.5,45,2.4,6)));
+  o.push(F(DO(92.5,37.5,36,22)),F(R(88.5,11.5,8,5)),F(DO(92.5,11.6,8,3)),F(CI(92.5,8,1.4)));
+  o.push(F('M91.6,7 L93.4,7 L93.1,2.2 L91.9,2.2 Z'),F(CI(92.5,1.2,0.9)),F('M92.5,3.2 L88.4,0.8 L89.6,4.2 Z'),F('M92.5,3.2 L96.6,0.8 L95.4,4.2 Z'));
+  return o;})();
+SH.mysore=(()=>{ // arcaded two-storey front, raised central portico, stepped central tower with big onion dome, flanking dome towers, end bastions
+  const o=[F(R(0,70,170,30)),F(R(0,68.8,170,1.6))];
+  for(let i=0;i<11;i++)o.push(O(PA(3.5+i*15.2,98,9,22)));
+  o.push(F(R(4,52,162,17.5)),F(R(2,50.4,166,1.8)));
+  for(let i=0;i<10;i++){const x=8+i*15.8;if(x>48&&x<114)continue;o.push(O(PA(x,68,8,13)));}
+  for(let i=0;i<40;i++)o.push(F(R(3+i*4.15,48.2,1.2,2.4)));
+  o.push(F(R(56,38,58,32)),F(R(54,36.6,62,1.8)),O(PA(71,69.6,28,29)),O(PA(59.5,68,8,16)),O(PA(102.5,68,8,16)));
+  o.push(F(R(63,28,44,9.6)),F(R(61,26.8,48,1.6)));for(const x of [67,79,91])o.push(O(PA(x,36,9,7.5)));
+  o.push(F(R(68,19.6,34,8)),F(R(66.5,18.6,37,1.4)));for(const x of [72,81.5,91])o.push(O(PA(x,26.6,7,6)));
+  for(const cx of [62,108]){o.push(F(R(cx-1.3,22.6,2.6,5)),F(DO(cx,22.8,3.4,2.8)),F(R(cx-0.2,18.6,0.4,1.8)));}
+  o.push(F(R(75,16.2,20,3)),F('M75,17 C68.5,13 71,7.4 78.6,4.8 C81.8,3.8 84,2.8 85,1.4 C86,2.8 88.2,3.8 91.4,4.8 C99,7.4 101.5,13 95,17 Z'),F(R(84.6,0,0.8,3)),F(EL(85,1.6,0.9,0.7)),OS(L(73.5,12.6,96.5,12.6),0.5));
+  for(const cx of [34,136]){o.push(F(R(cx-7,30,14,21)),O(PA(cx-2.5,47,5,9)),O(PA(cx-2,37,4,6)),F(R(cx-8,29.4,16,1.4)),F(ON(cx,30,13,11)),F(R(cx-0.35,15,0.7,4.5)));}
+  for(const cx of [7,163]){o.push(F(R(cx-6,40,12,11)),O(PA(cx-2,49,4,6)),F(R(cx-7,39.4,14,1.2)),F(DO(cx,39.8,11,6)),F(R(cx-0.3,31.5,0.6,3)));}
+  for(const cx of [20,50,120,150])o.push(F(R(cx-2.4,44.6,4.8,4)),F(DO(cx,44.8,5,3)),F(R(cx-0.2,40.2,0.4,1.8)));
+  return o;})();
+SH.lvm3=(()=>{const o=[];
+  for(const cx of [3.8,22.2]){o.push(F(R(cx-3.6,36,7.2,58)),F(`M${cx-3.6},36 C${cx-3.6},29 ${cx-1.5},26 ${cx},25 C${cx+1.5},26 ${cx+3.6},29 ${cx+3.6},36 Z`),F(PG(cx-2.6,94,cx+2.6,94,cx+3.4,100,cx-3.4,100)));
+    for(const y of [46,60,74,88])o.push(OS(L(cx-3.6,y,cx+3.6,y),0.45));}
+  o.push(F(R(8.6,24,8.8,72)),F(PG(10,95,16,95,17,100,9,100)),F(R(7.2,40,1.8,1.2)),F(R(17,40,1.8,1.2)),F(R(7.2,88,1.8,1.2)),F(R(17,88,1.8,1.2)));
+  o.push(OS(L(8.6,30,17.4,30),0.45),OS(L(8.6,70,17.4,70),0.45));
+  o.push(F(PG(6.6,22,19.4,22,17.4,26,8.6,26)),F(R(6.6,8,12.8,14.2)),F('M6.6,8.2 C6.6,3 10,0.5 13,0 C16,0.5 19.4,3 19.4,8.2 Z'),T('ISRO',13,17,3.6));
+  return o;})();
+SH.indiagate=[ // long-side view: tall round arch, INDIA frieze, heavy cornice, stepped stages, shallow dome
+  F(R(0,97,64,3)),F(R(2,95,60,2.2)),
+  F(R(4,32,56,63)),X(RA(21,95,22,49)),
+  OS('M19.4,95 L19.4,57 A12.6,12.6 0 0 1 44.6,57 L44.6,95',0.9),F(PG(30.4,44.6,33.6,44.6,34.2,48.6,29.8,48.6)),
+  F(R(3,71.4,18.4,1.8)),F(R(42.6,71.4,18.4,1.8)),OS(L(4,57,19.4,57),0.5),OS(L(44.6,57,60,57),0.5),
+  O(R(9,43,7,11)),O(R(48,43,7,11)),O(R(9,78,7,13)),O(R(48,78,7,13)),
+  O(R(18,34,28,6)),T('INDIA',32,39.4,5.2),T('MCMXIV',12.5,36.6,2.5),T('MCMXIX',51.5,36.6,2.5),
+  F(R(2,29.4,60,2.8)),OS(L(2,30.8,62,30.8),0.4),
+  F(R(7.5,21.5,49,8)),O(R(10,23.5,44,4)),
+  F('M13,21.6 L13,17.5 C13,16 14,15 15.5,15 L48.5,15 C50,15 51,16 51,17.5 L51,21.6 Z'),
+  F('M18,15.1 L18,11.6 C18,10.4 19,9.6 20.2,9.6 L43.8,9.6 C45,9.6 46,10.4 46,11.6 L46,15.1 Z'),
+  F(R(18.4,8.6,27.2,1.4)),F('M20,9 C20,3 25.5,0 32,0 C38.5,0 44,3 44,9 Z'),OS(L(21,6.2,43,6.2),0.4)
+];
+SH.lotus=(()=>{const o=[F(R(0,92,200,8)),F(R(8,88,184,4.5))],B=88;
+  const pet=(cx,w,h,lean)=>{const l=cx-w/2,r=cx+w/2,tx=cx+lean,ty=B-h;return `M${l},${B} C${l-w*0.12},${B-h*0.5} ${tx-w*0.22},${B-h*0.9} ${tx},${ty} C${tx+w*0.22},${B-h*0.9} ${r+w*0.12},${B-h*0.5} ${r},${B} Z`;};
+  for(const p of [[100,30,88,0],[82,32,74,-5],[118,32,74,5],[64,34,58,-9],[136,34,58,9],[44,34,42,-12],[156,34,42,12],[24,34,26,-17],[176,34,26,17],[100,46,32,0]]){const d=pet(...p);o.push(XS(d,1.6),F(d));}
+  o.push(OS(L(10,90.2,190,90.2),0.6));return o;})();
+SH.thiru=[
+  F(R(0,96,36,4)),F(R(2,74,32,22)),F(R(0,71,36,3)),F(R(5,69,26,2.2)),
+  O(R(6,77,3,17)),O(R(13,77,3,17)),O(R(20,77,3,17)),O(R(27,77,3,17)),
+  F(EL(18,3,2.4,3)),F(EL(18,9.5,4,4.8)),F('M14.3,10 C14,16 16.5,19.5 18,20.5 C19.5,19.5 22,16 21.7,10 Z'),F(R(16.5,13,3,6)),
+  F('M11,21 C13,19.5 23,19.5 25,21 L26.5,24 L27,44 L28.5,64 L7.5,64 L9,44 L9.5,24 Z'),
+  F('M10.5,21.5 C7,23 5.5,27 5,31 L4.5,35 C5,37 8,37 8.6,35 L9.5,28 Z'),
+  F('M4.6,34 C4.6,30 5.5,25 6,22 L8.6,22 L8.4,26 L8.6,35 Z'),
+  F('M5.6,22.5 L5.8,17.5 C6.2,16.8 6.8,17 6.9,17.6 L7.1,16.6 C7.4,15.8 8.1,16 8.2,16.8 L8.5,22.5 Z'),
+  F('M25,21 C28.5,22.5 30,27 30.2,32 L30.4,42 C30.2,44 27.6,44 27.4,42 L27.2,30 Z'),F(R(24.5,41,7,2.6)),
+  OS('M14,26 C16,34 17,44 16,62',0.5),OS('M22,26 C21,36 22,48 24,62',0.5),OS(L(8,60,28,60),0.5),
+  F('M10,64 L16.5,64 L16.5,69 L9,69 Z'),F('M19.5,64 L26,64 L27,69 L19.5,69 Z')
+];
+SH.gateway=(()=>{const o=[F(R(0,96,105,4)),F(R(22,22,61,74))];
+  o.push(X(PA(36,96,33,56)),OS('M36,58 C36,49 47,44 52.5,40 C58,44 69,49 69,58',0.7));
+  o.push(O(R(30,27,45,7)));for(let i=0;i<9;i++)o.push(F(R(32+i*5,27,1,7)));
+  for(let i=0;i<11;i++)o.push(F(R(23.5+i*5.6,18,3,4.4)));
+  for(const cx of [21,84]){o.push(F(R(cx-7,14,14,82)),O(PA(cx-2.5,90,5,14)),O(PA(cx-2.5,70,5,12)),O(PA(cx-2.5,50,5,10)),O(PA(cx-2,32,4,8)),
+    F(R(cx-8,56,16,1.6)),F(R(cx-8,36,16,1.6)),F(R(cx-8,13,16,1.6)),F(R(cx-6,9.6,12,4)),F(DO(cx,9.8,11,6)),F(R(cx-0.4,0,0.8,5)));}
+  for(const x of [0,91]){o.push(F(R(x,48,14,48)),O(PA(x+3,90,8,18)),O(PA(x+3,66,8,12)),F(R(x-0.5,47,15,1.5)));}
+  o.push(F(DO(5,47.2,7,4)),F(DO(100,47.2,7,4)));return o;})();
+SH.gomm=(()=>{ // Bahubali in kayotsarga: curled hair, long ears, rounded broad shoulders, arms hanging to the knees, creepers, anthills with cobras, lotus base
+  const o=[F(EL(25,9,5.8,8))];
+  for(let i=0;i<=8;i++){const a=Math.PI*(1.06+i*0.11);o.push(F(CI(25+5.8*Math.cos(a),9+8*Math.sin(a),1.3)));}
+  o.push(F(EL(19,12.6,1.2,5)),F(EL(31,12.6,1.2,5)),F(R(22,15.5,6,5)));
+  for(const [x,y] of [[22.2,4.4],[25,3.4],[27.8,4.4],[20.8,6.8],[29.2,6.8],[23.6,6.2],[26.4,6.2]])o.push(O(CI(x,y,0.65)));
+  o.push(F('M10,21.5 C15,19.4 20,18.6 25,18.6 C30,18.6 35,19.4 40,21.5 C43.5,23 44.6,26 44,29.5 L40.5,35 L36.2,45 L34.4,52 L35.4,60 L14.6,60 L15.6,52 L13.8,45 L9.5,35 L6,29.5 C5.4,26 6.5,23 10,21.5 Z'));
+  const arm='M6.2,24 C4,27 3.4,32 3.5,38 L3.9,63 C3.9,66.5 4.4,69.5 6,70.4 C7.6,71 8.7,69 8.6,66 L8.8,40 L9.5,34.5 Z';
+  const leaf=(x,y,d)=>`M${x},${y} q${-2.4*d},-1.8 ${-3.4*d},0.3 q${1.8*d},1.7 ${3.4*d},-0.3 Z`;
+  const side=[F(arm),F(leaf(4,46,1)),F(leaf(4.1,55,1)),F(leaf(4.2,63,1)),F(CI(3,31,1)),F(CI(2.4,33.4,0.9)),F(CI(3.6,29,0.8)),
+    OS('M6,67 C4.6,62 7.6,58 5,53 C7.6,49 4.6,45 6.6,40 C5,37 6.6,34 5.4,31',0.5),
+    F('M14.6,59 L24.6,59 L24.3,72 L23.4,92.5 L18.6,92.5 L17,80 L15.8,72 Z'),F(leaf(15.8,70,1)),F(leaf(16.6,79,1)),F(leaf(17.6,87,1)),
+    OS('M19,92 C23.5,88 17.4,84 22.5,79 C17.4,75 23.5,71 17.2,66 C22,63 18,61 20.5,59.5',0.55),
+    F('M16.2,92 L23.2,92 L23.4,96.6 L14.4,96.6 Z'),
+    F('M0,100 L0,82 C0.6,78 2,75.5 3.6,74 C5,72.6 6.6,73 7.4,75.4 C8.6,74.6 10.2,75.6 10.8,78.2 C12,80.4 13,84 13.4,88 L13.6,96.4 L9,96.4 L9,100 Z'),
+    F('M4.6,75 C4,70.4 3.3,67 4.3,64.4 C5.1,62.4 7.7,62.4 8.5,64.4 C9.5,67 8.8,70.4 8.2,75 Z'),O(CI(5.6,65.4,0.45)),O(CI(7.2,65.4,0.45)),
+    OS('M1.4,86 C4,84 7,85 10,87.4',0.45),OS('M1.2,93 C4.6,91 8,92 11,94',0.45)];
+  o.push(...side,['push',50,0,-1,1],...side,['pop']);
+  o.push(F(R(9,98,32,2)));for(let i=0;i<8;i++)o.push(F(EL(11.6+i*3.83,97.6,2.2,1.5)),OS(L(13.5+i*3.83,96.4,13.5+i*3.83,99),0.35));
+  o.push(OS('M13,29 C17,32 21.5,32.4 24.6,30.5',0.5),OS('M37,29 C33,32 28.5,32.4 25.4,30.5',0.5),O(CI(25,46,0.7)),OS(L(25,33,25,43),0.3));
+  return o;})();
+SH.hawa=(()=>{const o=[],st=[[0,130,82,100],[8,122,66,82],[18,112,51,66],[30,100,37,51],[42,88,24,37],[52,78,12,24]];
+  st.forEach(([x0,x1,yt,yb],s)=>{o.push(F(R(x0,yt,x1-x0,yb-yt)));
+    if(s===0){o.push(O(PA(57,100,16,14)));for(const x of [8,20,32,92,104,116])o.push(O(PA(x,97,5,8)));o.push(OS(L(0,86,130,86),0.6));return;}
+    const n=Math.max(3,Math.round((x1-x0)/8));
+    for(let j=0;j<n;j++){const cx=x0+(j+0.5)*(x1-x0)/n;o.push(F(DO(cx,yt+0.6,5.4,3.6)),F(R(cx-0.2,yt-4.6,0.4,1.4)),O(PA(cx-1.6,yb-2,3.2,(yb-yt)*0.55)));}
+    o.push(OS(L(x0,yb-1.2,x1,yb-1.2),0.5),F(R(x0-1,yb-1,x1-x0+2,1.2)));});
+  o.push(F('M56,12 L74,12 L74,8 C72,4 68,2 65,0 C62,2 58,4 56,8 Z'),O(PA(62.5,11.5,5,6)),F(DO(52.5,12.4,4,3)),F(DO(77.5,12.4,4,3)));
+  return o;})();
+SH.howrah=(()=>{const o=[F(R(0,84,780,6))],X1=137,X2=643;
+  const top=x=>x<=X1?66-64*x/X1:x>=X2?66-64*(780-x)/(780-X2):62-60*Math.pow((x-390)/253,2);
+  const xs=[];for(let i=0;i<=6;i++)xs.push(i*X1/6);for(let i=1;i<=22;i++)xs.push(X1+i*(X2-X1)/22);for(let i=1;i<=6;i++)xs.push(X2+i*(780-X2)/6);
+  o.push(S(L(...xs.flatMap(x=>[x,top(x)])),4.2));
+  xs.forEach((x,i)=>{o.push(S(L(x,84,x,top(x)),1.6));if(i<xs.length-1){const n=xs[i+1];o.push(i%2?S(L(x,top(x),n,84),1.2):S(L(x,84,n,top(n)),1.2));}});
+  for(const X of [X1,X2]){o.push(F(R(X-7,0,4,84)),F(R(X+3,0,4,84)),F(R(X-8,0,16,3)),F(R(X-12,90,24,10)));
+    for(let y=6;y<78;y+=12){o.push(S(L(X-5,y,X+5,y+12),1.2),S(L(X+5,y,X-5,y+12),1.2));}}
+  return o;})();
+SH.coach=(()=>{const o=[F('M10,12 C10,6 14,4 20,4 L563,4 C569,4 573,6 573,12 L575,74 L8,74 Z'),F(R(2,18,6,50)),F(R(575,18,6,50)),F(R(14,74,555,5)),F(R(190,78,70,8)),F(R(320,78,70,8))];
+  for(const bx of [95,488]){o.push(F(R(bx-48,77,96,9)),F(CI(bx-30,90,10)),F(CI(bx+30,90,10)),O(CI(bx-30,90,4)),O(CI(bx+30,90,4)),F(R(bx-6,70,12,8)));}
+  for(let i=0;i<12;i++)o.push(O(RR(96+i*33,24,24,20,3)));
+  for(const x of [36,529]){o.push(O(R(x,14,18,56)),O(RR(x+4,20,10,14,2)));}
+  o.push(O(R(10,52,563,3)),OS(L(10,58,573,58),1.2),OS(L(10,10,573,10),1));
+  return o;})();
+SH.pitch=[
+  F(R(0,0,660,100)),O(R(0,0,660,100)),F(R(0,0,660,100)),
+  XS(L(6,4,6,96),1.6),XS(L(654,4,654,96),1.6),XS(L(46,0,46,100),1.6),XS(L(614,0,614,100),1.6),
+  XS(L(6,6.7,46,6.7),1.6),XS(L(6,93.3,46,93.3),1.6),XS(L(654,6.7,614,6.7),1.6),XS(L(654,93.3,614,93.3),1.6),
+  OS(L(46,33,614,33),0.6),OS(L(46,67,614,67),0.6),
+  F(CI(6,46.3,1.8)),F(CI(6,50,1.8)),F(CI(6,53.7,1.8)),F(CI(654,46.3,1.8)),F(CI(654,50,1.8)),F(CI(654,53.7,1.8))
+];
+SH.kabaddi=[
+  F(R(0,0,130,100)),XS(R(1.2,1.2,127.6,97.6),1.4),XS(L(65,0,65,100),1.4),XS(L(27.5,10,27.5,90),1.1),XS(L(102.5,10,102.5,90),1.1),
+  XS(L(17.5,10,17.5,90),0.8),XS(L(112.5,10,112.5,90),0.8),XS(L(0,10,130,10),1.1),XS(L(0,90,130,90),1.1),O(R(0,0,130,10)),O(R(0,90,130,10))
+];
+SH.elephant=[
+  F('M16,40 C18,16 40,5 62,6 C78,6 90,10 98,9 C102,3 110,0 117,3 C124,7 127,17 126,28 C125,34 124,38 124,42 C125,56 127,72 128,84 C128.5,90 131,94 135,93 C137,92 138,94 136,96 C131,99 125,97 123,90 C121,78 119,62 116,52 C113,52 110,54 106,58 C104,62 104,64 104,66 L104,100 L92,100 L91,70 C80,72 64,72 54,70 L52,100 L40,100 L38,72 C26,68 16,56 16,40 Z'),
+  F(R(78,66,11,34)),F(R(25,62,11,38)),F('M78,98 L90,98 L90,100 L77,100 Z'),
+  OS('M100,14 C108,16 113,26 111,38 C110,44 105,48 100,46',1.2),O(CI(115,19,1.3)),
+  O('M116,51 C120,58 124,62 130,62 C126,59 121,55 119,50 Z'),
+  S('M17,42 C13,50 11,58 11,68',1.6),F(EL(11,70,1.6,3)),
+  OS(L(40,96,52,96),0.6),OS(L(92,96,104,96),0.6),OS('M120,60 L124,60 M121,68 L125.5,68 M122,76 L126.5,76',0.5)
+];
+SH.tiger=(()=>{const o=[S('M92,32 C70,34 48,50 34,62 C24,70 12,70 8,62',7),
+  F('M90,30 C100,17 170,17 200,19 C214,20 224,17 232,20 C238,30 238,46 230,54 C202,62 142,62 112,58 C94,56 86,44 90,30 Z'),
+  F('M224,24 C228,11 239,6 252,7 C265,8 276,14 284,23 C289,29 290,37 285,41 C277,46 263,48 251,46 C240,44 230,38 225,31 Z'),
+  F(EL(242,8,5,5)),F(EL(255,6,4.5,4.5)),
+  F('M220,50 L237,48 L237,90 C241,92 246,95 246,100 L222,100 L224,90 Z'),
+  F('M200,54 L214,54 L214,92 C217,94 219,97 219,100 L201,100 Z'),
+  F('M100,44 C108,38 128,42 130,56 L122,70 L120,92 C124,94 127,97 127,100 L106,100 L108,92 L106,70 C96,64 94,52 100,44 Z'),
+  F('M128,58 L140,58 L141,93 C144,95 146,97 146,100 L130,100 Z')];
+  for(let i=0;i<9;i++){const x=118+i*12;o.push(OS(`M${x},21 C${x+3},28 ${x-1},34 ${x+2},44`,2.4));}
+  for(const x of [104,226])o.push(OS(`M${x},60 L${x+8},62 M${x+1},68 L${x+8},70 M${x+2},76 L${x+9},77`,2));
+  o.push(OS('M262,11 C264,15 262,19 264,23',1.6),OS('M270,14 C272,18 270,22 272,26',1.4),O(CI(268,22,1.6)),OS('M60,52 L56,58 M44,60 L42,66 M26,66 L24,72',2.2));
+  return o;})();
+SH.person=[
+  F(CI(15,6.5,6.5)),
+  F('M9,16 C11,14 19,14 21,16 L24,18 C26,19 27,22 27,26 L27,52 C27,54 24,54 24,52 L24,30 L23,30 L23,56 L22,96 C22,98 24,99 25,100 L16,100 L16,60 L14,60 L14,100 L5,100 C6,99 8,98 8,96 L7,56 L7,30 L6,30 L6,52 C6,54 3,54 3,52 L3,26 C3,22 4,19 6,18 Z')
+];
+SH.auto=[
+  F('M20,4 L118,4 C124,4 127,7 126,12 L123,14 L133,44 C143,46 151,53 153,62 C155,70 153,77 146,79 L12,79 C7,79 4,75 4,69 L4,20 C4,10 10,4 20,4 Z'),
+  OS(L(6,16,124,14),1),X('M36,22 L86,22 L86,60 L36,60 Z'),F(R(36,40,9,20)),X('M92,22 L117,22 L127,48 L92,48 Z'),
+  X(CI(34,87,15)),X(CI(138,87,15)),F(CI(34,87,13)),F(CI(138,87,13)),O(CI(34,87,5)),O(CI(138,87,5)),
+  F(CI(150,48,4.5)),O(CI(150,48,2.2)),OS(L(10,68,148,68),0.8),S(L(116,26,108,40),1.6)
+];
+SH.bullet=(()=>{const o=[],RA2=(cx,cy,r,a1,a2,sw)=>{const p=a=>[cx+r*Math.cos(a*Math.PI/180),cy+r*Math.sin(a*Math.PI/180)];const [x1,y1]=p(a1),[x2,y2]=p(a2);return `M${x1},${y1}A${r},${r} 0 0 ${sw} ${x2},${y2}`;};
+  // spoked wheels
+  for(const cx of [34,161.7]){o.push(F(CI(cx,70,30)),X(CI(cx,70,23.4)),S(CI(cx,70,22.2),1.4));
+    for(let i=0;i<20;i++){const a=i*Math.PI/10,b=a+0.45;o.push(S(L(cx+5*Math.cos(a),70+5*Math.sin(a),cx+22*Math.cos(b),70+22*Math.sin(b)),0.55));}
+    o.push(F(CI(cx,70,6.5)),O(CI(cx,70,2.4)));}
+  // deep valanced mudguards
+  o.push(S(RA2(161.7,70,33.5,195,345,1),6),S(RA2(34,70,33.5,300,150,0),6),F(RR(0,54,6.5,5.5,1.5)),F(R(3,59,7,8)));
+  // swingarm, twin shock, seat rails, down tube, fork
+  o.push(S(L(34,70,76,63),5),S(L(40,66,53,33),3.6),S(L(40,41,64,31),3),S(L(139,24,121,62),4.5),S(L(141,20,161.7,70),6));
+  // engine: barrel with fins + crankcase
+  o.push(F('M96,32 L116,32 L120,58 L94,60 Z'));for(let i=0;i<6;i++)o.push(OS(L(95.4,36+i*4.2,117.6,36+i*4.2),0.9));
+  o.push(F('M78,60 C80,54 88,52 98,54 L120,58 C124,62 124,72 120,80 C116,88 106,91 94,91 L84,90 C78,88 76,80 76,72 Z'),O(CI(89,75,6)),O(EL(110,74,5,4)));
+  // side box, tank, sprung saddle, pillion
+  o.push(F('M62,31 L90,31 L88,57 L68,59 Z'),O(CI(76,44,4)));
+  o.push(F('M88,27 C94,14 126,11 140,17 C143,20 142,26 138,30 L98,32 C91,32 87,30 88,27 Z'),O(RR(96,20,12,7,2)),O(EL(122,22,6,3.5)));
+  o.push(F('M60,25 C64,19.5 80,18.5 90,22.5 L90,27.5 C82,28.5 70,28.6 62,29.6 Z'),S('M66,29 L64,30.5 L68,32 L64,33.5 L68,35 L66,36.5',1),S('M78,28.6 L76,30.2 L80,31.8 L76,33.4 L80,35 L78,36.5',1));
+  o.push(F('M26,31 C30,27 46,26 54,29 L54,33.5 L28,34.5 Z'));
+  // round headlamp in its nacelle, pilot lamp, bars, mirror
+  o.push(F(PG(140,13,150,10.6,154,28,141,28)),F(CI(151,20,9.5)),O(EL(158.6,20,2,7.2)),F(CI(143.5,27.5,2.4)));
+  o.push(S('M141,13 C137,7 131,5 124,5',3),S(L(119,4.6,125,5),4.4),S(L(134,6,131,2),1),F(EL(130,1.6,3.2,1.6)));
+  // long exhaust with peashooter silencer, foot peg
+  o.push(S('M117,57 C126,66 124,84 110,90 L64,90',4.2),F('M20,84.5 L64,86 L64,92 L22,92 C18,91.4 16,90 16,88.5 C16,86.8 17.6,84.6 20,84.5 Z'),F(R(80,92,9,2)));
+  return o;})();
+SH.nano=[
+  F('M8,66 L6,30 C6,14 14,8 30,6 L110,4 C122,4 132,8 140,16 L168,46 C177,48 183,53 184,60 L186,74 C186,80 182,84 176,84 L14,84 C9,84 7,80 7,74 Z'),
+  O('M16,16 C16,13 18,12 22,12 L58,11 L58,42 L16,42 Z'),O('M64,11 L108,10 L108,42 L64,42 Z'),O('M114,10 L130,10 C134,10 136,12 138,15 L158,42 L114,42 Z'),
+  OS(L(61,8,61,82),0.8),OS(L(111,6,111,82),0.8),OS(L(8,60,184,60),0.6),
+  X(CI(38,84,18)),X(CI(154,84,18)),F(CI(38,84,16)),F(CI(154,84,16)),O(CI(38,84,7)),O(CI(154,84,7)),
+  O('M170,52 L182,56 L182,62 L172,60 Z'),O(R(6,38,3,10)),F(EL(156,46,4,3)),OS(L(96,52,104,52),1.4)
+];
+SH.bat=(()=>{const o=[F('M3.6,1.2 C3.6,0.4 4.4,0 5.4,0 C6.4,0 7.2,0.4 7.2,1.2 L7.1,31 L3.7,31 Z'),F('M3.7,30 L7.1,30 C8.2,32 10.8,33 10.8,36 L0,36 C0,33 2.6,32 3.7,30 Z'),F('M0,35.5 L10.8,35.5 L10.8,94 C10.8,95.6 10,96.5 8.6,96.5 L2.2,96.5 C0.8,96.5 0,95.6 0,94 Z')];
+  for(let i=0;i<11;i++)o.push(OS(L(3.7,3+i*2.5,7.1,4.6+i*2.5),0.3));
+  o.push(OS(L(5.4,38,5.4,92),0.25),O(R(1.4,44,8,11)),OS(L(0.6,88,10.2,88),0.25));return o;})();
+SH.stumps=[
+  F(R(0.2,2,3.6,69.1)),F(R(9.63,2,3.6,69.1)),F(R(19.06,2,3.6,69.1)),F(DO(2,2.2,3.6,1.2)),F(DO(11.43,2.2,3.6,1.2)),F(DO(20.86,2.2,3.6,1.2)),
+  F(R(0.8,0.6,10.3,1)),F(R(11.8,0.6,10.3,1)),F(RR(3,0,6,1.9,0.8)),F(RR(14,0,6,1.9,0.8)),OS(L(0.2,62,22.66,62),0.3)
+];
+SH.ball=(()=>{const o=[F(CI(50,50,50)),OS('M47,1 C42,30 42,70 47,99',2.4),OS('M56,1 C51,30 51,70 56,99',2.4)];
+  for(let i=0;i<13;i++){const y=8+i*7;o.push(OS(L(40.5,y,43.5,y+1.2),1.2),OS(L(58.5,y,61.5,y+1.2),1.2));}
+  o.push(O(EL(28,28,11,7)));return o;})();
+SH.note=[
+  F(RR(0,0,150,66,2)),OS(R(3,3,144,60),0.6),T('RESERVE BANK OF INDIA',62,12,4.6),T('₹500',6,16,8,'l'),T('500',144,60,15,'r'),
+  O(EL(104,31,8,10)),O('M90,56 C92,44 97,41 104,41 C111,41 116,44 118,56 Z'),OS(L(84,0,84,66),1.4),O(EL(134,30,8,11)),OS(L(10,54,70,54),0.6)
+];
+SH.coin=[F(CI(50,50,50)),O(CI(50,50,36)),OS(CI(50,50,46),0.8),T('₹',50,36,14),T('10',50,72,30)];
+SH.card=(()=>{const o=[F(RR(0,0,85.6,54,3.2)),O(R(0,0,85.6,11)),T('GOVERNMENT OF INDIA',42.8,7.6,4.2),O(R(5,15,17,21))];
+  for(const [y,w] of [[16,28],[21,22],[26,26],[31,18]])o.push(O(R(26,y,w,2.4)));
+  o.push(O(R(64,15,16,16)));
+  for(let i=0;i<5;i++)for(let j=0;j<5;j++)if((i*j+i+j)%3===0||i===0&&j<2||j===0&&i<2)o.push(F(R(64.6+i*3,15.6+j*3,2.6,2.6)));
+  o.push(T('XXXX XXXX 1234',42.8,47.5,6.4));return o;})();
+SH.passport=[
+  F(RR(0,0,88,125,3)),T('REPUBLIC OF INDIA',44,22,5.6),
+  O(R(35,62,18,4)),O(EL(38.6,54,3.6,6.5)),O(EL(44,52,4.2,7.5)),O(EL(49.4,54,3.6,6.5)),O(R(34,66,20,2)),
+  T('PASSPORT',44,86,8),OS(R(38,102,12,7),0.8),OS(L(38,105.5,50,105.5),0.6),OS(L(44,102,44,109),0.6)
+];
+
+/* ---------- shared builders ---------- */
+const GOP=(W,{baseW,baseTop,n,topW,vaultH,kal=5,concave=0,dots=0,doorW})=>{const cx=W/2,o=[];
+  const bx=cx-baseW/2,bh=100-baseTop;
+  o.push(F(R(bx,baseTop,baseW,bh)),F(R(bx-1,baseTop-1.4,baseW+2,1.6)),OS(L(bx,baseTop+bh*0.45,bx+baseW,baseTop+bh*0.45),0.7));
+  for(let k=1;k<6;k++){const x=bx+baseW*k/6;if(Math.abs(x-cx)<baseW*0.14)continue;o.push(OS(L(x,baseTop+1.5,x,98),0.5));}
+  const dw=doorW||baseW*0.2,dh=bh*0.78;o.push(X(R(cx-dw/2,100-dh,dw,dh)));
+  const yT=kal+vaultH,w0=baseW*0.9,H=baseTop-yT;
+  const wid=t=>w0-(w0-topW)*t-concave*baseW*t*(1-t);
+  for(let i=0;i<n;i++){const t0=i/n,t1=(i+1)/n,yb=baseTop-H*t0,yt=baseTop-H*t1,wb=wid(t0),wt=wid(t1),th=yb-yt;
+    o.push(F(PG(cx-wb/2,yb,cx+wb/2,yb,cx+wt/2,yt,cx-wt/2,yt)),F(R(cx-wb/2-0.9,yb-1,wb+1.8,1.1)));
+    o.push(F(DO(cx-wt/2+1.2,yt+0.4,2.6,1.6)),F(DO(cx+wt/2-1.2,yt+0.4,2.6,1.6)),O(PA(cx-1.3,yb-1.4,2.6,th*0.62)));
+    if(dots){const m=Math.max(2,Math.floor(wb/4.2));for(let j=0;j<m;j++){const x=cx-wb/2+(j+0.5)*wb/m;if(Math.abs(x-cx)<2.4)continue;o.push(O(RR(x-0.7,yb-th*0.8,1.4,th*0.58,0.6)));}}
+  }
+  const vx0=cx-topW/2,vx1=cx+topW/2,vb=yT;
+  o.push(F(`M${vx0},${vb} V${vb-vaultH*0.45} Q${vx0},${kal} ${vx0+vaultH*0.7},${kal} H${vx1-vaultH*0.7} Q${vx1},${kal} ${vx1},${vb-vaultH*0.45} V${vb} Z`));
+  o.push(F(EL(vx0-0.6,vb-vaultH*0.55,1.3,2.2)),F(EL(vx1+0.6,vb-vaultH*0.55,1.3,2.2)),O(EL(cx,vb-vaultH*0.45,topW*0.18,vaultH*0.3)));
+  const nk=Math.max(3,Math.round(topW/3.6));
+  for(let j=0;j<nk;j++){const x=vx0+vaultH*0.6+j*(topW-vaultH*1.2)/(nk-1);o.push(F(EL(x,kal-1.2,0.9,1.1)),F(R(x-0.22,0,0.44,kal)));}
+  return o;};
+const NANDI=[ // couchant bull facing right, head raised, horns up
+  F('M6,98 C3,88 4,72 14,62 C24,52 42,48 62,48 L96,48 C108,48 116,56 118,66 L120,98 Z'),
+  F('M78,50 C80,38 88,32 98,34 C104,36 106,42 104,50 Z'),
+  F('M100,44 C108,40 116,40 122,44 L126,60 C124,70 118,80 112,84 L104,84 Z'),
+  F('M113,40 C115,28 123,20 134,20 C143,20 149,27 151,37 C153,47 154,58 152,66 C150,73 143,76 138,72 C134,66 131,58 126,52 C121,48 115,46 113,44 Z'),
+  F('M124,26 C120,21 119,15.5 121.5,11 C124.6,15 126.8,20 128.6,24.6 Z'),F('M135.4,22.4 C135.6,16.6 137.6,12 141,10 C141.2,15 140.4,20 139.2,23.6 Z'),
+  F('M122,30 C114,26.6 107,28.6 104,33 C109.6,36.4 116.6,36.4 122.6,34 Z'),F(EL(147,64,5.6,5.4)),O(CI(149.6,63,0.9)),
+  F('M110,84 C118,84 130,86 142,90 C146,92 146,98 140,98 L108,98 Z'),
+  OS('M30,84 C42,74 58,78 62,90',0.9),S('M8,80 C2,84 2,92 6,96',1.6),F(R(0,97.6,155,2.4)),
+  O(CI(141,36,1.5)),OS('M104,54 C110,66 118,72 128,68',1.3),
+  O(CI(108.6,62,1.8)),O(CI(113.4,67.4,1.8)),O(CI(119,70,1.8)),O(CI(124.6,69.6,1.8)),
+  OS('M96,50 C100,60 100,72 98,84',0.6),OS(L(132,40,132,52),0.5)
+];
+
+/* ---------- Karnataka ---------- */
+SH.golgumbaz=(()=>{const o=[F(R(5,50,68.5,50)),F('M3,41.5 C3,14 19,0 39.25,0 C59.5,0 75.5,14 75.5,41.5 Z'),F(R(5,40,68.5,4.5))];
+  for(let i=0;i<13;i++)o.push(F(DO(8.2+i*5.2,41.4,4.8,3.4)));
+  o.push(F(R(3,45.5,72.5,4.6)),OS(L(3,48,75.5,48),0.5));
+  for(let i=0;i<14;i++)o.push(F(R(6.2+i*4.75,42.8,2.4,3.2)));
+  for(let i=0;i<15;i++)o.push(O(PA(7.8+i*4.3,53.6,2.2,3)));
+  o.push(O(PA(27,98,24.5,40)),O(PA(11.5,98,11,28)),O(PA(56,98,11,28)),O(R(13,60,7,5)),O(R(58.5,60,7,5)));
+  for(const x0 of [0,69.5]){o.push(F(R(x0,30,9,70)));
+    for(const y of [40,50,60,70,80,90]){o.push(F(R(x0-0.6,y-0.9,10.2,1.3)),O(PA(x0+3,y-1.6,3,5)));}
+    o.push(F(R(x0+0.4,27,8.2,3.2)),F(ON(x0+4.5,27.4,8.6,9)),F(R(x0+4.25,14,0.5,4.6)));}
+  o.push(OS('M10,30 C20,12 34,6 39.25,5.4',0.5));return o;})();
+SH.jog=[
+  F('M0,100 L0,8 C6,4 10,9 16,6 C22,3 28,7 34,5 C40,3 46,6 52,4 C58,1 64,6 70,4 C76,1 82,6 88,4 C94,1 100,6 106,4 C112,1 118,6 124,4 C130,2 136,6 140,5 L140,100 Z'),
+  OS('M8,30 L20,44 M14,60 L6,72 M120,28 L132,40 M128,62 L136,78 M66,22 L72,34 M92,46 L98,60',0.8),
+  O('M40,10 L50,10 C50.5,40 50.5,70 51,92 L39,92 C39.5,70 39.5,40 40,10 Z'),O('M42.5,14 L47.5,14 L48,88 L42,88 Z'),
+  O('M54,10 L61,10 C61,30 57,44 51,53 L46,53 C52,43 55,28 54,10 Z'),
+  O(R(78,10,4.4,14)),O(R(78.4,27,3.8,12)),O(R(78.8,42,3.4,13)),O(R(79.2,58,3,14)),O(R(79.4,75,2.8,15)),
+  O('M98,10 L112,10 C116,40 122,70 127,92 L111,92 C107,70 102,40 98,10 Z'),
+  O(EL(70,96,62,5)),O(EL(46,92,12,5)),O(EL(118,92,12,4))
+];
+SH.virupaksha=GOP(52,{baseW:46,baseTop:72,n:9,topW:17,vaultH:8});
+SH.murudeshwar=(()=>{const o=[F('M28,15 C27,7 31,1.5 36,0 C41,1.5 45,7 44,15 Z'),OS('M38,5 C41,4 43,6 42.5,9',1),F(EL(36,18.5,6.2,7.6)),F(R(33,25,6,4))];
+  o.push(F('M18,30.5 C24,28 30,27.4 36,27.4 C42,27.4 48,28 54,30.5 C57,32 58,34.5 57.6,37.5 L54,50 L52,60 L20,60 L18,50 L14.4,37.5 C14,34.5 15,32 18,30.5 Z'));
+  o.push(F('M52,31 C51,24 52,19.5 54.6,18.4 C57.2,19.5 58.2,24 57.2,31 Z'),OS('M20,32 C26,40 36,44 52,34',1.1),O(CI(54.6,21,0.5)));
+  const arm='M15,32.5 C11,34.5 9.5,40 9.6,46 L10,56 C10.4,60 12,62 14,64 L13,70 C13,73 15,75 17.6,74.6 C19.6,74 20,72 19.4,70 L18.6,62 L16.6,56 L17,44 Z';
+  o.push(F(arm),['push',72,0,-1,1],F(arm),['pop'],F(R(20,58,32,14)));
+  o.push(F('M4,86 C3,79 7,74 14,72 C22,70 30,70.5 36,71 C42,70.5 50,70 58,72 C65,74 69,79 68,86 C67,90 60,92 50,92 L22,92 C12,92 5,90 4,86 Z'));
+  o.push(O(EL(28,80,5,2.4)),O(EL(44,80,5,2.4)),OS('M10,84 C20,78 52,78 62,84',0.7),O(CI(36,14.6,0.6)),OS('M28,40 C32,46 40,46 44,40',0.6));
+  o.push(F('M0,100 L2,92 L70,92 L72,100 Z'),OS(L(4,95.4,68,95.4),0.6));return o;})();
+SH.chamundinandi=[['push',0,-10,0.9,1],...NANDI,F(CI(117,82,3)),F(CI(126,76,2.4)),['pop']];
+SH.kempegowda=[
+  F('M11,8.5 C11,3.4 14,0.8 18,0.8 C22,0.8 25,3.4 25,8.5 L25.6,10.4 L10.4,10.4 Z'),F('M22.6,2.6 C24.6,0 27,0 27.2,2 C26.2,3 24.8,3.6 23.6,4 Z'),
+  OS('M11.6,7 C15,5.4 21,5.4 24.4,7',0.6),F(EL(18,13.4,4.3,4.8)),OS('M15.6,15.4 C17,16.2 19,16.2 20.4,15.4',0.6),F(R(16.4,17,3.2,3.2)),
+  F('M10.6,21 C13,19.6 23,19.6 25.4,21 L27,24 L27.4,40 L29,62 L7,62 L8.6,40 L9,24 Z'),O(R(8.8,37.6,18.4,2.4)),
+  OS(L(18,22,18,60),0.4),O(CI(18,26,0.5)),O(CI(18,30,0.5)),O(CI(18,34,0.5)),OS(L(7.4,60,28.6,60),0.6),
+  F('M10.4,21.6 C7.6,23 6.4,27 6.2,31 L5.6,39 C5.6,41 8.4,41.4 8.8,39.4 L9.6,30 Z'),F(CI(7.1,40.6,1.7)),
+  S(L(6.9,41.4,5.6,75),1.4),S(L(4.4,42.8,9.4,42.4),1.2),F(CI(7.2,38.2,0.9)),
+  F('M25.6,21.6 C28.4,23 29.6,27 29.4,31 L29,36 C28.6,38 26.4,38.6 25.4,38 L26.4,30 Z'),
+  F('M11,61 L17,61 L16.6,78 L10.4,78 Z'),F('M19,61 L25,61 L25.6,78 L19.4,78 Z'),F('M9.2,78 L17,78 L17,81.5 L7.6,81.5 Z'),F('M19,78 L26.8,78 L28.4,81.5 L19,81.5 Z'),
+  F(R(6,81.5,22,3)),F(R(4,84.5,26,15.5)),O(R(8,88,18,8)),OS(L(4,98,30,98),0.5)
+];
+SH.narasimha=(()=>{const o=[F('M4,100 L4,40 C4,16 20,2.6 40,2.6 C60,2.6 76,16 76,40 L76,100 Z'),X('M10,100 L10,42 C10,22 24,9 40,9 C56,9 70,22 70,42 L70,100 Z'),F(EL(40,4.4,7,4.4))];
+  o.push(O(CI(37.4,3.6,0.9)),O(CI(42.6,3.6,0.9)));
+  for(const x of [4,76]){o.push(F(EL(x,40,3,4)));}
+  o.push(F(EL(40,29,17,14)));
+  for(let i=0;i<7;i++){const a=Math.PI*(1.12+i*0.127),x=40+15*Math.cos(a),y=30+14*Math.sin(a);o.push(F(EL(x,y,3.8,4.6)),O(CI(x-1,y-0.4,0.5)),O(CI(x+1,y-0.4,0.5)));}
+  o.push(F(PG(33,26,47,26,44.4,16,35.6,16)),O(R(35,20,10,1.2)),F(EL(40,33,7.6,8)),O(CI(36.8,31,2)),O(CI(43.2,31,2)),OS('M36,37.6 C38.6,39.4 41.4,39.4 44,37.6',0.8));
+  o.push(F('M28,41 C32,39 48,39 52,41 L54,60 L26,60 Z'));
+  const arm='M28,42 C24,44 22,49 22,55 L23,66 L27.4,66 L28.2,53 Z';o.push(F(arm),['push',80,0,-1,1],F(arm),['pop']);
+  o.push(F(R(26,58,28,12)),F('M10,86 C10,76 16,70 26,68 L54,68 C64,70 70,76 70,86 C70,92 64,94 56,94 L24,94 C16,94 10,92 10,86 Z'),OS('M14,81 C28,74 52,74 66,81',1.5));
+  o.push(F(R(10,94,60,6)),OS('M12,96.6 C24,94 34,99 46,96.6 C56,94.6 64,98 68,96.6',0.6));return o;})();
+SH.nammametro=(()=>{const o=[F('M8,8 C8,5 10,4 14,4 L500,4 C514,4 524,12 528,26 L531,72 C531,75 528,77 524,77 L8,77 Z'),F(R(2,20,6,44)),F(R(100,0,70,4.4)),F(R(330,0,70,4.4))];
+  o.push(F(R(20,76,490,6)));for(const bx of [90,440]){o.push(F(R(bx-42,80,84,8)),F(CI(bx-26,92,8)),F(CI(bx+26,92,8)),O(CI(bx-26,92,3)),O(CI(bx+26,92,3)));}
+  for(const x of [70,190,310,430]){o.push(O(R(x,12,28,63)),O(R(x+3,17,9.5,28)),O(R(x+15.5,17,9.5,28)));}
+  for(const x of [16,104,124,144,224,244,264,344,364,384,464]){o.push(O(RR(x,18,17,24,3)));}
+  o.push(O('M506,10 C514,12 521,18 524,32 L504,32 Z'),O(CI(522,58,3)),O(R(10,50,490,3)),OS(L(10,8,520,8),0.8));return o;})();
+
+/* ---------- Tamil Nadu ---------- */
+SH.meenakshi=GOP(56,{baseW:52,baseTop:78,n:9,topW:16,vaultH:8,concave:0.3,dots:1});
+SH.srirangam=GOP(62,{baseW:60,baseTop:82,n:13,topW:17,vaultH:6});
+SH.shore=(()=>{const o=[F(R(0,92,150,8))];
+  for(let i=0;i<13;i++)o.push(F(EL(6+i*11.6,90.6,3,2.2)),F(EL(8.4+i*11.6,88.6,1.2,1.4)));
+  const tower=(cx,yb,baseW,yTop,n)=>{const H=yb-yTop-14;o.push(F(R(cx-baseW/2,yb-14,baseW,14)),O(RA(cx-2.5,yb-1,5,9)));
+    for(let i=0;i<n;i++){const t0=i/n,t1=(i+1)/n,y0=yb-14-H*t0,y1=yb-14-H*t1,w0=baseW*(1-0.62*t0),w1=baseW*(1-0.62*t1);
+      o.push(F(PG(cx-w0/2,y0,cx+w0/2,y0,cx+w1/2,y1,cx-w1/2,y1)),F(R(cx-w0/2-0.8,y0-1.2,w0+1.6,1.4)),F(DO(cx-w1/2+1.4,y1+0.3,2.8,2)),F(DO(cx+w1/2-1.4,y1+0.3,2.8,2)),O(PA(cx-1.2,y0-1.6,2.4,(y0-y1)*0.6)));}
+    const tw=baseW*0.38,y=yTop;o.push(F(R(cx-tw*0.36,y+8,tw*0.72,6.4)),F(`M${cx-tw/2},${y+9} C${cx-tw/2-1},${y+3} ${cx-tw*0.25},${y} ${cx},${y} C${cx+tw*0.25},${y} ${cx+tw/2+1},${y+3} ${cx+tw/2},${y+9} Z`));};
+  tower(44,92,40,7,4);tower(112,92,28,40,2);o.push(F(R(64,78,30,14)),O(R(68,82,22,8)),F(R(43.4,0,1.2,7.4)),F(EL(44,5.6,1.2,1.2)),F(R(111.5,34,1,6)));return o;})();
+SH.butterball=[
+  F('M46,95.6 C32,95 15,88 8,72 C1,56 3,34 13,19 C23,5 39,0 53,0.6 C69,1.5 81,13 82.5,31 C84,51 78,72 66,85 C60,91.5 53,95.4 46,95.6 Z'),
+  F('M0,100 L0,99.8 L83,91.6 L83,100 Z'),
+  OS('M22,24 C30,18 38,16 46,17',0.8),OS('M62,60 C68,66 70,74 68,82',0.8),OS('M14,56 C16,64 22,72 30,78',0.6),O(EL(30,22,9,5))
+];
+SH.valluvarchariot=(()=>{const o=[];
+  o.push(F(R(3,76,40,15)),F(R(1,72.6,44,3.6)),F(R(6,64,34,8.6)),F(R(4,62,38,2.4)));
+  for(let i=0;i<7;i++)o.push(O(R(5+i*5.4,79,3.6,9)));
+  o.push(F(R(8,44,30,18)),X(R(12,47,6.4,15)),X(R(20,47,6,15)),X(R(28,47,6.4,15)),F(CI(23,55,2.6)),F(R(21,57,4,5)));
+  o.push(F(R(5,41,36,3.4)),F(R(8,36,30,5)),F(R(11,33.4,24,2.8)),F('M11,34 C9,21 16,12 23,8 C30,12 37,21 35,34 Z'),OS('M23,9 L23,33',0.5),OS('M16,22 C20,20 26,20 30,22',0.5));
+  o.push(F(EL(23,6.4,2.2,2)),F(R(22.6,0,0.8,5)));
+  for(const cx of [11,35]){o.push(F(CI(cx,95.7,4.3)),O(CI(cx,95.7,1.4)));for(let a=0;a<6;a++){const t=a*Math.PI/3;o.push(OS(L(cx,95.7,cx+3.6*Math.cos(t),95.7+3.6*Math.sin(t)),0.4));}}
+  return o;})();
+SH.arjuna=(()=>{const o=[F('M0,100 L0,22 C2,12 10,6 22,5 C40,4 60,3 80,6 C92,8 100,12 104,20 L108,100 Z'),F('M114,100 L116,18 C120,8 132,2 150,1 C175,0 200,2 214,10 C221,16 223,26 223,40 L223,100 Z')];
+  o.push(O('M146,100 L146,76 C146,66 156,60 170,60 C182,60 192,64 196,72 C200,74 204,80 204,88 L204,100 L197,100 L197,90 C195,88 193,88 191,90 L191,100 L183,100 L183,92 L166,92 L166,100 L158,100 L158,92 C154,94 152,97 152,100 Z'),OS('M201,78 C206,84 206,92 203,98',2.4));
+  o.push(O('M122,100 L122,88 C122,83 127,80 133,80 C139,80 143,83 144,88 L144,100 L140,100 L140,94 L128,94 L128,100 Z'));
+  for(let r=0;r<4;r++)for(let i=0;i<16;i++){const x=6+i*6.4+(r%2)*3;if(x>100)continue;o.push(O(RR(x,16+r*14,3,8,1.2)));}
+  for(let r=0;r<3;r++)for(let i=0;i<14;i++){const x=120+i*7+(r%2)*3;if(x>216)continue;o.push(O(RR(x,12+r*14,3,8,1.2)));}
+  o.push(OS('M110,20 C107,34 113,46 110,60 C107,72 113,84 110,98',1.4));return o;})();
+SH.chennaicentral=(()=>{const o=[F(R(10,58,210,42)),F(R(8,56.6,214,1.8))];
+  for(let i=0;i<18;i++){const x=16+i*11.4;if(x>94&&x<130)continue;o.push(O(PA(x,96,6,14)),O(PA(x,76,6,10)));}
+  o.push(F(R(100,14,30,44)),F(R(98,13,34,2)),O(CI(115,27,6.4)),S(L(115,27,115,22.6),1),S(L(115,27,118.4,28.6),1),O(PA(109,52,12,16)),O(PA(106,40,4,7)),O(PA(120,40,4,7)));
+  o.push(F(PG(99,13.4,131,13.4,123,5.4,107,5.4)),F(R(113.4,0,3.2,6)),F(CI(115,1.2,1.2)));
+  for(const x of [38,176]){o.push(F(R(x,34,16,24)),O(PA(x+5,52,6,12)),F(R(x-1,33,18,1.6)),F(PG(x-1,33.4,x+17,33.4,x+8,20)),F(R(x+7.6,17,0.8,4)));}
+  for(const x of [0,212]){o.push(F(R(x,44,18,56)),O(PA(x+5,96,8,16)),O(PA(x+6,64,6,10)),F(R(x-0.6,43,19.2,1.6)),F(DO(x+9,43.4,16,8)),F(R(x+8.6,32,0.8,4)));}
+  o.push(F(R(70,52,90,4.6)));for(let i=0;i<10;i++)o.push(F(R(72+i*9.2,49.6,3,3)));return o;})();
+SH.thanjavurnandi=[['push',0,-10,146.7/155,1],...NANDI,['pop']];
+
+/* ---------- Kerala ---------- */
+SH.fishnet=(()=>{const o=[S(L(8,78,74,78),3.2)];
+  for(const x of [12,28,44,60,72])o.push(S(L(x,78,x,100),1.6));
+  o.push(S(L(66,77,152,3),3.4),S(L(54,77,124,22),2.2),S(L(60,62,98,54),1.2),S(L(84,48,110,42),1.2));
+  const tip=[152,3];for(const c of [[108,84],[132,90],[176,90],[202,82]])o.push(S(L(tip[0],tip[1],c[0],c[1]),1.6));
+  o.push(O('M108,84 C120,88 126,90 132,90 C150,92 160,92 176,90 C186,88 196,85 202,82 C190,96 170,99 154,99 C134,99 116,95 108,84 Z'));
+  for(let i=1;i<8;i++)o.push(OS(L(108+i*12,84+i*0.4,112+i*11,96),0.4));
+  o.push(S(L(150,4,10,46),0.9));
+  for(let j=0;j<8;j++){const x=16+j*7.6,y=46-(x-10)*42/140;const len=8+((j*5)%11);o.push(S(L(x,y,x,y+len),0.5),F(CI(x,y+len+1.6,1.8)));}
+  return o;})();
+SH.snakeboat=(()=>{const o=[F('M8,2 C12,0 16,2 16,8 C16,36 24,64 44,76 L300,80 L556,80 L560,82 L540,88 C500,92 420,93 300,93 L70,93 C42,93 26,88 16,80 C6,62 3,30 4,10 C4,6 5,3 8,2 Z'),F(CI(10,2.6,2.6))];
+  for(let i=0;i<58;i++){const x=64+i*8;o.push(F(CI(x,70.4,2.3)),F(RR(x-1.8,72,3.6,8.4,1.2)),S(L(x+1.2,75,x+6,92),0.8));}
+  for(const x of [26,34,42]){o.push(F(CI(x,52-((x-26)*0.6),2.4)),F(RR(x-1.8,54-((x-26)*0.6),3.6,16,1.2)));}
+  o.push(S(L(30,58,12,96),1.2),OS(L(44,86,540,85),0.8));return o;})();
+SH.houseboat=(()=>{const o=[F('M0,52 C10,60 20,70 40,76 C100,90 500,90 560,76 C580,70 592,60 600,52 C596,70 584,90 560,96 C500,100 100,100 40,96 C16,90 4,70 0,52 Z')];
+  o.push(F('M50,66 C50,24 72,2 120,0 L480,0 C528,2 550,24 550,66 Z'),F(R(46,64,508,10)));
+  for(let i=0;i<12;i++)o.push(O(RR(80+i*38,30,24,26,6)));
+  for(let i=0;i<9;i++)o.push(OS(`M${60+i*1},${60-i*6.4} C${150},${56-i*6.8} ${450},${56-i*6.8} ${540-i*1},${60-i*6.4}`,0.5));
+  o.push(OS('M30,82 C120,94 480,94 570,82',0.8),OS('M14,70 C80,90 520,90 586,70',0.6),F(R(554,58,22,8)),S(L(562,58,562,40),1.4),F('M556,40 L572,46 L556,46 Z'));return o;})();
+SH.padmanabha=GOP(110,{baseW:50,baseTop:74,n:7,topW:20,vaultH:9}).concat([
+  F(R(2,86,28,14)),F('M0,87 L8,78.6 L30,78.6 L30,87 Z'),OS(L(4,84,30,84),0.5),O(R(8,90,6,8)),O(R(18,90,6,8)),
+  F(R(80,86,28,14)),F('M80,87 L80,78.6 L102,78.6 L110,87 Z'),OS(L(80,84,106,84),0.5),O(R(86,90,6,8)),O(R(96,90,6,8))]);
+SH.athirappilly=[
+  F('M0,100 L0,14 C20,4 40,12 60,8 C80,4 100,12 120,10 L300,10 C320,8 340,14 360,6 C380,1 392,6 400,4 L400,100 Z'),
+  F(CI(14,10,8)),F(CI(30,6,6.4)),F(CI(46,8,5)),F(CI(366,6,6)),F(CI(382,4,4.6)),F(CI(394,6,5)),
+  O('M90,12 L170,12 C172,40 176,70 180,96 L80,96 C84,70 88,40 90,12 Z'),O('M186,12 L236,12 C239,40 243,70 247,96 L178,96 C182,70 184,40 186,12 Z'),O('M252,12 L302,12 C308,40 316,70 322,96 L254,96 C254,70 253,40 252,12 Z'),
+  O('M104,14 L150,14 C152,44 154,70 156,94 L100,94 C102,70 103,44 104,14 Z'),O('M200,14 L222,14 L226,94 L196,94 Z'),O('M266,14 L288,14 L298,94 L268,94 Z'),
+  O(EL(200,97,150,6)),F(EL(52,96,20,7)),F(EL(346,95,24,8)),OS('M20,40 L34,52 M372,36 L384,50 M30,70 L44,80',0.8)
+];
+SH.jatayu=[
+  F('M0,100 C10,84 30,78 60,76 L240,74 C262,76 280,84 290,100 Z'),
+  F('M60,80 C70,60 100,48 140,46 C170,45 190,50 205,58 C215,64 222,72 224,80 Z'),
+  F('M196,58 C204,40 214,26 228,20 C238,16 248,18 252,24 C256,30 254,36 248,38 C240,40 232,42 226,48 C220,54 216,62 214,70 Z'),
+  F('M248,21 C258,21 266,25 270,31 C272,35 270,40 266,38 C262,34 256,32 249,32 Z'),O(CI(242,26,1.8)),
+  F('M124,52 C112,32 98,16 78,5 C71,1.4 64,0 59,1.6 C67,9 75,19 81,29 C69,23 55,21 43,23 C55,29 65,37 73,45 C59,45 45,49 33,55 C49,57 67,57 85,55 Z'),
+  F('M70,78 C50,73 28,71 6,74 C18,78 34,81 50,83 Z'),
+  OS('M70,42 C90,40 108,44 120,50',0.8),OS('M62,28 C80,30 96,36 110,44',0.8),OS('M100,60 C130,56 170,58 200,66',0.8),
+  F('M176,76 L180,64 L184,76 Z'),F('M186,76 L190,66 L194,76 Z')
+];
+SH.idukki=(()=>{const o=[F('M0,100 L0,0 L18,0 C30,30 50,70 80,100 Z'),F('M217,0 L217,100 L137,100 C167,70 187,30 199,0 Z'),F('M14,0 L203,0 C190,30 170,70 140,100 L77,100 C47,70 27,30 14,0 Z'),O('M16,3 L201,3 C188,32 168,70 139,100 L78,100 C49,70 29,32 16,3 Z'),F(R(10,0,197,3.4))];
+  const lx=y=>14+(y/100)*63+Math.sin(y/100*Math.PI)*-4,rx=y=>203-(y/100)*63-Math.sin(y/100*Math.PI)*-4;
+  for(const y of [14,28,42,56,70,84])o.push(OS(`M${lx(y)},${y} Q108.5,${y+9} ${rx(y)},${y}`,0.8));
+  o.push(OS('M4,20 L12,30 M6,60 L18,66 M210,24 L202,36 M212,64 L198,72',0.8));return o;})();
+SH.vizhinjam=(()=>{const o=[F(R(0,94,22,6)),F(PG(3,94,19,94,16.6,24,5.4,24))];
+  for(let i=0;i<5;i++){const y0=28+i*13.2,y1=y0+6.6,w=y=>16.6-5.4+(y-24)*(15.6-11.2)/70;const xl=y=>11-((5.4+(y-24)*(2.4/70))*0)-(5.6+(y-24)*2.4/70),xr=y=>11+(5.6+(y-24)*2.4/70);o.push(O(PG(xl(y0),y0,xr(y0),y0,xr(y1),y1,xl(y1),y1)));}
+  o.push(O(RA(9.4,94,3.2,6)),F(R(3,21,16,3)),S(L(3.6,17,3.6,21),0.6),S(L(18.4,17,18.4,21),0.6),S(L(3.4,17,18.6,17),0.6),F(R(6.4,10,9.2,11)),O(R(7.6,11.6,6.8,7.6)),OS(L(11,11.6,11,19.2),0.5),F(DO(11,10.4,10.4,7.6)),F(R(10.7,0,0.6,3.4)),F(CI(11,3,0.9)));
+  return o;})();
+SH.vikrant=(()=>{const o=[F('M0,56 L380,56 C405,56 425,52 444,44 L444,50 C440,56 434,60 430,62 C426,72 420,84 410,92 C400,98 390,100 370,100 L70,100 C40,100 16,92 8,80 L2,62 Z')];
+  o.push(OS(L(0,62,428,62),0.8),OS(L(14,76,412,76),0.6));for(let i=0;i<30;i++)o.push(O(CI(30+i*12.6,69,0.9)));
+  o.push(F(PG(250,56,302,56,300,36,256,36)),F(PG(256,36,296,36,292,24,262,24)),O(R(262,28,28,3)),F(PG(266,24,278,24,276,12,268,12)),F(R(284,0,3,24)),S(L(276,8,296,8),1.4),S(L(279,15,293,15),1.2));
+  for(const x of [60,110,330,372])o.push(F(`M${x},55 l22,0 l5,-2.4 l-4,0 l-3,-3.4 l-3,0 l1,3.4 l-11,0 l-4,-3 l-2,0 l1,3 Z`));
+  return o;})();
+SH.pooram=SH.elephant.concat([
+  O('M104,6 C112,1.6 121,5 124,15 C125.6,28 124.6,42 126.6,60 C127,66 123,68 120.6,62 C118.4,48 116.4,30 110.4,20 C106.4,15.6 103,11 104,6 Z'),
+  O(CI(112,10,1.4)),O(CI(118,14,1.4)),O(CI(116,22,1.4)),O(CI(121,30,1.4)),O(CI(119.6,40,1.4)),O(CI(122.6,50,1.4)),
+  F(CI(106,74,2.6)),F(CI(100,72,2.2)),O('M56,8 C70,6 86,8 96,10 L94,40 C80,44 64,44 50,40 Z'),OS('M52,38 C66,42 80,42 94,38',1)
+]);
+
+/*END-SHAPES*/
+
+/* ---------- items: real sizes in metres ---------- */
+const ITEMS=[
+ {id:'qutub',name:'Qutub Minar',size:72.5,dim:'h',vb:[20,100],word:'tall',fact:'Five storeys of red sandstone and marble in Delhi. Building started around 1199.'},
+ {id:'taj',name:'Taj Mahal',size:73,dim:'h',vb:[130,100],word:'tall, to the dome tip',fact:'Measured to the top of the finial on the main dome. The four minarets are about 40 m. Built in Agra between 1632 and 1653.'},
+ {id:'unity',name:'Statue of Unity',size:240,dim:'h',vb:[64,263],word:'tall, with its base',fact:'Sardar Vallabhbhai Patel’s figure alone is 182 m, the tallest statue in the world. With its base it reaches 240 m. Opened in Gujarat in 2018.'},
+ {id:'brihad',name:'Brihadeeswarar Temple tower',size:66,dim:'h',vb:[50,100],word:'tall',fact:'The Chola temple tower in Thanjavur rises about 66 m. It was finished in 1010 CE.'},
+ {id:'charminar',name:'Charminar',size:56,dim:'h',vb:[45,100],word:'tall',fact:'Each of its four minarets in Hyderabad reaches about 56 m. Built in 1591.'},
+ {id:'victoria',name:'Victoria Memorial',size:56,dim:'h',vb:[185,100],word:'tall, to the angel on top',fact:'A white marble hall in Kolkata, about 56 m to the top of the angel figure. Opened in 1921.'},
+ {id:'mysore',name:'Mysore Palace',size:44.2,dim:'h',vb:[170,100],word:'tall, main tower',fact:'Its central tower rises 145 ft, about 44 m. The present palace was finished in 1912.'},
+ {id:'lvm3',name:'ISRO LVM3 rocket',size:43.5,dim:'h',vb:[26,100],word:'tall',fact:'ISRO’s heaviest launcher. It carried Chandrayaan-3 to space in 2023.'},
+ {id:'indiagate',name:'India Gate',size:42,dim:'h',vb:[64,100],word:'tall',fact:'The war memorial arch in New Delhi. Finished in 1931.'},
+ {id:'lotus',name:'Lotus Temple',size:34.3,dim:'h',vb:[200,100],word:'tall',fact:'The Bahá’í house of worship in Delhi, made of 27 marble petals. Opened in 1986.'},
+ {id:'thiru',name:'Thiruvalluvar Statue',size:40.5,dim:'h',vb:[36,100],word:'tall, with its pedestal',fact:'At Kanyakumari: a 95 ft statue on a 38 ft base, 133 ft in all — one foot for each chapter of the Tirukkural.'},
+ {id:'gateway',name:'Gateway of India',size:26,dim:'h',vb:[105,100],word:'tall',fact:'The basalt arch on Mumbai’s waterfront, finished in 1924.'},
+ {id:'gomm',name:'Gommateshwara statue',size:17.4,dim:'h',vb:[50,100],word:'tall',fact:'Carved from one single rock at Shravanabelagola, Karnataka, around 983 CE. About 57 ft high.'},
+ {id:'hawa',name:'Hawa Mahal',size:15,dim:'h',vb:[130,100],word:'tall',fact:'Jaipur’s “Palace of Winds” is about 50 ft high and has 953 small windows. Built in 1799.'},
+ {id:'howrah',name:'Howrah Bridge',size:705,dim:'l',vb:[780,100],word:'long, end to end',fact:'705 m long, with a 457 m main span between the two towers. It opened in 1943 and carries heavy traffic every day.'},
+ {id:'coach',name:'Indian Railways LHB coach',size:23.54,dim:'l',vb:[583,100],word:'long',fact:'The modern LHB coach body is about 23.5 m long, longer than the older ICF coaches.'},
+ {id:'pitch',name:'Cricket pitch',size:20.12,dim:'l',vb:[660,100],word:'long, seen from above',fact:'22 yards (20.12 m) from one set of stumps to the other.'},
+ {id:'kabaddi',name:'Kabaddi court (men)',size:13,dim:'l',vb:[130,100],word:'long, seen from above',fact:'A men’s kabaddi court is 13 m by 10 m, split by a mid-line.'},
+ {id:'elephant',name:'Indian elephant',size:2.7,dim:'h',vb:[140,100],word:'tall',fact:'Adult male Indian elephants stand about 2.5 to 3 m tall. We use 2.7 m.'},
+ {id:'tiger',name:'Bengal tiger',size:2.9,dim:'l',vb:[290,100],word:'nose to tail tip',fact:'Adult male Bengal tigers are about 2.7 to 3.1 m long including the tail. We use 2.9 m.'},
+ {id:'person',name:'A person',size:1.7,dim:'h',vb:[30,100],word:'tall',refOnly:true,fact:''},
+ {id:'auto',name:'Auto rickshaw',size:2.635,dim:'l',vb:[155,100],word:'long',fact:'A standard three-wheeler auto is about 2.6 m long — shorter than most small cars.'},
+ {id:'bullet',name:'Royal Enfield Classic 350',size:2.145,dim:'l',vb:[197,100],word:'long',fact:'The Classic 350 is about 2.1 m long from front tyre to rear.'},
+ {id:'nano',name:'Tata Nano',size:3.099,dim:'l',vb:[188,100],word:'long',fact:'Launched in 2008 as the cheapest car in the world. Just 3.1 m long.'},
+ {id:'bat',name:'Cricket bat',size:0.965,dim:'h',vb:[10.8,96.5],word:'long, the legal maximum',fact:'The Laws of Cricket allow a bat up to 38 inches (96.5 cm) long.'},
+ {id:'stumps',name:'Cricket stumps',size:0.711,dim:'h',vb:[22.86,71.1],word:'tall',fact:'Stumps stand 28 inches (71.1 cm) above the ground.'},
+ {id:'ball',name:'Cricket ball',size:0.072,dim:'d',vb:[100,100],word:'across',fact:'Its circumference must be 22.4 to 22.9 cm, so it is about 7.2 cm across.'},
+ {id:'note',name:'₹500 note',size:0.15,dim:'l',vb:[150,66],word:'wide',fact:'The current ₹500 note is 66 mm by 150 mm.'},
+ {id:'coin',name:'₹10 coin',size:0.027,dim:'d',vb:[100,100],word:'across',fact:'The two-coloured ₹10 coin is 27 mm across.'},
+ {id:'card',name:'PVC Aadhaar card',size:0.0856,dim:'l',vb:[85.6,54],word:'wide',fact:'It uses the standard bank-card size: 85.6 mm by 54 mm.'},
+ {id:'passport',name:'Indian passport',size:0.125,dim:'h',vb:[88,125],word:'tall',fact:'Passport booklets follow the international size: 125 mm by 88 mm.'},
+ /* Karnataka */
+ {id:'golgumbaz',name:'Gol Gumbaz',size:60.5,dim:'h',vb:[78.5,100],word:'tall',fact:'The tomb of Mohammed Adil Shah in Vijayapura. Its dome is about 44 m across, one of the largest in the world.'},
+ {id:'jog',name:'Jog Falls',size:253,dim:'h',vb:[140,100],word:'high, top to bottom',fact:'The Sharavati river drops about 253 m here, split into four falls: Raja, Rani, Roarer and Rocket.'},
+ {id:'virupaksha',name:'Virupaksha Temple gopuram, Hampi',size:50,dim:'h',vb:[52,100],word:'tall',fact:'The nine-tiered east gateway of the Virupaksha temple at Hampi is 50 m tall.'},
+ {id:'murudeshwar',name:'Murudeshwar Shiva statue',size:37,dim:'h',vb:[72,100],word:'tall',fact:'This seated Shiva on the coast at Murudeshwar is 123 ft (37 m) tall.'},
+ {id:'chamundinandi',name:'Chamundi Hill Nandi',size:4.9,dim:'h',vb:[139.5,90],word:'tall',fact:'A black granite Nandi on the steps up Chamundi Hill in Mysuru: 4.9 m tall and 7.6 m long. The steps were built in 1659.'},
+ {id:'kempegowda',name:'Kempegowda statue',size:33,dim:'h',vb:[34,100],word:'tall, with its base',fact:'The “Statue of Prosperity” of Bengaluru’s founder at the airport is 108 ft (33 m) tall, including a 20 ft base. Unveiled in 2022.'},
+ {id:'narasimha',name:'Ugra Narasimha, Hampi',size:6.7,dim:'h',vb:[80,100],word:'tall',fact:'He sits on the coils of the seven-headed serpent Adishesha, whose hoods rise behind him. About 6.7 m (22 ft) tall.'},
+ {id:'nammametro',name:'Namma Metro coach',size:20.8,dim:'l',vb:[533,100],word:'long',fact:'Each of Bengaluru’s original Phase 1 metro coaches is 20.8 m long and 2.88 m wide.'},
+ /* Tamil Nadu */
+ {id:'meenakshi',name:'Meenakshi Temple south gopuram',size:52,dim:'h',vb:[56,100],word:'tall',fact:'The tallest of the Madurai temple’s gateways, covered in colourful sculptures. 170 ft (52 m).'},
+ {id:'srirangam',name:'Srirangam Rajagopuram',size:73,dim:'h',vb:[62,100],word:'tall',fact:'The 13-tiered main gateway of the Ranganathaswamy temple, about 73 m (240 ft) tall.'},
+ {id:'shore',name:'Shore Temple',size:18,dim:'h',vb:[150,100],word:'tall, main tower',fact:'The 8th-century granite temple by the sea at Mahabalipuram. Its main tower is 60 ft (18 m) high.'},
+ {id:'butterball',name:'Krishna’s Butter Ball',size:6,dim:'h',vb:[83,100],word:'tall',fact:'A 250-tonne boulder balanced on a slope at Mahabalipuram. About 6 m high and 5 m wide.'},
+ {id:'valluvarchariot',name:'Valluvar Kottam chariot',size:39,dim:'h',vb:[46,100],word:'tall',fact:'A stone copy of the Thiruvarur temple chariot in Chennai, 128 ft (39 m) tall. Its wheels are 11 ft across.'},
+ {id:'arjuna',name:'Arjuna’s Penance',size:29,dim:'l',vb:[223,100],word:'long',fact:'A huge rock carving at Mahabalipuram, about 29 m by 13 m, with life-size elephants near the bottom.'},
+ {id:'chennaicentral',name:'Chennai Central station',size:41,dim:'h',vb:[230,100],word:'tall, clock tower',fact:'The red-brick station’s clock tower is 136 ft (41 m) tall, with four clock faces.'},
+ {id:'thanjavurnandi',name:'Thanjavur Big Temple Nandi',size:5.94,dim:'l',vb:[146.7,90],word:'long',fact:'The monolithic Nandi at the Brihadeeswarar temple is about 5.9 m long and 3.65 m high.'},
+ /* Kerala */
+ {id:'fishnet',name:'Chinese fishing net, Kochi',size:10,dim:'h',vb:[210,100],word:'tall',fact:'Kochi’s shore-operated nets stand at least 10 m high, with nets 20 m or more across. We use 10 m.'},
+ {id:'snakeboat',name:'Snake boat (chundan vallam)',size:36,dim:'l',vb:[560,100],word:'long',fact:'Snake boats are 100 to 138 ft (30–42 m) long and carry about 64 rowers. We use 36 m.'},
+ {id:'houseboat',name:'Kerala houseboat',size:30.5,dim:'l',vb:[600,100],word:'long',fact:'A typical kettuvallam is about 30 m long and 4 m wide, built from planks tied with coir.'},
+ {id:'padmanabha',name:'Padmanabhaswamy Temple gopuram',size:30.5,dim:'h',vb:[110,100],word:'tall',fact:'The seven-tiered gopuram in Thiruvananthapuram is 100 ft (about 30 m) tall.'},
+ {id:'athirappilly',name:'Athirappilly Falls',size:25,dim:'h',vb:[400,100],word:'tall',fact:'About 25 m tall and 100 m wide, on the Chalakudy river.'},
+ {id:'jatayu',name:'Jatayu sculpture',size:61,dim:'l',vb:[290,100],word:'long',fact:'At Jatayu Earth’s Center in Kollam: 200 ft long, 150 ft wide and 70 ft high.'},
+ {id:'idukki',name:'Idukki Arch Dam',size:169,dim:'h',vb:[217,100],word:'tall',fact:'A double-curved arch dam across a gorge of the Periyar river, 169 m tall and 366 m long at the top.'},
+ {id:'vizhinjam',name:'Vizhinjam lighthouse',size:36,dim:'h',vb:[22,100],word:'tall',fact:'The red-and-white striped lighthouse near Kovalam beach is 36 m tall.'},
+ {id:'vikrant',name:'INS Vikrant',size:262,dim:'l',vb:[444,100],word:'long',fact:'India’s first home-built aircraft carrier, made at Cochin Shipyard in Kochi. 262 m long.'},
+ {id:'pooram',name:'Thrissur Pooram elephant',size:3.14,dim:'h',vb:[140,100],word:'tall',fact:'Thechikottukavu Ramachandran, the elephant who opens Thrissur Pooram, is about 3.14 m tall.'},
+];
+ITEMS.forEach(i=>{i.ops=SH[i.id];i.aspect=i.vb[0]/i.vb[1];});
+const byId=Object.fromEntries(ITEMS.map(i=>[i.id,i]));
+const PACKS=[
+ {id:'india',name:'All India',sub:'Monuments, rides and everyday things',preview:['qutub','taj','indiagate','auto'],items:null},
+ {id:'karnataka',name:'Karnataka',sub:'Mysuru, Hampi, Bengaluru and the coast',preview:['gomm','mysore','golgumbaz'],items:['mysore','gomm','golgumbaz','jog','virupaksha','murudeshwar','chamundinandi','kempegowda','narasimha','nammametro']},
+ {id:'tamilnadu',name:'Tamil Nadu',sub:'Gopurams, Mahabalipuram and Chennai',preview:['srirangam','shore','thiru'],items:['brihad','thiru','meenakshi','srirangam','shore','butterball','valluvarchariot','arjuna','chennaicentral','thanjavurnandi']},
+ {id:'kerala',name:'Kerala',sub:'Backwaters, boats, falls and festivals',preview:['vizhinjam','fishnet','padmanabha'],items:['fishnet','snakeboat','houseboat','padmanabha','athirappilly','jatayu','idukki','vizhinjam','vikrant','pooram']},
+];
+const packById=Object.fromEntries(PACKS.map(p=>[p.id,p]));
+const box=(it,m)=>it.dim==='l'?{w:m,h:m/it.aspect}:it.dim==='d'?{w:m,h:m}:{w:m*it.aspect,h:m};
+const maxDim=(it,m)=>{const b=box(it,m);return Math.max(b.w,b.h);};
+const PARTNERS={};
+ITEMS.forEach(t=>{if(t.refOnly)return;PARTNERS[t.id]=ITEMS.filter(r=>r!==t&&(()=>{const q=maxDim(t,t.size)/maxDim(r,r.size);return q<=3.5&&q>=1/3.5;})()).map(r=>r.id);});
+const TARGETS=Object.keys(PARTNERS).filter(k=>PARTNERS[k].length);
+const packItems=p=>(p.items||TARGETS).filter(id=>TARGETS.includes(id));
+
+/* ---------- utils ---------- */
+const pad=n=>String(n).padStart(2,'0');
+const dstr=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const TODAY=dstr(new Date());
+const YESTERDAY=(()=>{const d=new Date();d.setDate(d.getDate()-1);return dstr(d);})();
+const LAUNCH=[2026,9,20];
+const dayNum=s=>{const [y,m,d]=s.split('-').map(Number);return Math.round((Date.UTC(y,m-1,d)-Date.UTC(...LAUNCH))/864e5)+1;};
+function hash(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return h>>>0;}
+function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function shuffle(a,rnd=Math.random){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function fmt(m){if(m<0.1)return Math.round(m*1000)+' mm';if(m<1)return(+(m*100).toFixed(1))+' cm';if(m<10)return(+m.toFixed(2))+' m';if(m<100)return(+m.toFixed(1))+' m';return Math.round(m)+' m';}
+function scoreOf(g,T){const e=Math.abs(Math.log(g/T)),tol=Math.log(1.06);return e<=tol?100:Math.round(100*Math.exp(-1.257*(e-tol)));}
+const tier=s=>s>=80?1:s>=40?2:3;
+const tile=s=>s>=90?'\u{1F7E9}':s>=60?'\u{1F7E8}':s>=30?'\u{1F7E7}':'\u{1F7E5}';
+const verdictOf=s=>s===100?'Spot on!':s>=80?'Very close':s>=60?'Close':s>=30?'A bit off':'Way off';
+const within10=rd=>{const q=rd.guess/byId[rd.t].size;return Math.max(q,1/q)<=1.1;};
+
+function makeRound(tId,rId,rnd){
+  const t=byId[tId],r=byId[rId],k=maxDim(t,1),refMax=maxDim(r,r.size);
+  const lo=refMax/4/k,hi=refMax*4/k;let s=0.5;
+  for(let i=0;i<40;i++){s=0.05+rnd()*0.9;const g=lo*Math.pow(hi/lo,s);if(Math.abs(Math.log(g/t.size))>0.45)break;}
+  return {t:tId,r:rId,lo,hi,pos:Math.round(s*1000),done:false,guess:null,score:null};
+}
+function dailyRounds(date){
+  const rnd=mulberry(hash('size-up-india:'+date));const pool=shuffle(TARGETS,rnd);
+  const used=new Set(),out=[];
+  for(const t of pool){if(out.length===5)break;if(used.has(t))continue;
+    const cands=PARTNERS[t].filter(r=>!used.has(r));if(!cands.length)continue;
+    const r=cands[Math.floor(rnd()*cands.length)];used.add(t);used.add(r);out.push(makeRound(t,r,rnd));}
+  return out;
+}
+function packRounds(p){
+  const own=packItems(p),pool=shuffle(own),n=Math.min(10,pool.length),use={},out=[];
+  for(let i=0;i<n;i++){const t=pool[i];let c=PARTNERS[t].filter(r=>(use[r]||0)<2);if(!c.length)c=PARTNERS[t];
+    const local=p.items?c.filter(r=>own.includes(r)):[];const from=local.length&&Math.random()<0.5?local:c;
+    const r=from[Math.floor(Math.random()*from.length)];use[r]=(use[r]||0)+1;out.push(makeRound(t,r,Math.random));}
+  return out;
+}
+const gOf=rd=>rd.lo*Math.pow(rd.hi/rd.lo,rd.pos/1000);
+
+/* ---------- state ---------- */
+const KEY='size-up-india:v1';
+let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){saved={};}
+const G={view:'home',daily:null,live:{},sess:null,streak:saved.streak||0,lastDone:saved.lastDone||null,best:saved.best||0,packBest:saved.packBest||{}};
+if(saved.daily&&saved.daily.date===TODAY&&Array.isArray(saved.daily.rounds)&&saved.daily.rounds.length===5&&saved.daily.rounds.every(r=>byId[r.t]&&byId[r.r]))G.daily=saved.daily;
+else G.daily={date:TODAY,rounds:dailyRounds(TODAY),idx:0};
+G.daily.kind='daily';
+function save(){try{localStorage.setItem(KEY,JSON.stringify({daily:G.daily,streak:G.streak,lastDone:G.lastDone,best:G.best,packBest:G.packBest}));}catch(e){}}
+const cur=()=>G.sess&&G.sess.rounds[Math.min(G.sess.idx,G.sess.rounds.length-1)];
+const isDone=s=>s.idx>=s.rounds.length;
+const totalOf=s=>s.rounds.reduce((a,r)=>a+(r.score||0),0);
+
+/* ---------- drawing ---------- */
+const $=id=>document.getElementById(id);
+const cv=$('cv'),ctx=cv.getContext('2d'),wrapEl=$('cvwrap'),slider=$('size');
+let dpr=Math.max(1,window.devicePixelRatio||1);
+const oc=document.createElement('canvas'),ox=oc.getContext('2d');
+const view={s:null};let revealStart=0,raf=null;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function drawShape(c,it,x,yb,w,h,color,alpha){
+  if(w<=0||h<=0)return;
+  const dw=Math.max(2,Math.ceil(w*dpr)),dh=Math.max(2,Math.ceil(h*dpr)),cap=4096,sc=Math.min(1,cap/dw,cap/dh);
+  oc.width=Math.max(2,Math.ceil(dw*sc));oc.height=Math.max(2,Math.ceil(dh*sc));
+  ox.clearRect(0,0,oc.width,oc.height);paintShape(ox,it,oc.width,oc.height,color);
+  c.globalAlpha=alpha;c.drawImage(oc,x,yb-h,w,h);c.globalAlpha=1;
+}
+const nice=x=>{const e=Math.pow(10,Math.floor(Math.log10(x))),f=x/e;return(f<1.5?1:f<3.5?2:f<7.5?5:10)*e;};
+const ease=p=>1-Math.pow(1-p,3);
+
+function draw(){
+  if(G.view!=='game')return false;
+  const rd=cur();if(!rd)return false;
+  const W=cv.clientWidth,H=cv.clientHeight;if(!W||!H)return false;
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  const cRef=css('--ref'),cTgt=css('--tgt'),cGrid=css('--grid'),cMuted=css('--muted'),cEarth=css('--earth'),cCard=css('--card'),cInk=css('--ink');
+  const ref=byId[rd.r],tgt=byId[rd.t],rb=box(ref,ref.size),g=gOf(rd),gb=box(tgt,g);
+  let prog=1,tb=null;
+  if(rd.done){prog=revealStart?clamp((performance.now()-revealStart)/900,0,1):1;const m=g*Math.pow(tgt.size/g,ease(prog));tb=box(tgt,m);}
+  const fb=rd.done?box(tgt,tgt.size):gb;
+  const maxTW=Math.max(gb.w,fb.w),maxH=Math.max(rb.h,gb.h,fb.h);
+  const ground=H-30,top=34,gap=Math.max(28,W*0.07);
+  const sT=Math.min((ground-top)/maxH,(W-40-gap)/(rb.w+maxTW));
+  let moving=false;
+  if(!view.s||!isFinite(view.s))view.s=sT;else{const a=Math.log(view.s),b=Math.log(sT);const n=a+(b-a)*0.22;view.s=Math.exp(n);if(Math.abs(n-b)>0.002)moving=true;else view.s=sT;}
+  const s=view.s;
+  const step=nice((ground-top)/s/4);ctx.lineWidth=1;ctx.font='500 11px "IBM Plex Mono", ui-monospace, monospace';ctx.textBaseline='bottom';
+  for(let i=1;ground-i*step*s>4;i++){const y=Math.round(ground-i*step*s)+0.5;ctx.strokeStyle=cGrid;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
+    if(rd.done&&prog>=1){ctx.fillStyle=cMuted;ctx.fillText(fmt(i*step),8,y-3);}}
+  ctx.fillStyle=cEarth;ctx.fillRect(0,ground,W,H-ground);
+  const totalW=(rb.w+maxTW)*s+gap,x0=(W-totalW)/2,tCx=x0+rb.w*s+gap+maxTW*s/2;
+  drawShape(ctx,ref,x0,ground,rb.w*s,rb.h*s,cRef,1);
+  if(!rd.done){
+    drawShape(ctx,tgt,tCx-gb.w*s/2,ground,gb.w*s,gb.h*s,cTgt,1);
+    const hy=Math.max(16,ground-gb.h*s-18);ctx.fillStyle=cTgt;ctx.beginPath();ctx.arc(tCx,hy,11,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=cCard;ctx.beginPath();ctx.moveTo(tCx-5,hy-2);ctx.lineTo(tCx+5,hy-2);ctx.lineTo(tCx,hy-7);ctx.closePath();ctx.fill();
+    ctx.beginPath();ctx.moveTo(tCx-5,hy+2);ctx.lineTo(tCx+5,hy+2);ctx.lineTo(tCx,hy+7);ctx.closePath();ctx.fill();
+  }else{
+    drawShape(ctx,tgt,tCx-gb.w*s/2,ground,gb.w*s,gb.h*s,cTgt,1);
+    drawShape(ctx,tgt,tCx-tb.w*s/2,ground,tb.w*s,tb.h*s,cInk,0.42);
+    ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle=cInk;ctx.globalAlpha=0.7;ctx.strokeRect(Math.round(tCx-tb.w*s/2)+0.5,Math.round(ground-tb.h*s)+0.5,Math.max(1,tb.w*s-1),Math.max(1,tb.h*s-1));ctx.restore();
+    if(prog>=1){ctx.fillStyle=cMuted;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText('red = your guess · shaded = real size',tCx,ground+8);ctx.textAlign='left';}
+  }
+  ctx.strokeStyle=cMuted;ctx.beginPath();ctx.moveTo(0,ground+0.5);ctx.lineTo(W,ground+0.5);ctx.stroke();
+  return moving||(rd.done&&prog<1);
+}
+function tick(){raf=null;if(draw())raf=requestAnimationFrame(tick);}
+function kick(){if(!raf)raf=requestAnimationFrame(tick);}
+function fit(){dpr=Math.max(1,window.devicePixelRatio||1);cv.width=Math.round(cv.clientWidth*dpr);cv.height=Math.round(cv.clientHeight*dpr);view.s=null;draw();kick();}
+new ResizeObserver(fit).observe(wrapEl);
+
+function drawPreview(c,ids){
+  const W=c.clientWidth,H=c.clientHeight;if(!W||!H)return;
+  c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);const g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,W,H);
+  const col=css('--ref'),base=H-10,h=H-20,gap=14;
+  let ws=ids.map(id=>h*byId[id].aspect),tot=ws.reduce((a,b)=>a+b,0)+gap*(ids.length-1);
+  const k=Math.min(1,(W-24)/tot);ws=ws.map(w=>w*k);tot=tot*k;let x=(W-tot)/2;
+  ids.forEach((id,i)=>{drawShape(g,byId[id],x,base,ws[i],h*k,col,1);x+=ws[i]+gap*k;});
+  g.fillStyle=css('--line');g.fillRect(8,base,W-16,1);
+}
+function drawPreviews(){document.querySelectorAll('.pack canvas').forEach(c=>drawPreview(c,packById[c.dataset.pack].preview));}
+const redrawAll=()=>{kick();if(G.view==='home')drawPreviews();};
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redrawAll);}catch(e){}
+new MutationObserver(redrawAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+try{document.fonts&&document.fonts.ready.then(redrawAll);}catch(e){}
+
+/* ---------- home ---------- */
+function buildPacks(){
+  const wrap=$('packs');wrap.innerHTML='';
+  PACKS.forEach(p=>{
+    const b=document.createElement('button');b.className='pack';b.dataset.pack=p.id;
+    const c=document.createElement('canvas');c.dataset.pack=p.id;c.setAttribute('aria-hidden','true');
+    const top=document.createElement('span');top.className='pk-top';
+    const nm=document.createElement('span');nm.className='pk-name';nm.textContent=p.name;
+    const n=document.createElement('span');n.className='pk-n';n.textContent=packItems(p).length+' places';
+    top.append(nm,n);
+    const sub=document.createElement('span');sub.className='pk-sub';sub.textContent=p.sub;
+    const best=document.createElement('span');best.className='pk-best';best.id='best-'+p.id;
+    b.append(c,top,sub,best);b.addEventListener('click',()=>openPack(p.id));wrap.appendChild(b);
+  });
+  new ResizeObserver(()=>{if(G.view==='home')drawPreviews();}).observe(wrap);
+}
+function renderHome(){
+  const n=dayNum(G.daily.date);$('dcLabel').textContent='Daily #'+n;
+  const d=G.daily;
+  if(isDone(d)){$('dcStatus').innerHTML='';const s=document.createElement('span');s.className='score';s.textContent='Done: '+totalOf(d)+' / 500';$('dcStatus').append(s,document.createTextNode(' · Streak '+G.streak+(G.streak===1?' day':' days')+'. Come back tomorrow.'));$('dcPlay').textContent='See today’s result';}
+  else if(d.idx>0){$('dcStatus').textContent='Round '+(d.idx+1)+' of 5 · pick up where you left off.';$('dcPlay').textContent='Continue';}
+  else{$('dcStatus').textContent='5 rounds, the same for everyone. A new puzzle every midnight.';$('dcPlay').textContent='Play today’s puzzle';}
+  PACKS.forEach(p=>{const el=$('best-'+p.id),b=G.packBest[p.id],live=G.live[p.id];
+    if(live&&!isDone(live)&&live.idx>0){el.className='pk-best';el.textContent='In progress · round '+(live.idx+1)+' of '+live.rounds.length;}
+    else if(b!=null){el.className='pk-best has';el.textContent='Best '+b+' / '+(Math.min(10,packItems(p).length)*100);}
+    else{el.className='pk-best';el.textContent='Not played yet';}});
+  drawPreviews();
+}
+
+/* ---------- navigation ---------- */
+function show(v){G.view=v;$('home').hidden=v!=='home';$('game').hidden=v!=='game';
+  if(v==='home')renderHome();else{view.s=null;fit();renderGame();}
+  try{window.scrollTo({top:0});}catch(e){}}
+function openDaily(){G.sess=G.daily;show('game');}
+function openPack(id){let s=G.live[id];if(!s||isDone(s)){s={kind:'pack',packId:id,rounds:packRounds(packById[id]),idx:0};G.live[id]=s;}G.sess=s;show('game');}
+
+/* ---------- game UI ---------- */
+function labelOf(s){return s.kind==='daily'?'Daily #'+dayNum(G.daily.date):packById[s.packId].name;}
+function renderGame(){
+  const s=G.sess,N=s.rounds.length;
+  const dots=$('dots');dots.innerHTML='';
+  s.rounds.forEach((r,i)=>{const d=document.createElement('span');if(r.done)d.className='t'+tier(r.score);else if(i===s.idx)d.className='now';dots.appendChild(d);});
+  if(isDone(s)){$('roundLabel').textContent=labelOf(s)+' · Finished';showSummary();renderRound(s.rounds[N-1]);return;}
+  $('summary').hidden=true;
+  $('roundLabel').textContent=labelOf(s)+' · Round '+(s.idx+1)+' of '+N;
+  renderRound(cur());
+}
+function renderRound(rd){
+  const ref=byId[rd.r],tgt=byId[rd.t];
+  $('prompt').innerHTML='How big is the <b class="t"></b> next to the <b class="r"></b>?';
+  $('prompt').querySelector('.t').textContent=tgt.name;$('prompt').querySelector('.r').textContent=ref.name;
+  $('refName').textContent=ref.name;$('refSize').textContent=fmt(ref.size)+' '+ref.word;
+  $('tgtName').textContent=tgt.name;$('tgtSize').textContent=(rd.done?fmt(tgt.size):'?')+' '+tgt.word;
+  slider.value=rd.pos;
+  const lock=rd.done;slider.disabled=lock;$('minus').disabled=lock;$('plus').disabled=lock;$('lock').disabled=lock;
+  $('controls').hidden=lock;$('hint').hidden=lock;cv.classList.toggle('locked',lock);
+  cv.setAttribute('aria-label','Blue: '+ref.name+', '+fmt(ref.size)+'. Red: '+tgt.name+(lock?', real size '+fmt(tgt.size)+', your guess '+fmt(rd.guess):'. Resize it with the slider.'));
+  const showRes=lock&&!isDone(G.sess);
+  $('result').hidden=!showRes;
+  if(showRes){
+    const p=$('pts');p.className='pts t'+tier(rd.score);p.firstChild.nodeValue=rd.score;
+    $('verdict').textContent=verdictOf(rd.score);
+    const q=rd.guess/tgt.size,off=Math.abs(q-1);
+    $('nums').textContent='Your guess '+fmt(rd.guess)+' · Real '+fmt(tgt.size)+' · '+(off<0.01?'almost exact':Math.round(off*100)+'% too '+(q>1?'big':'small'));
+    $('fact').textContent=tgt.fact;
+    $('next').textContent=G.sess.idx>=G.sess.rounds.length-1?'See your score':'Next round';
+  }
+  kick();
+}
+function showSummary(){
+  const s=G.sess,N=s.rounds.length,total=totalOf(s),w=s.rounds.filter(within10).length;
+  $('result').hidden=true;$('controls').hidden=true;$('summary').hidden=false;
+  $('sumLabel').textContent=labelOf(s)+' done';
+  $('total').innerHTML='';$('total').append(String(total)+' ');const sp=document.createElement('span');sp.textContent='/ '+N*100;$('total').append(sp);
+  $('within').textContent=w+' of '+N+' guesses within 10%';
+  const ul=$('rows');ul.innerHTML='';
+  s.rounds.forEach(r=>{const li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('b');a.textContent=tile(r.score)+' '+byId[r.t].name;b.textContent=r.score;li.append(a,b);ul.appendChild(li);});
+  const st=$('stats');st.textContent='';
+  const pairs=s.kind==='daily'?[['Streak',G.streak+(G.streak===1?' day':' days')],['Best',G.best+' / 500'],['Next puzzle','tomorrow']]:[['Best',(G.packBest[s.packId]||total)+' / '+N*100]];
+  pairs.forEach(([k,v])=>{const e=document.createElement('span');e.textContent=k+': '+v;st.appendChild(e);});
+  $('again').hidden=s.kind==='daily';$('shareBox').hidden=true;
+}
+function shareText(){const s=G.sess,N=s.rounds.length,w=s.rounds.filter(within10).length;
+  const head=s.kind==='daily'?'Size Up India #'+dayNum(G.daily.date):'Size Up India · '+packById[s.packId].name;
+  const site=/^https?:$/.test(location.protocol)&&!/claude/.test(location.hostname)?'\n'+location.host:'';
+  return head+' · '+totalOf(s)+'/'+N*100+' · '+w+'/'+N+' within 10%\n'+s.rounds.map(r=>tile(r.score)).join('')+site;}
+
+function setPos(v){const rd=cur();if(!rd||rd.done)return;rd.pos=clamp(Math.round(v),0,1000);slider.value=rd.pos;kick();}
+slider.addEventListener('input',()=>setPos(+slider.value));
+$('minus').addEventListener('click',()=>setPos(cur().pos-8));
+$('plus').addEventListener('click',()=>setPos(cur().pos+8));
+let drag=null;
+cv.addEventListener('pointerdown',e=>{const rd=cur();if(!rd||rd.done)return;drag={y:e.clientY,p:rd.pos};try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+cv.addEventListener('pointermove',e=>{if(!drag)return;setPos(drag.p+(drag.y-e.clientY)*1000/(cv.clientHeight*1.3));});
+const endDrag=()=>{drag=null;};cv.addEventListener('pointerup',endDrag);cv.addEventListener('pointercancel',endDrag);
+
+$('lock').addEventListener('click',()=>{
+  const rd=cur();if(!rd||rd.done)return;rd.guess=gOf(rd);rd.score=scoreOf(rd.guess,byId[rd.t].size);rd.done=true;
+  revealStart=matchMedia('(prefers-reduced-motion: reduce)').matches?0:performance.now();
+  if(G.sess.kind==='daily')save();
+  renderGame();$('next').focus({preventScroll:true});
+});
+$('next').addEventListener('click',()=>{
+  const s=G.sess;revealStart=0;view.s=null;s.idx++;
+  if(isDone(s)){const total=totalOf(s);
+    if(s.kind==='daily'){if(G.lastDone!==s.date){G.streak=G.lastDone===YESTERDAY?G.streak+1:1;G.lastDone=s.date;G.best=Math.max(G.best,total);}}
+    else G.packBest[s.packId]=Math.max(G.packBest[s.packId]||0,total);}
+  save();renderGame();
+});
+$('copy').addEventListener('click',()=>{
+  const t=shareText(),box=$('shareBox');
+  const fallback=()=>{box.value=t;box.hidden=false;box.focus();box.select();};
+  try{navigator.clipboard.writeText(t).then(()=>{$('toast').hidden=false;setTimeout(()=>$('toast').hidden=true,1800);}).catch(fallback);}catch(e){fallback();}
+});
+$('again').addEventListener('click',()=>{const id=G.sess.packId;delete G.live[id];openPack(id);});
+$('home2').addEventListener('click',()=>show('home'));
+$('back').addEventListener('click',()=>show('home'));
+$('dcPlay').addEventListener('click',openDaily);
+
+buildPacks();
+const h=(location.hash||'').slice(1);
+if(h==='daily')openDaily();else if(packById[h])openPack(h);else show('home');
+})();
+</script>
+</body>
+</html>
