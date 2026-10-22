@@ -888,6 +888,7 @@ async function shareCard(){
     }
     if(cardUrl)URL.revokeObjectURL(cardUrl);cardUrl=URL.createObjectURL(cardBlob);
     $('cardImg').src=cardUrl;$('cardDl').href=cardUrl;
+    $('cardDl').hidden=!/^https?:$/.test(location.protocol)||/claude|usercontent/.test(location.hostname);
     $('cardCopy').hidden=!(navigator.clipboard&&window.ClipboardItem);
     $('cardView').hidden=false;$('cardClose').focus();
   }finally{btn.disabled=false;}
