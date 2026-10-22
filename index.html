@@ -65,6 +65,7 @@ h1 .q{color:var(--tgt)}
 .pk-best.has{color:var(--good)}
 
 /* game */
+}
 .gbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .gbar .eyebrow{flex:1 1 auto}
 .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px}
@@ -133,6 +134,22 @@ a.primary{text-decoration:none;display:inline-block}
 .how .n{font:500 .75rem var(--f-mono);color:var(--tgt);letter-spacing:.06em}
 .note{color:var(--muted);font-size:.85rem;margin:0;max-width:70ch}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.in-game .wrap{padding-top:14px;gap:12px}
+.in-game h1{font-size:1.7rem}
+.in-game .view{gap:12px}
+.cvwrap{max-height:max(230px,calc(100svh - 300px))}
+@media (max-width:560px){.stage{padding:12px;gap:12px}#prompt{font-size:1.06rem}}
+#size{height:36px}
+@media (max-height:720px){.in-game header{display:none}}
+@media (max-width:400px){.cvwrap{max-height:max(230px,calc(100svh - 340px))}}
+@media (max-height:460px){.cvwrap{max-height:190px}}
+@media (max-width:560px){
+  .controls{display:grid;grid-template-columns:auto 1fr auto;gap:10px}
+  #lock{grid-column:1/-1;width:100%;padding:12px 20px}
+  .gbar{flex-wrap:nowrap}
+  .gbar .ghost{padding:9px 12px;flex:none}
+  .gbar .eyebrow{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.68rem}
+@media (max-height:600px){.cvwrap{max-height:210px}}
 </style>
 <style>html{-webkit-text-size-adjust:100%}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}</style>
 </head>
@@ -176,15 +193,15 @@ a.primary{text-decoration:none;display:inline-block}
         <canvas id="cv" role="img" aria-label="Size comparison"></canvas>
         <span id="hint">DRAG UP / DOWN</span>
       </div>
-      <div class="chips">
-        <div class="chip ref"><i></i><div><strong id="refName"></strong><small id="refSize"></small></div></div>
-        <div class="chip tgt"><i></i><div><strong id="tgtName"></strong><small id="tgtSize"></small></div></div>
-      </div>
       <div class="controls" id="controls">
         <button class="step" id="minus" aria-label="Make smaller">−</button>
         <input type="range" id="size" min="0" max="1000" step="1" value="500" aria-label="Size of the red shape">
         <button class="step" id="plus" aria-label="Make bigger">+</button>
         <button class="primary" id="lock">Lock it in</button>
+      </div>
+      <div class="chips">
+        <div class="chip ref"><i></i><div><strong id="refName"></strong><small id="refSize"></small></div></div>
+        <div class="chip tgt"><i></i><div><strong id="tgtName"></strong><small id="tgtSize"></small></div></div>
       </div>
       <div class="result" id="result" hidden aria-live="polite">
         <div class="pts" id="pts">0<small>of 100</small></div>
@@ -692,7 +709,7 @@ function draw(){
     drawShape(ctx,tgt,tCx-gb.w*s/2,ground,gb.w*s,gb.h*s,cTgt,1);
     drawShape(ctx,tgt,tCx-tb.w*s/2,ground,tb.w*s,tb.h*s,cInk,0.42);
     ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle=cInk;ctx.globalAlpha=0.7;ctx.strokeRect(Math.round(tCx-tb.w*s/2)+0.5,Math.round(ground-tb.h*s)+0.5,Math.max(1,tb.w*s-1),Math.max(1,tb.h*s-1));ctx.restore();
-    if(prog>=1){ctx.fillStyle=cMuted;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText('red = your guess · shaded = real size',tCx,ground+8);ctx.textAlign='left';}
+    if(prog>=1){ctx.fillStyle=cMuted;ctx.textAlign='center';ctx.textBaseline='top';{const tx=W<460?'red = guess · shaded = real':'red = your guess · shaded = real size',hw=ctx.measureText(tx).width/2+6;ctx.fillText(tx,clamp(tCx,hw,W-hw),ground+8);}ctx.textAlign='left';}
   }
   ctx.strokeStyle=cMuted;ctx.beginPath();ctx.moveTo(0,ground+0.5);ctx.lineTo(W,ground+0.5);ctx.stroke();
   return moving||(rd.done&&prog<1);
@@ -747,7 +764,7 @@ function renderHome(){
 }
 
 /* ---------- navigation ---------- */
-function show(v){G.view=v;$('home').hidden=v!=='home';$('game').hidden=v!=='game';
+function show(v){G.view=v;document.body.classList.toggle('in-game',v==='game');$('home').hidden=v!=='home';$('game').hidden=v!=='game';
   if(v==='home')renderHome();else{view.s=null;fit();renderGame();}
   try{window.scrollTo({top:0});}catch(e){}}
 function openDaily(){G.sess=G.daily;show('game');}
@@ -817,6 +834,7 @@ $('lock').addEventListener('click',()=>{
   revealStart=matchMedia('(prefers-reduced-motion: reduce)').matches?0:performance.now();
   if(G.sess.kind==='daily')save();
   renderGame();$('next').focus({preventScroll:true});
+  if(matchMedia('(max-width:560px), (max-height:600px)').matches)setTimeout(()=>{try{$('result').scrollIntoView({behavior:revealStart?'smooth':'auto',block:'nearest'});}catch(e){}},revealStart?950:0);
 });
 $('next').addEventListener('click',()=>{
   const s=G.sess;revealStart=0;view.s=null;s.idx++;
