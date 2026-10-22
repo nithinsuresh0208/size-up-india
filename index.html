@@ -219,7 +219,7 @@ a.primary{text-decoration:none;display:inline-block}
     <img id="cardImg" alt="Your Size Up India result">
     <p class="cv-tip">On a phone, press and hold the picture to save or share it.</p>
     <div class="actions">
-      <a class="primary" id="cardDl" download="size-up-india.png">Download</a>
+      <a class="primary" id="cardDl" download="size-up-india.jpg">Download</a>
       <button class="ghost" id="cardCopy">Copy picture</button>
       <button class="ghost" id="cardText">Copy caption</button>
       <button class="ghost" id="cardClose">Close</button>
@@ -805,9 +805,8 @@ function showSummary(){
   $('again').hidden=s.kind==='daily';$('shareBox').hidden=true;
 }
 function shareText(){const s=G.sess,N=s.rounds.length,w=s.rounds.filter(within10).length;
-  const head=s.kind==='daily'?'Size Up India #'+dayNum(G.daily.date):'Size Up India · '+packById[s.packId].name;
-  const site='\nPlay: https://'+SITE+'/#'+(s.kind==='daily'?'daily':s.packId);
-  return head+' · '+totalOf(s)+'/'+N*100+' · '+w+'/'+N+' within 10%\n'+s.rounds.map(r=>tile(r.score)).join('')+site;}
+  const where=s.kind==='daily'?'today’s Size Up India (Daily #'+dayNum(G.daily.date)+')':'Size Up India, '+packById[s.packId].name+' pack';
+  return 'I scored '+totalOf(s)+'/'+N*100+' in '+where+'. Can you beat me?\n'+s.rounds.map(r=>tile(r.score)).join('')+'\nhttps://'+SITE+'/#'+(s.kind==='daily'?'daily':s.packId);}
 
 function setPos(v){const rd=cur();if(!rd||rd.done)return;rd.pos=clamp(Math.round(v),0,1000);slider.value=rd.pos;kick();}
 slider.addEventListener('input',()=>setPos(+slider.value));
@@ -843,46 +842,46 @@ const fmtDate=d=>{const [y,m,dd]=d.split('-').map(Number);return dd+' '+['Jan','
 async function makeCard(){
   try{await Promise.all(['400 100px "Rozha One"','600 40px Hind','700 40px Hind'].map(f=>document.fonts.load(f)));}catch(e){}
   const s=G.sess,N=s.rounds.length,total=totalOf(s),w=s.rounds.filter(within10).length;
-  const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
-  const DISP='"Rozha One", Georgia, serif',BODY='Hind, "Noto Sans", Arial, sans-serif',INK='#151A2C',MUTED='#586078';
-  g.fillStyle='#EDF0F6';g.fillRect(0,0,W,H);
+  const W=1080,H=1080,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+  const DISP='"Rozha One", Georgia, serif',BODY='Hind, "Noto Sans", Arial, sans-serif',INK='#151A2C',MUTED='#586078',RED='#D1362A';
   const rr=(x,y,w,h,r)=>{g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();};
-  g.fillStyle='#FFFFFF';rr(44,44,W-88,H-88-170,36);g.fill();
-  g.textBaseline='alphabetic';g.textAlign='left';
-  // title
-  g.font='400 92px '+DISP;const t1='Size Up ',t2='India',tw=g.measureText(t1+t2).width;let x=(W-tw)/2;
-  g.fillStyle=INK;g.fillText(t1,x,170);g.fillStyle='#D1362A';g.fillText(t2,x+g.measureText(t1).width,170);
-  g.textAlign='center';g.fillStyle=MUTED;g.font='600 36px '+BODY;
-  g.fillText(s.kind==='daily'?'Daily #'+dayNum(G.daily.date)+'  ·  '+fmtDate(G.daily.date):packById[s.packId].name+' pack',W/2,228);
+  g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);
+  // top strip: brand + pack
+  g.fillStyle='#EDF0F6';g.fillRect(0,0,W,120);
+  g.textBaseline='alphabetic';g.textAlign='left';g.font='400 58px '+DISP;
+  g.fillStyle=INK;g.fillText('Size Up ',56,82);g.fillStyle=RED;g.fillText('India',56+g.measureText('Size Up ').width,82);
+  g.textAlign='right';g.fillStyle=MUTED;g.font='600 34px '+BODY;
+  g.fillText(s.kind==='daily'?'Daily #'+dayNum(G.daily.date):packById[s.packId].name,W-56,80);
+  // challenge
+  g.textAlign='center';g.fillStyle=INK;g.font='400 84px '+DISP;g.fillText('Can you beat me?',W/2,262);
   // score
-  g.font='400 220px '+DISP;const sc=String(total),sw=g.measureText(sc).width;g.font='400 76px '+DISP;const ow=g.measureText(' / '+N*100).width;
-  x=(W-sw-ow)/2;g.textAlign='left';g.fillStyle=INK;g.font='400 220px '+DISP;g.fillText(sc,x,445);g.fillStyle=MUTED;g.font='400 76px '+DISP;g.fillText(' / '+N*100,x+sw,445);
-  g.textAlign='center';g.font='700 40px '+BODY;g.fillStyle=w?'#1C7F47':MUTED;g.fillText(w+' of '+N+' guesses within 10%',W/2,515);
-  // rounds grid
-  const cols=5,rows=Math.ceil(N/cols),gx=88,gw=W-2*gx,cw=gw/cols,top=568,ch=rows===1?400:300,sh=rows===1?250:170;
+  g.font='400 250px '+DISP;const sc=String(total),sw=g.measureText(sc).width;g.font='400 80px '+DISP;const ow=g.measureText(' / '+N*100).width;
+  let x=(W-sw-ow)/2;g.textAlign='left';g.fillStyle=RED;g.font='400 250px '+DISP;g.fillText(sc,x,520);
+  g.fillStyle=MUTED;g.font='400 80px '+DISP;g.fillText(' / '+N*100,x+sw,520);
+  g.textAlign='center';g.font='600 40px '+BODY;g.fillStyle=MUTED;
+  g.fillText(w+' of '+N+' guesses within 10%',W/2,590);
+  // one coloured tile per round with the place's shape inside
+  const gap=14,tw=Math.min(150,(W-112-gap*(N-1))/N),y0=640;let tx=(W-(tw*N+gap*(N-1)))/2;
   const oc2=document.createElement('canvas'),o2=oc2.getContext('2d');
-  s.rounds.forEach((r,i)=>{
-    const it=byId[r.t],col=i%cols,row=Math.floor(i/cols),cx=gx+cw*col+cw/2,base=top+row*ch+sh,sc=r.score||0,color=TIER(sc);
-    let bw=cw-34,bh=bw/it.aspect;if(bh>sh){bh=sh;bw=bh*it.aspect;}
-    oc2.width=Math.ceil(bw*2);oc2.height=Math.ceil(bh*2);o2.clearRect(0,0,oc2.width,oc2.height);paintShape(o2,it,oc2.width,oc2.height,color);
-    g.drawImage(oc2,cx-bw/2,base-bh,bw,bh);
-    g.fillStyle='#D3D8E5';g.fillRect(cx-cw/2+14,base+4,cw-28,2);
-    g.fillStyle=color;g.font='700 44px '+BODY;g.fillText(String(sc),cx,base+56);
-    g.fillStyle=MUTED;g.font='500 21px '+BODY;let nm=it.name.replace(/,.*$/,'');while(g.measureText(nm).width>cw-16&&nm.length>3)nm=nm.slice(0,-2).trim()+'…';
-    if(nm.endsWith('……'))nm=nm.slice(0,-1);g.fillText(nm,cx,base+86);
-  });
-  // footer
-  g.fillStyle=INK;g.fillRect(0,H-170,W,170);
-  g.fillStyle='#FFFFFF';g.font='600 38px '+BODY;g.fillText('Can you guess closer? Play free at',W/2,H-104);
-  g.fillStyle='#F0B43C';g.font='400 58px '+DISP;g.fillText(SITE,W/2,H-40);
+  s.rounds.forEach(r=>{const it=byId[r.t],sc=r.score||0;
+    g.fillStyle=TIER(sc);rr(tx,y0,tw,tw,16);g.fill();
+    const pad=tw*0.16;let bw=tw-2*pad,bh=bw/it.aspect;if(bh>tw-2*pad){bh=tw-2*pad;bw=bh*it.aspect;}
+    oc2.width=Math.ceil(bw*2);oc2.height=Math.ceil(bh*2);o2.clearRect(0,0,oc2.width,oc2.height);paintShape(o2,it,oc2.width,oc2.height,'#FFFFFF');
+    g.drawImage(oc2,tx+(tw-bw)/2,y0+tw-pad-bh,bw,bh);
+    g.fillStyle=INK;g.font='700 '+Math.round(tw*0.36)+'px '+BODY;g.fillText(String(sc),tx+tw/2,y0+tw+Math.round(tw*0.42));
+    tx+=tw+gap;});
+  // footer link
+  g.fillStyle=INK;g.fillRect(0,H-150,W,150);
+  g.fillStyle='#FFFFFF';g.font='600 34px '+BODY;g.fillText('Guess the size of India’s famous places',W/2,H-92);
+  g.fillStyle='#F0B43C';g.font='400 54px '+DISP;g.fillText(SITE,W/2,H-30);
   return c;
 }
 let cardBlob=null,cardUrl=null;
 async function shareCard(){
   const btn=$('shareImg');btn.disabled=true;
   try{
-    const c=await makeCard();cardBlob=await new Promise(r=>c.toBlob(r,'image/png'));
-    const text=shareText(),file=new File([cardBlob],'size-up-india.png',{type:'image/png'});
+    const c=await makeCard();cardBlob=await new Promise(r=>c.toBlob(r,'image/jpeg',0.9));
+    const text=shareText(),file=new File([cardBlob],'size-up-india.jpg',{type:'image/jpeg'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){
       try{await navigator.share({files:[file],text,title:'Size Up India'});return;}catch(e){if(e&&e.name==='AbortError')return;}
     }
@@ -898,7 +897,7 @@ $('cardClose').addEventListener('click',()=>{$('cardView').hidden=true;$('shareI
 $('cardView').addEventListener('click',e=>{if(e.target===$('cardView'))$('cardClose').click();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('cardView').hidden)$('cardClose').click();});
 $('cardCopy').addEventListener('click',async()=>{
-  try{await navigator.clipboard.write([new ClipboardItem({'image/png':cardBlob})]);$('cardCopy').textContent='Copied';}
+  try{const png=await new Promise(r=>{const im=new Image();im.onload=()=>{const k=document.createElement('canvas');k.width=im.naturalWidth;k.height=im.naturalHeight;k.getContext('2d').drawImage(im,0,0);k.toBlob(r,'image/png');};im.src=cardUrl;});await navigator.clipboard.write([new ClipboardItem({'image/png':png})]);$('cardCopy').textContent='Copied';}
   catch(e){$('cardCopy').textContent='Can’t copy here';}
   setTimeout(()=>$('cardCopy').textContent='Copy picture',1800);
 });
