@@ -109,6 +109,11 @@ button:disabled{opacity:.45;cursor:default}
 .fact{margin:0;max-width:62ch}
 .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .result .actions{grid-column:1/-1;margin-top:6px}
+.cardview{position:fixed;inset:0;background:rgba(10,12,20,.72);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.cv-box{background:var(--card);border-radius:16px;padding:14px;max-width:420px;width:100%;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.cv-box img{width:100%;height:auto;border-radius:10px;display:block}
+.cv-tip{margin:0;color:var(--muted);font-size:.9rem}
+a.primary{text-decoration:none;display:inline-block}
 .summary{border-top:1px dashed var(--line);padding-top:14px;display:flex;flex-direction:column;gap:12px}
 .total{font-family:var(--f-display);font-size:2.6rem;line-height:1}
 .total span{font:500 .9rem var(--f-mono);color:var(--muted)}
@@ -197,7 +202,8 @@ button:disabled{opacity:.45;cursor:default}
         <ul class="rows" id="rows"></ul>
         <div class="stats" id="stats"></div>
         <div class="actions">
-          <button class="primary" id="copy">Copy result</button>
+          <button class="primary" id="shareImg">Share picture</button>
+          <button class="ghost" id="copy">Copy text</button>
           <button class="ghost" id="again">Play again</button>
           <button class="ghost" id="home2">Home</button>
           <span class="toast" id="toast" hidden>Copied</span>
@@ -208,6 +214,18 @@ button:disabled{opacity:.45;cursor:default}
   </section>
 </div>
 
+<div class="cardview" id="cardView" hidden role="dialog" aria-modal="true" aria-label="Your result picture">
+  <div class="cv-box">
+    <img id="cardImg" alt="Your Size Up India result">
+    <p class="cv-tip">On a phone, press and hold the picture to save or share it.</p>
+    <div class="actions">
+      <a class="primary" id="cardDl" download="size-up-india.png">Download</a>
+      <button class="ghost" id="cardCopy">Copy picture</button>
+      <button class="ghost" id="cardText">Copy caption</button>
+      <button class="ghost" id="cardClose">Close</button>
+    </div>
+  </div>
+</div>
 <script>
 (() => {
 /*SHAPES*/
@@ -788,7 +806,7 @@ function showSummary(){
 }
 function shareText(){const s=G.sess,N=s.rounds.length,w=s.rounds.filter(within10).length;
   const head=s.kind==='daily'?'Size Up India #'+dayNum(G.daily.date):'Size Up India · '+packById[s.packId].name;
-  const site=/^https?:$/.test(location.protocol)&&!/claude/.test(location.hostname)?'\n'+location.host:'';
+  const site='\nPlay: https://'+SITE+'/#'+(s.kind==='daily'?'daily':s.packId);
   return head+' · '+totalOf(s)+'/'+N*100+' · '+w+'/'+N+' within 10%\n'+s.rounds.map(r=>tile(r.score)).join('')+site;}
 
 function setPos(v){const rd=cur();if(!rd||rd.done)return;rd.pos=clamp(Math.round(v),0,1000);slider.value=rd.pos;kick();}
@@ -817,6 +835,75 @@ $('copy').addEventListener('click',()=>{
   const t=shareText(),box=$('shareBox');
   const fallback=()=>{box.value=t;box.hidden=false;box.focus();box.select();};
   try{navigator.clipboard.writeText(t).then(()=>{$('toast').hidden=false;setTimeout(()=>$('toast').hidden=true,1800);}).catch(fallback);}catch(e){fallback();}
+});
+/* ---------- shareable result picture ---------- */
+const SITE='size-up-india.pages.dev';
+const TIER=s=>s>=90?'#1C7F47':s>=60?'#A86F00':s>=30?'#D9701E':'#D1362A';
+const fmtDate=d=>{const [y,m,dd]=d.split('-').map(Number);return dd+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1]+' '+y;};
+async function makeCard(){
+  try{await Promise.all(['400 100px "Rozha One"','600 40px Hind','700 40px Hind'].map(f=>document.fonts.load(f)));}catch(e){}
+  const s=G.sess,N=s.rounds.length,total=totalOf(s),w=s.rounds.filter(within10).length;
+  const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+  const DISP='"Rozha One", Georgia, serif',BODY='Hind, "Noto Sans", Arial, sans-serif',INK='#151A2C',MUTED='#586078';
+  g.fillStyle='#EDF0F6';g.fillRect(0,0,W,H);
+  const rr=(x,y,w,h,r)=>{g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();};
+  g.fillStyle='#FFFFFF';rr(44,44,W-88,H-88-170,36);g.fill();
+  g.textBaseline='alphabetic';g.textAlign='left';
+  // title
+  g.font='400 92px '+DISP;const t1='Size Up ',t2='India',tw=g.measureText(t1+t2).width;let x=(W-tw)/2;
+  g.fillStyle=INK;g.fillText(t1,x,170);g.fillStyle='#D1362A';g.fillText(t2,x+g.measureText(t1).width,170);
+  g.textAlign='center';g.fillStyle=MUTED;g.font='600 36px '+BODY;
+  g.fillText(s.kind==='daily'?'Daily #'+dayNum(G.daily.date)+'  ·  '+fmtDate(G.daily.date):packById[s.packId].name+' pack',W/2,228);
+  // score
+  g.font='400 220px '+DISP;const sc=String(total),sw=g.measureText(sc).width;g.font='400 76px '+DISP;const ow=g.measureText(' / '+N*100).width;
+  x=(W-sw-ow)/2;g.textAlign='left';g.fillStyle=INK;g.font='400 220px '+DISP;g.fillText(sc,x,445);g.fillStyle=MUTED;g.font='400 76px '+DISP;g.fillText(' / '+N*100,x+sw,445);
+  g.textAlign='center';g.font='700 40px '+BODY;g.fillStyle=w?'#1C7F47':MUTED;g.fillText(w+' of '+N+' guesses within 10%',W/2,515);
+  // rounds grid
+  const cols=5,rows=Math.ceil(N/cols),gx=88,gw=W-2*gx,cw=gw/cols,top=568,ch=rows===1?400:300,sh=rows===1?250:170;
+  const oc2=document.createElement('canvas'),o2=oc2.getContext('2d');
+  s.rounds.forEach((r,i)=>{
+    const it=byId[r.t],col=i%cols,row=Math.floor(i/cols),cx=gx+cw*col+cw/2,base=top+row*ch+sh,sc=r.score||0,color=TIER(sc);
+    let bw=cw-34,bh=bw/it.aspect;if(bh>sh){bh=sh;bw=bh*it.aspect;}
+    oc2.width=Math.ceil(bw*2);oc2.height=Math.ceil(bh*2);o2.clearRect(0,0,oc2.width,oc2.height);paintShape(o2,it,oc2.width,oc2.height,color);
+    g.drawImage(oc2,cx-bw/2,base-bh,bw,bh);
+    g.fillStyle='#D3D8E5';g.fillRect(cx-cw/2+14,base+4,cw-28,2);
+    g.fillStyle=color;g.font='700 44px '+BODY;g.fillText(String(sc),cx,base+56);
+    g.fillStyle=MUTED;g.font='500 21px '+BODY;let nm=it.name.replace(/,.*$/,'');while(g.measureText(nm).width>cw-16&&nm.length>3)nm=nm.slice(0,-2).trim()+'…';
+    if(nm.endsWith('……'))nm=nm.slice(0,-1);g.fillText(nm,cx,base+86);
+  });
+  // footer
+  g.fillStyle=INK;g.fillRect(0,H-170,W,170);
+  g.fillStyle='#FFFFFF';g.font='600 38px '+BODY;g.fillText('Can you guess closer? Play free at',W/2,H-104);
+  g.fillStyle='#F0B43C';g.font='400 58px '+DISP;g.fillText(SITE,W/2,H-40);
+  return c;
+}
+let cardBlob=null,cardUrl=null;
+async function shareCard(){
+  const btn=$('shareImg');btn.disabled=true;
+  try{
+    const c=await makeCard();cardBlob=await new Promise(r=>c.toBlob(r,'image/png'));
+    const text=shareText(),file=new File([cardBlob],'size-up-india.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],text,title:'Size Up India'});return;}catch(e){if(e&&e.name==='AbortError')return;}
+    }
+    if(cardUrl)URL.revokeObjectURL(cardUrl);cardUrl=URL.createObjectURL(cardBlob);
+    $('cardImg').src=cardUrl;$('cardDl').href=cardUrl;
+    $('cardCopy').hidden=!(navigator.clipboard&&window.ClipboardItem);
+    $('cardView').hidden=false;$('cardClose').focus();
+  }finally{btn.disabled=false;}
+}
+$('shareImg').addEventListener('click',shareCard);
+$('cardClose').addEventListener('click',()=>{$('cardView').hidden=true;$('shareImg').focus();});
+$('cardView').addEventListener('click',e=>{if(e.target===$('cardView'))$('cardClose').click();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('cardView').hidden)$('cardClose').click();});
+$('cardCopy').addEventListener('click',async()=>{
+  try{await navigator.clipboard.write([new ClipboardItem({'image/png':cardBlob})]);$('cardCopy').textContent='Copied';}
+  catch(e){$('cardCopy').textContent='Can’t copy here';}
+  setTimeout(()=>$('cardCopy').textContent='Copy picture',1800);
+});
+$('cardText').addEventListener('click',async()=>{
+  const t=shareText();try{await navigator.clipboard.writeText(t);$('cardText').textContent='Caption copied';}catch(e){$('cardText').textContent='Can’t copy here';}
+  setTimeout(()=>$('cardText').textContent='Copy caption',1800);
 });
 $('again').addEventListener('click',()=>{const id=G.sess.packId;delete G.live[id];openPack(id);});
 $('home2').addEventListener('click',()=>show('home'));
