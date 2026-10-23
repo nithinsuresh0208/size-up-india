@@ -418,13 +418,27 @@ const SND={ctx:null,master:null};
 function ac(){
   if(!G.sound)return null;
   try{
-    if(!SND.ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;SND.ctx=new A();
-      const comp=SND.ctx.createDynamicsCompressor();SND.master=SND.ctx.createGain();SND.master.gain.value=0.8;SND.master.connect(comp);comp.connect(SND.ctx.destination);}
-    if(SND.ctx.state==='suspended')SND.ctx.resume();
+    if(!SND.ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;
+      /* iPhone (iOS 17+): treat game sound like media, so the ring/silent switch doesn't mute it */
+      try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
+      SND.ctx=new A();
+      const comp=SND.ctx.createDynamicsCompressor();SND.master=SND.ctx.createGain();SND.master.gain.value=1;SND.master.connect(comp);comp.connect(SND.ctx.destination);}
+    if(SND.ctx.state!=='running'){const r=SND.ctx.resume();if(r&&r.catch)r.catch(()=>{});}
   }catch(e){return null;}
   return SND.ctx;
 }
-['pointerdown','touchend','keydown'].forEach(ev=>addEventListener(ev,()=>{ac();},{passive:true}));
+/* phones only allow sound after a real tap (touchend/click, not the first touch), so unlock on those.
+   Older iPhones also need a silent <audio> playing to move game sound off the ringer channel. */
+const SILENT='data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSADAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==';
+let silentEl=null;
+function unlockAudio(){
+  const c=ac();if(!c)return;
+  try{const b=c.createBuffer(1,1,22050),s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start(0);}catch(e){}
+  if(!silentEl){try{silentEl=new Audio(SILENT);silentEl.loop=true;silentEl.setAttribute('playsinline','');silentEl.preload='auto';}catch(e){silentEl=null;}}
+  if(silentEl&&silentEl.paused){const p=silentEl.play();if(p&&p.catch)p.catch(()=>{});}
+}
+['touchend','click','keydown','pointerup'].forEach(ev=>addEventListener(ev,unlockAudio,{passive:true,capture:true}));
+document.addEventListener('visibilitychange',()=>{if(document.hidden){try{silentEl&&silentEl.pause();}catch(e){}}});
 function tone(f,dur,o={}){
   const c=ac();if(!c)return;
   const t=c.currentTime+(o.at||0),osc=c.createOscillator(),g=c.createGain();
@@ -440,11 +454,11 @@ function noise(dur,vol,freq){
   s.buffer=b;f.type='lowpass';f.frequency.value=freq||1800;g.gain.value=vol;s.connect(f);f.connect(g);g.connect(SND.master);s.start();
 }
 const sfx={
-  detent(){tone(1500,0.014,{vol:0.025});},
-  thunk(){tone(170,0.2,{type:'triangle',vol:0.5,slide:55});noise(0.06,0.25,1400);},
-  roll(p){tone(300+500*p,0.03,{type:'square',vol:0.035});},
+  detent(){tone(1500,0.018,{vol:0.06});},
+  thunk(){tone(170,0.22,{type:'triangle',vol:0.6,slide:55});tone(340,0.08,{type:'square',vol:0.08});noise(0.07,0.35,1600);},
+  roll(p){tone(300+500*p,0.04,{type:'square',vol:0.07});},
   stamp(){tone(120,0.22,{type:'triangle',vol:0.55,slide:60});noise(0.09,0.35,900);},
-  tick(p){tone(520+780*p,0.035,{type:'triangle',vol:0.09});},
+  tick(p){tone(520+780*p,0.045,{type:'triangle',vol:0.16});},
   whoa(){tone(380,0.28,{type:'sine',vol:0.12,slide:880});tone(760,0.3,{type:'triangle',vol:0.06,slide:1500,at:0.05});},
   finish(score){
     if(score>=100){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,0.4,{type:'triangle',vol:0.16,at:i*0.075}));tone(2093,0.5,{vol:0.06,at:0.3});}
@@ -478,7 +492,7 @@ function confetti(fromEl,n=150){
 const popEl=el=>{el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');};
 const announce=t=>{$('sr').textContent=t;};
 function syncSound(){document.querySelectorAll('.snd').forEach(b=>{b.classList.toggle('muted',!G.sound);b.setAttribute('aria-label',G.sound?'Sound on':'Sound off');b.setAttribute('aria-pressed',String(G.sound));});}
-document.querySelectorAll('.snd').forEach(b=>b.addEventListener('click',()=>{G.sound=!G.sound;save();syncSound();if(G.sound){ac();tone(880,0.12,{type:'triangle',vol:0.12});vib(15);}}));
+document.querySelectorAll('.snd').forEach(b=>b.addEventListener('click',()=>{G.sound=!G.sound;save();syncSound();if(G.sound){unlockAudio();tone(880,0.12,{type:'triangle',vol:0.16});vib(15);}else{try{silentEl&&silentEl.pause();}catch(e){}}}));
 syncSound();
 
 /* ---------- countdown ---------- */
