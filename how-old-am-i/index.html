@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Indian brands ask you one question: how old am I? Guess, then get the jaw-drop facts. A daily puzzle plus Karnataka, food, startup, old-is-gold and sarkari GK packs.">
+<meta property="og:title" content="How Old Am I? · Guess the age of Indian brands">
+<meta property="og:description" content="Amul, Jio, Parle-G, Mysore Sandal Soap… Guess how old they are, then get the whaaat facts.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/how-old-am-i/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#D1362A">
+<link rel="icon" href="/how-old-am-i/favicon.svg" type="image/svg+xml">
+<title>How Old Am I? · Indian brands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<style>
+:root{
+  --bg:#EDF0F6; --card:#FFFFFF; --ink:#151A2C; --muted:#586078; --line:#D3D8E5; --grid:#E7EBF3;
+  --ref:#2C46A4; --tgt:#D1362A; --gold:#A86F00; --good:#1C7F47; --on-tgt:#FFFFFF; --tint:#E3E8F6;
+  --f-display:"Bricolage Grotesque",system-ui,sans-serif; --f-body:"DM Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F121B; --card:#171B27; --ink:#E7E9F2; --muted:#9BA2B9; --line:#2A3042; --grid:#1F2433;
+  --ref:#7F98F2; --tgt:#FF6B57; --gold:#F0B43C; --good:#4CC983; --on-tgt:#1A0D0B; --tint:#1C2236; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F121B; --card:#171B27; --ink:#E7E9F2; --muted:#9BA2B9; --line:#2A3042; --grid:#1F2433;
+  --ref:#7F98F2; --tgt:#FF6B57; --gold:#F0B43C; --good:#4CC983; --on-tgt:#1A0D0B; --tint:#1C2236; color-scheme:dark}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:720px;margin:0 auto;padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{font:800 clamp(2.1rem,7vw,3.1rem)/1 var(--f-display);margin:0;letter-spacing:-.035em}
+h1 a{color:inherit;text-decoration:none}
+h1 .q{color:var(--tgt)}
+h2{letter-spacing:-.02em}
+.lede{margin:-6px 0 0;color:var(--muted);max-width:60ch}
+.eyebrow{font:700 .72rem var(--f-body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.view{display:flex;flex-direction:column;gap:18px;animation:fadein .22s ease-out}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hbtns{display:flex;gap:8px}
+.in-game .hbtns{display:none}
+.icon{flex:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon .off{display:none}.icon.muted .on{display:none}.icon.muted .off{display:inline}
+.primary{font:700 1rem var(--f-body);border:0;border-radius:10px;padding:10px 20px;background:var(--tgt);color:var(--on-tgt);cursor:pointer}
+.ghost{font:600 .95rem var(--f-body);border:1px solid var(--line);border-radius:10px;padding:9px 16px;background:transparent;color:var(--ink);cursor:pointer}
+.step{flex:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 1.3rem var(--f-body);cursor:pointer}
+.primary,.ghost,.step,.icon,.pack{transition:transform .08s,border-color .15s}
+.primary:active,.ghost:active,.step:active,.icon:active{transform:scale(.96)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--ref);outline-offset:2px}
+button:disabled{opacity:.45;cursor:default}
+a.primary{text-decoration:none;display:inline-block}
+
+/* home */
+.daily{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 18px 22px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
+.daily::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--tgt)}
+@media (max-width:520px){.daily{grid-template-columns:1fr}}
+.daily h2{font:700 1.7rem/1.1 var(--f-display);margin:4px 0}
+.daily p{margin:0;color:var(--muted)}
+.daily .score{color:var(--good);font-weight:600}
+.dc-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.flame{font:600 .8rem var(--f-body);background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold);border-radius:999px;padding:1px 9px}
+.cd{font-weight:600;color:var(--ink)}
+.minis{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.mini{font:700 .78rem var(--f-display);letter-spacing:-.01em;border-radius:7px;padding:3px 8px;white-space:nowrap}
+.mini.mystery{background:var(--grid);color:var(--muted)}
+.sec{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:4px}
+.sec h2{font:700 1.6rem var(--f-display);margin:0}
+.sec span{color:var(--muted);font-size:.95rem}
+.packs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:540px){.packs{grid-template-columns:1fr}}
+.pack{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pack:hover{border-color:var(--ref);transform:translateY(-2px)}
+.pack:focus-visible{outline:2px solid var(--ref);outline-offset:2px}
+.pk-strip{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;min-height:28px}
+.pk-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pk-name{font:700 1.15rem var(--f-display);letter-spacing:-.01em}
+.pk-n{font:500 .78rem var(--f-body);color:var(--muted)}
+.pk-sub{color:var(--muted);font-size:.92rem}
+.pk-best{font:500 .82rem var(--f-body);color:var(--muted);margin-top:6px}
+.pk-best.has{color:var(--good)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:620px){.how{grid-template-columns:1fr}}
+.how h3{font:700 1rem var(--f-body);margin:0 0 2px}
+.how p{margin:0;color:var(--muted);font-size:.95rem}
+.how .n{font:700 .72rem var(--f-body);color:var(--tgt);letter-spacing:.07em}
+.xpromo{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-decoration:none;color:inherit}
+.xpromo b{font:700 1.15rem var(--f-display);letter-spacing:-.01em;display:block}
+.xpromo span{color:var(--muted);font-size:.92rem}
+.xpromo i{font-style:normal;font-size:1.4rem}
+.note{color:var(--muted);font-size:.85rem;margin:0;max-width:70ch}
+
+/* game */
+.in-game .wrap{padding-top:14px;gap:12px}
+.in-game h1{font-size:1.6rem}
+@media (max-height:720px){.in-game header{display:none}}
+.gbar{display:flex;align-items:center;gap:12px}
+.gbar .eyebrow{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gbar .ghost{flex:none;padding:9px 12px}
+.runtot{flex:none;font:500 .8rem var(--f-body);color:var(--muted);white-space:nowrap}
+.runtot b{font:800 1.25rem var(--f-display);color:var(--ink);margin-right:3px}
+.vsbanner{background:color-mix(in srgb,var(--ref) 12%,var(--card));border:1px solid color-mix(in srgb,var(--ref) 35%,var(--line));border-radius:12px;padding:10px 14px;font-weight:600}
+.vsbanner b{color:var(--ref)}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:560px){.stage{padding:12px;gap:12px}}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots span{width:18px;height:8px;border-radius:4px;background:var(--grid);border:1px solid var(--line)}
+.dots span.now{border-color:var(--ink)}
+.dots span.t1{background:var(--good);border-color:var(--good)}
+.dots span.t2{background:var(--gold);border-color:var(--gold)}
+.dots span.t3{background:var(--tgt);border-color:var(--tgt)}
+
+.bcard{position:relative;overflow:hidden;border-radius:16px;padding:16px 18px 18px;min-height:178px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;isolation:isolate}
+.bcard .big{position:absolute;right:-6px;bottom:-26px;font-size:8.5rem;line-height:1;opacity:.2;z-index:-1;transform:rotate(-10deg);pointer-events:none}
+.bcard .cat{align-self:flex-start;font:700 .74rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 10px}
+.bcard .nm{font:800 clamp(2rem,9vw,3.3rem)/1 var(--f-display);letter-spacing:-.035em;margin:0;overflow-wrap:anywhere;text-wrap:balance}
+.bubble{align-self:flex-start;position:relative;background:#FFFFFF;color:#151A2C;font:700 1rem var(--f-display);letter-spacing:-.01em;padding:8px 14px;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.bubble::before{content:"";position:absolute;left:18px;top:-7px;border:8px solid transparent;border-top:0;border-bottom-color:#FFFFFF}
+.bubble.pop{animation:pop .45s cubic-bezier(.2,1.6,.4,1)}
+
+.dial{text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:2px}
+.age{display:flex;align-items:baseline;gap:8px;justify-content:center}
+.age b{font:800 clamp(3.6rem,15vw,5rem)/1 var(--f-display);letter-spacing:-.04em;min-width:2ch;text-align:right}
+.age span{font:600 1.05rem var(--f-body);color:var(--muted)}
+.age.real b{color:var(--tgt)}
+.age.pop b{animation:pop .45s cubic-bezier(.2,1.6,.4,1);display:inline-block}
+.born{color:var(--muted);font-weight:500}
+.born b{color:var(--ink)}
+.controls{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+#age{width:100%;min-width:0;accent-color:var(--tgt);height:36px}
+#lock{grid-column:1/-1;padding:13px 20px;font-size:1.05rem}
+#lock.pulse{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--tgt) 55%,transparent)}50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--tgt) 0%,transparent)}}
+.coach{background:var(--ink);color:var(--card);font:600 .9rem var(--f-body);padding:8px 14px;border-radius:999px;align-self:center;text-align:center}
+
+.result{border-top:1px dashed var(--line);padding-top:14px;display:flex;flex-direction:column;gap:14px}
+.scorerow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pts{font:800 3rem/1 var(--f-display);letter-spacing:-.03em;transform-origin:left center}
+.pts small{font:500 .8rem var(--f-body);color:var(--muted);display:block;margin-top:4px;letter-spacing:0}
+.pts.t1{color:var(--good)} .pts.t2{color:var(--gold)} .pts.t3{color:var(--tgt)}
+.pts.pop{animation:pop .42s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.28)}100%{transform:scale(1)}}
+.vblock{display:flex;flex-direction:column;gap:4px;min-width:0}
+.verdict{font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.pill{align-self:flex-start;font:600 .85rem var(--f-body);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.pill.p1{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.pill.p2{background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold)}
+.pill.p3{background:color-mix(in srgb,var(--tgt) 14%,transparent);color:var(--tgt)}
+.vsline{font:600 .92rem var(--f-body);color:var(--ref)}
+.facts{display:flex;flex-direction:column;gap:12px;transition:opacity .3s,transform .3s}
+.facts.pending{opacity:0;transform:translateY(8px)}
+.wow{border-radius:14px;padding:14px 16px;background:color-mix(in srgb,var(--gold) 13%,var(--card));border:1px solid color-mix(in srgb,var(--gold) 35%,var(--line))}
+.wow .k{font:800 1.15rem var(--f-display);letter-spacing:-.01em;display:block;margin-bottom:4px}
+.wow p{margin:0;font-size:1.08rem;line-height:1.45;font-weight:500}
+.ctx{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.ctx li{background:var(--bg);border-radius:10px;padding:8px 12px;font-weight:600}
+.gk{border-left:4px solid var(--ref);padding:2px 0 2px 12px}
+.gk .k{font:700 .72rem var(--f-body);letter-spacing:.07em;text-transform:uppercase;color:var(--ref)}
+.gk p{margin:2px 0 0}
+.more{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.since{margin:0;color:var(--muted);font-size:.85rem}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+.summary{border-top:1px dashed var(--line);padding-top:14px;display:flex;flex-direction:column;gap:12px}
+.stitle{font:800 1.6rem/1.1 var(--f-display);letter-spacing:-.02em;color:var(--tgt)}
+.stitle.pop{animation:pop .5s cubic-bezier(.2,1.6,.4,1);display:inline-block;transform-origin:left center}
+.total{font:800 2.8rem/1 var(--f-display);letter-spacing:-.03em}
+.total span{font:500 .95rem var(--f-body);color:var(--muted);letter-spacing:0}
+.within{font-weight:600}
+.vsbox{background:var(--bg);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.vs-head{font:800 1.35rem/1.15 var(--f-display);letter-spacing:-.02em}
+.vs-sc{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
+.vs-sc b{font:800 1.6rem var(--f-display);color:var(--ink);margin-right:4px}
+.rows{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none}
+.rows li{display:grid;grid-template-columns:1fr auto;gap:10px;padding:6px 0;border-bottom:1px solid var(--grid);align-items:center}
+.rows li > span:first-child{min-width:0}
+.rows small{color:var(--muted);margin-left:6px}
+.two{display:flex;gap:12px;font-weight:600}
+.two i{font-style:normal;color:var(--muted);min-width:2.2em;text-align:right}
+.stats{display:flex;gap:6px 18px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
+.namerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.92rem}
+.namerow input{font:500 1rem var(--f-body);border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card);color:var(--ink);width:12em;max-width:100%}
+#shareBox{width:100%;box-sizing:border-box;font:500 .9rem var(--f-body);border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg);color:var(--ink);resize:none}
+.toast{font:600 .88rem var(--f-body);color:var(--good)}
+
+.cardview{position:fixed;inset:0;background:rgba(10,12,20,.72);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.cv-box,.m-box{background:var(--card);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;color:var(--ink)}
+.cv-box img{width:100%;height:auto;border-radius:10px;display:block}
+.cv-tip{margin:0;color:var(--muted);font-size:.9rem}
+.m-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.m-head h2{font:800 1.7rem var(--f-display);margin:0}
+.st-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center}
+.st-grid b{display:block;font:800 1.7rem/1.1 var(--f-display);letter-spacing:-.02em}
+.st-grid span{font-size:.75rem;color:var(--muted);line-height:1.2;display:block}
+.m-box h3{font:700 1rem var(--f-body);margin:0}
+.hist{display:flex;flex-direction:column;gap:5px}
+.hist div{display:grid;grid-template-columns:5.6em 1fr;gap:8px;align-items:center;font-size:.8rem;color:var(--muted)}
+.hist i{display:block;height:20px;min-width:24px;border-radius:5px;background:var(--line);color:var(--ink);font:600 .78rem/20px var(--f-body);font-style:normal;text-align:right;padding-right:7px;box-sizing:border-box}
+.hist i.now{background:var(--good);color:#fff}
+.st-next{margin:0;color:var(--muted)}
+.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><a href="#" id="logo">How Old <span class="q">Am I?</span></a></h1>
+    <div class="hbtns">
+      <button class="icon" id="statsBtn" aria-label="Your stats" title="Your stats"><svg viewBox="0 0 24 24"><path d="M5 20V12M12 20V5M19 20v-6"/></svg></button>
+      <button class="icon snd" aria-label="Sound on" title="Sound and vibration"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+    </div>
+  </header>
+
+  <section class="view" id="home" aria-label="Home">
+    <p class="lede">Indian brands ask you one question. Guess their age, then get the facts that make you go “whaaat?”</p>
+    <div class="daily">
+      <div>
+        <div class="dc-top"><span class="eyebrow" id="dcLabel">Daily #1</span><span class="flame" id="dcFlame" hidden></span></div>
+        <h2>Today’s five brands</h2>
+        <p id="dcStatus">Same five for everyone. New brands every midnight.</p>
+        <div class="minis" id="dcMinis"></div>
+      </div>
+      <button class="primary" id="dcPlay">Play today’s five</button>
+    </div>
+    <div class="sec"><h2>Packs</h2><span>10 brands each · score out of 1000</span></div>
+    <div class="packs" id="packs"></div>
+    <section class="how" aria-label="How to play">
+      <div><span class="n">STEP 1</span><h3>Meet the brand</h3><p>It asks you: “How old am I?”</p></div>
+      <div><span class="n">STEP 2</span><h3>Guess its age</h3><p>Slide or tap + and − to set your guess in years.</p></div>
+      <div><span class="n">STEP 3</span><h3>Lock it in</h3><p>Within a year scores 100. Then come the shocking facts.</p></div>
+    </section>
+    <a class="xpromo" href="/"><div><b>Also play: Size Up India</b><span>Guess the real size of Indian monuments, rides and everyday things.</span></div><i aria-hidden="true">→</i></a>
+    <p class="note">Ages count from the year shown under each answer: when the brand, company or first product began. Facts were checked against public sources in October 2026.</p>
+  </section>
+
+  <section class="view" id="game" aria-label="Game" hidden>
+    <div class="gbar">
+      <button class="ghost" id="back">← Home</button>
+      <span class="eyebrow" id="roundLabel"></span>
+      <span class="runtot" id="runTot"><b>0</b>pts</span>
+      <button class="icon snd" aria-label="Sound on" title="Sound and vibration"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+    </div>
+    <div class="vsbanner" id="vsBanner" hidden></div>
+    <div class="stage">
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="bcard" id="bcard">
+        <span class="cat" id="bCat"></span>
+        <h2 class="nm" id="bName"></h2>
+        <span class="bubble" id="bubble">How old am I? 👀</span>
+        <span class="big" id="bBig" aria-hidden="true"></span>
+      </div>
+      <div class="dial">
+        <div class="age" id="ageBox"><b id="ageNum">30</b><span id="ageUnit">years old</span></div>
+        <div class="born" id="born"></div>
+      </div>
+      <div class="coach" id="coach" hidden></div>
+      <div class="controls" id="controls">
+        <button class="step" id="minus" aria-label="One year younger">−</button>
+        <input type="range" id="age" min="0" max="1000" step="1" value="500" aria-label="Your age guess">
+        <button class="step" id="plus" aria-label="One year older">+</button>
+        <button class="primary" id="lock">Lock it in</button>
+      </div>
+      <div class="result" id="result" hidden>
+        <div class="scorerow">
+          <div class="pts" id="pts" aria-hidden="true">0<small>of 100</small></div>
+          <div class="vblock"><span class="verdict" id="verdict"></span><span class="pill" id="pill"></span><span class="vsline" id="vsLine" hidden></span></div>
+        </div>
+        <div class="facts" id="facts">
+          <div class="wow"><span class="k">😱 Whaaat?!</span><p id="wow"></p></div>
+          <ul class="ctx" id="ctx"></ul>
+          <div class="gk"><span class="k">📝 GK point</span><p id="gk"></p></div>
+          <ul class="more" id="more"></ul>
+          <p class="since" id="since"></p>
+        </div>
+        <div class="actions"><button class="primary" id="next">Next brand</button></div>
+      </div>
+      <div class="summary" id="summary" hidden>
+        <span class="eyebrow" id="sumLabel"></span>
+        <span class="stitle" id="sTitle"></span>
+        <div class="total" id="total"></div>
+        <span class="within" id="within"></span>
+        <div class="vsbox" id="vsBox" hidden></div>
+        <ul class="rows" id="rows"></ul>
+        <div class="stats" id="stats"></div>
+        <label class="namerow">Your name on the challenge <input id="myName" maxlength="16" placeholder="Your name" autocomplete="given-name"></label>
+        <div class="actions">
+          <button class="primary" id="challenge">Challenge a friend</button>
+          <button class="ghost" id="shareImg">Share picture</button>
+          <button class="ghost" id="copy">Copy text</button>
+          <button class="ghost" id="statsBtn2">Stats</button>
+          <button class="ghost" id="again">Play again</button>
+          <button class="ghost" id="home2">Home</button>
+          <span class="toast" id="toast" hidden>Copied</span>
+        </div>
+        <textarea id="shareBox" rows="3" readonly hidden aria-label="Text to share"></textarea>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="cardview" id="cardView" hidden role="dialog" aria-modal="true" aria-label="Your result picture">
+  <div class="cv-box">
+    <img id="cardImg" alt="Your How Old Am I result">
+    <p class="cv-tip">On a phone, press and hold the picture to save or share it.</p>
+    <div class="actions">
+      <a class="primary" id="cardDl" download="how-old-am-i.jpg">Download</a>
+      <button class="ghost" id="cardCopy">Copy picture</button>
+      <button class="ghost" id="cardText">Copy caption</button>
+      <button class="ghost" id="cardClose">Close</button>
+    </div>
+  </div>
+</div>
+<div class="cardview" id="statsView" hidden role="dialog" aria-modal="true" aria-labelledby="stTitle">
+  <div class="m-box">
+    <div class="m-head"><h2 id="stTitle">Your stats</h2><button class="icon" id="stClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="st-grid" id="stGrid"></div>
+    <h3>Daily scores</h3>
+    <div class="hist" id="hist"></div>
+    <p class="st-next">New brands in <span class="cd">--:--:--</span></p>
+  </div>
+</div>
+<div class="sr" id="sr" aria-live="polite"></div>
+
+<script src="/how-old-am-i/brands.js"></script>
+<script>
+(() => {
+const $=id=>document.getElementById(id);
+const BRANDS=(window.HOAI_BRANDS||[]).filter(b=>b&&b.id&&b.year);
+const byId=Object.fromEntries(BRANDS.map(b=>[b.id,b]));
+const PACKS=[
+ {id:'karnataka',name:'Karnataka Pride',sub:'Mysuru, Bengaluru and beyond',items:['mysoresandal','nandini','akshayakalpa','mtr','infosys','wipro','hal','flipkart','titan','swiggy','hmt','bpl','zerodha','ola']},
+ {id:'food',name:'Snacks & Sips',sub:'Biscuits, milk, masala and cola',items:['parleg','amul','britannia','haldiram','mdh','lijjat','thumsup','rasna','mtr','nandini','akshayakalpa']},
+ {id:'startups',name:'Startups & Tech',sub:'Apps, phones and telecom',items:['jio','airtel','lyf','bpl','blinkit','zomato','paytm','ola','zerodha','nykaa','micromax','flipkart','swiggy','infosys','wipro']},
+ {id:'gold',name:'Old is Gold',sub:'Brands older than your grandparents',items:['tata','godrej','asianpaints','fevicol','nirma','lakme','hero','maruti800','boroline','dabur','amrutanjan','britannia','parleg','mysoresandal','hmt']},
+ {id:'sarkari',name:'Sarkari GK',sub:'For exam toppers: PSUs and institutions',items:['lic','sbi','railways','doordarshan','airindia','isro','indiapost','hal','amul','nandini','mysoresandal','hmt']},
+ {id:'india',name:'All India Mix',sub:'Every brand, any era',items:null},
+];
+const packById=Object.fromEntries(PACKS.map(p=>[p.id,p]));
+const packItems=p=>(p.items||BRANDS.map(b=>b.id)).filter(id=>byId[id]);
+
+/* ---------- utils ---------- */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const pad=n=>String(n).padStart(2,'0');
+const dstr=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const TODAY=dstr(new Date());
+const YESTERDAY=(()=>{const d=new Date();d.setDate(d.getDate()-1);return dstr(d);})();
+const NOW_Y=new Date().getFullYear();
+const LAUNCH=[2026,9,23];
+const dayNum=s=>{const [y,m,d]=s.split('-').map(Number);return Math.round((Date.UTC(y,m-1,d)-Date.UTC(...LAUNCH))/864e5)+1;};
+function hash(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return h>>>0;}
+function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function shuffle(a,rnd=Math.random){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const ease=p=>1-Math.pow(1-p,3);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const ageOf=b=>NOW_Y-b.year;
+const yrs=n=>n+(n===1?' year':' years');
+
+/* the slider is curved so young brands (0–20) get fine control and 150-year-olds are still reachable */
+const MAXA=180,EXP=1.7,START=30;
+const posToAge=p=>Math.round(MAXA*Math.pow(clamp(p,0,1000)/1000,EXP));
+const ageToPos=a=>Math.round(1000*Math.pow(clamp(a,0,MAXA)/MAXA,1/EXP));
+
+/* within a year = 100; the allowance grows with age, so 10 off on a 120-year-old hurts less than on a 10-year-old */
+function scoreOf(g,A){const e=Math.abs(g-A);if(e<=1)return 100;return Math.round(100*Math.exp(-0.7*(e-1)/(2+0.12*A)));}
+const tier=s=>s>=80?1:s>=40?2:3;
+const tile=s=>s>=90?'\u{1F7E9}':s>=60?'\u{1F7E8}':s>=30?'\u{1F7E7}':'\u{1F7E5}';
+const verdictOf=s=>s===100?'Spot on!':s>=80?'So close!':s>=60?'Close':s>=30?'A bit off':'Way off';
+const offLabel=(g,A)=>{const d=g-A;if(Math.abs(d)<=1)return d===0?'Exactly right':'Off by just 1 year';return yrs(Math.abs(d))+(d<0?' too young':' too old');};
+const close3=rd=>Math.abs(rd.guess-ageOf(byId[rd.b]))<=3;
+function titleOf(total,max){const p=total/max;
+  return p>=.95?'Brand historian':p>=.85?'GK topper':p>=.7?'Knows their brands':p>=.55?'Getting there':p>=.4?'Half guessing, half knowing':p>=.25?'Needs a GK book':'Living under a rock';}
+
+/* "same year as" and "older than" lines: real Indian milestones only */
+const SAME={1853:'India’s first passenger train',1913:'India’s first feature film',1930:'the Dandi March',1942:'the Quit India Movement',1947:'Independent India 🇮🇳',1950:'the Republic of India',1969:'the first Moon landing',1983:'India’s first Cricket World Cup win 🏏',1984:'Rakesh Sharma’s trip to space',1991:'India’s 1991 economic reforms',1995:'India’s first mobile phone call',2007:'the first iPhone',2008:'Chandrayaan-1',2011:'India’s 2011 World Cup win 🏏',2014:'Mangalyaan reaching Mars',2016:'demonetisation',2020:'the COVID lockdown',2023:'Chandrayaan-3’s Moon landing'};
+const OLDER=[[1885,'the Indian National Congress'],[1947,'Independent India 🇮🇳'],[1983,'India’s first World Cup win 🏏'],[1995,'India’s first mobile phone call'],[2007,'the first iPhone']];
+function contextOf(b){
+  const out=[];
+  if(SAME[b.year]&&b.id!=='railways')out.push('📅 Born the same year as '+SAME[b.year]+'.');
+  const o=OLDER.find(([y])=>y>b.year);
+  if(o)out.push('👴 Older than '+o[1]+', by '+yrs(o[0]-b.year)+'!');
+  else out.push('👶 Younger than the first iPhone (2007).');
+  return out;
+}
+
+/* ---------- daily + packs ---------- */
+const ALL=BRANDS.map(b=>b.id);
+const ORDER=shuffle(ALL,mulberry(hash('how-old-am-i:order:v1')));
+function dailyIds(date){const k=dayNum(date)-1,N=ORDER.length,out=[];for(let i=0;out.length<5&&i<N;i++){const id=ORDER[(((k*5+i)%N)+N)%N];if(!out.includes(id))out.push(id);}return out;}
+const mkRound=id=>({b:id,pos:ageToPos(START),done:false,guess:null,score:null});
+function packRounds(p){return shuffle(packItems(p)).slice(0,10).map(mkRound);}
+
+/* ---------- state ---------- */
+const KEY='how-old-am-i:v1';
+let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){saved={};}
+const G={view:'home',daily:null,live:{},sess:null,streak:saved.streak||0,lastDone:saved.lastDone||null,best:saved.best||0,packBest:saved.packBest||{},
+  hist:(saved.hist&&typeof saved.hist==='object')?saved.hist:{},maxStreak:Math.max(saved.maxStreak||0,saved.streak||0),
+  sound:saved.sound!==false,tut:!!saved.tut,name:typeof saved.name==='string'?saved.name:''};
+const liveStreak=()=>(G.lastDone===TODAY||G.lastDone===YESTERDAY)?G.streak:0;
+if(saved.daily&&saved.daily.date===TODAY&&Array.isArray(saved.daily.rounds)&&saved.daily.rounds.length===5&&saved.daily.rounds.every(r=>byId[r.b]))G.daily=saved.daily;
+else G.daily={date:TODAY,rounds:dailyIds(TODAY).map(mkRound),idx:0};
+G.daily.kind='daily';
+function save(){try{localStorage.setItem(KEY,JSON.stringify({daily:G.daily,streak:G.streak,lastDone:G.lastDone,best:G.best,packBest:G.packBest,hist:G.hist,maxStreak:G.maxStreak,sound:G.sound,tut:G.tut,name:G.name}));}catch(e){}}
+const cur=()=>G.sess&&G.sess.rounds[Math.min(G.sess.idx,G.sess.rounds.length-1)];
+const isDone=s=>s.idx>=s.rounds.length;
+const totalOf=s=>s.rounds.reduce((a,r)=>a+(r.score||0),0);
+
+/* ---------- feel: sound made in code, vibration, count-ups, confetti ---------- */
+const reduceMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SND={ctx:null,master:null};
+function ac(){
+  if(!G.sound)return null;
+  try{
+    if(!SND.ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;SND.ctx=new A();
+      const comp=SND.ctx.createDynamicsCompressor();SND.master=SND.ctx.createGain();SND.master.gain.value=0.8;SND.master.connect(comp);comp.connect(SND.ctx.destination);}
+    if(SND.ctx.state==='suspended')SND.ctx.resume();
+  }catch(e){return null;}
+  return SND.ctx;
+}
+['pointerdown','touchend','keydown'].forEach(ev=>addEventListener(ev,()=>{ac();},{passive:true}));
+function tone(f,dur,o={}){
+  const c=ac();if(!c)return;
+  const t=c.currentTime+(o.at||0),osc=c.createOscillator(),g=c.createGain();
+  osc.type=o.type||'sine';osc.frequency.setValueAtTime(f,t);if(o.slide)osc.frequency.exponentialRampToValueAtTime(o.slide,t+dur);
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(o.vol||0.15,t+(o.attack||0.005));g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  osc.connect(g);g.connect(SND.master);osc.start(t);osc.stop(t+dur+0.03);
+}
+function noise(dur,vol,freq){
+  const c=ac();if(!c)return;
+  const n=Math.max(1,Math.floor(c.sampleRate*dur)),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+  const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();
+  s.buffer=b;f.type='lowpass';f.frequency.value=freq||1800;g.gain.value=vol;s.connect(f);f.connect(g);g.connect(SND.master);s.start();
+}
+const sfx={
+  detent(){tone(1500,0.014,{vol:0.025});},
+  thunk(){tone(170,0.2,{type:'triangle',vol:0.5,slide:55});noise(0.06,0.25,1400);},
+  roll(p){tone(300+500*p,0.03,{type:'square',vol:0.035});},
+  stamp(){tone(120,0.22,{type:'triangle',vol:0.55,slide:60});noise(0.09,0.35,900);},
+  tick(p){tone(520+780*p,0.035,{type:'triangle',vol:0.09});},
+  whoa(){tone(380,0.28,{type:'sine',vol:0.12,slide:880});tone(760,0.3,{type:'triangle',vol:0.06,slide:1500,at:0.05});},
+  finish(score){
+    if(score>=100){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,0.4,{type:'triangle',vol:0.16,at:i*0.075}));tone(2093,0.5,{vol:0.06,at:0.3});}
+    else if(score>=80){tone(659.25,0.3,{type:'triangle',vol:0.16});tone(987.77,0.4,{type:'triangle',vol:0.15,at:0.09});}
+    else if(score>=40){tone(587.33,0.35,{type:'sine',vol:0.18});}
+    else{tone(233,0.42,{type:'triangle',vol:0.24,slide:110});}
+  }
+};
+const vib=p=>{try{if(G.sound&&navigator.vibrate)navigator.vibrate(p);}catch(e){}};
+/* runs fn(p) each frame for dur ms; returns a handle that can stop it */
+function animate(dur,fn,done){
+  const h={stop:false},t0=performance.now();
+  if(!dur){fn(1);h.stop=true;done&&done();return h;}
+  const f=now=>{if(h.stop)return;const p=clamp((now-t0)/dur,0,1);fn(p);if(p<1)requestAnimationFrame(f);else{h.stop=true;done&&done();}};
+  requestAnimationFrame(f);return h;
+}
+function confetti(fromEl,n=150){
+  if(reduceMotion())return;
+  const c=document.createElement('canvas');c.className='confetti';c.setAttribute('aria-hidden','true');document.body.appendChild(c);
+  const W=innerWidth,H=innerHeight,k=Math.max(1,window.devicePixelRatio||1);c.width=W*k;c.height=H*k;const g=c.getContext('2d');g.scale(k,k);
+  let ox=W/2,oy=H*0.4;try{const r=fromEl.getBoundingClientRect();ox=r.left+r.width/2;oy=r.top+r.height/2;}catch(e){}
+  const cols=[css('--tgt'),css('--ref'),css('--gold'),css('--good'),'#FF9933'];
+  const ps=Array.from({length:n},(_,i)=>{const a=-Math.PI/2+(Math.random()-.5)*Math.PI*1.1,v=7+Math.random()*11;
+    return {x:ox,y:oy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:Math.random()*6,vr:(Math.random()-.5)*.5,w:6+Math.random()*6,h:3+Math.random()*4,c:cols[i%cols.length]};});
+  const t0=performance.now();
+  const f=now=>{const t=now-t0;g.clearRect(0,0,W,H);
+    ps.forEach(p=>{p.vy+=0.38;p.vx*=0.985;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;g.save();g.translate(p.x,p.y);g.rotate(p.r);g.globalAlpha=Math.max(0,1-t/1900);g.fillStyle=p.c;g.fillRect(-p.w/2,-p.h/2,p.w,p.h);g.restore();});
+    if(t<1900)requestAnimationFrame(f);else c.remove();};
+  requestAnimationFrame(f);
+}
+const popEl=el=>{el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');};
+const announce=t=>{$('sr').textContent=t;};
+function syncSound(){document.querySelectorAll('.snd').forEach(b=>{b.classList.toggle('muted',!G.sound);b.setAttribute('aria-label',G.sound?'Sound on':'Sound off');b.setAttribute('aria-pressed',String(G.sound));});}
+document.querySelectorAll('.snd').forEach(b=>b.addEventListener('click',()=>{G.sound=!G.sound;save();syncSound();if(G.sound){ac();tone(880,0.12,{type:'triangle',vol:0.12});vib(15);}}));
+syncSound();
+
+/* ---------- countdown ---------- */
+function msToMidnight(){const n=new Date(),m=new Date(n);m.setHours(24,0,0,0);return m-n;}
+function hms(ms){const s=Math.max(0,Math.floor(ms/1000));return pad(Math.floor(s/3600))+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60);}
+function tickClock(){const t=hms(msToMidnight());document.querySelectorAll('.cd').forEach(e=>{e.textContent=t;});
+  if(dstr(new Date())!==TODAY&&G.view==='home'&&$('statsView').hidden)location.reload();}
+setInterval(tickClock,1000);
+
+/* ---------- home ---------- */
+function mini(b,mystery){const s=document.createElement('span');s.className='mini'+(mystery?' mystery':'');if(mystery)s.textContent='?';else{s.textContent=b.name;s.style.background=b.bg;s.style.color=b.fg;}return s;}
+function buildPacks(){
+  const wrap=$('packs');wrap.innerHTML='';
+  PACKS.forEach(p=>{
+    const btn=document.createElement('button');btn.className='pack';btn.dataset.pack=p.id;
+    const strip=document.createElement('span');strip.className='pk-strip';
+    shuffle(packItems(p),mulberry(hash(p.id))).slice(0,4).forEach(id=>strip.appendChild(mini(byId[id])));
+    const top=document.createElement('span');top.className='pk-top';
+    const nm=document.createElement('span');nm.className='pk-name';nm.textContent=p.name;
+    const n=document.createElement('span');n.className='pk-n';n.textContent=packItems(p).length+' brands';top.append(nm,n);
+    const sub=document.createElement('span');sub.className='pk-sub';sub.textContent=p.sub;
+    const best=document.createElement('span');best.className='pk-best';best.id='best-'+p.id;
+    btn.append(strip,top,sub,best);btn.addEventListener('click',()=>openPack(p.id));wrap.appendChild(btn);
+  });
+}
+function renderHome(){
+  const d=G.daily,st=liveStreak(),fl=$('dcFlame');
+  $('dcLabel').textContent='Daily #'+dayNum(d.date);
+  fl.hidden=!st;fl.textContent='🔥 '+st+(st===1?' day':' days');
+  const S=$('dcStatus');S.textContent='';
+  if(isDone(d)){const s=document.createElement('span');s.className='score';s.textContent='Done: '+totalOf(d)+' / 500';
+    const cd=document.createElement('span');cd.className='cd';cd.textContent=hms(msToMidnight());
+    S.append(s,document.createTextNode(' · New brands in '),cd);$('dcPlay').textContent='See today’s result';}
+  else if(d.idx>0){S.textContent='Brand '+(d.idx+1)+' of 5 · pick up where you left off.';$('dcPlay').textContent='Continue';}
+  else if(st){S.textContent='Keep your '+st+'-day streak alive. Same five for everyone.';$('dcPlay').textContent='Play today’s five';}
+  else{S.textContent='Same five for everyone. New brands every midnight.';$('dcPlay').textContent='Play today’s five';}
+  /* show brands you've already met, keep the rest a mystery */
+  const M=$('dcMinis');M.innerHTML='';d.rounds.forEach(r=>M.appendChild(mini(byId[r.b],!r.done)));
+  PACKS.forEach(p=>{const el=$('best-'+p.id),b=G.packBest[p.id],live=G.live[p.id];
+    if(live&&!isDone(live)&&live.idx>0){el.className='pk-best';el.textContent='In progress · brand '+(live.idx+1)+' of '+live.rounds.length;}
+    else if(b!=null){el.className='pk-best has';el.textContent='Best '+b+' / '+(Math.min(10,packItems(p).length)*100);}
+    else{el.className='pk-best';el.textContent='Not played yet';}});
+}
+
+/* ---------- navigation ---------- */
+function show(v){G.view=v;document.body.classList.toggle('in-game',v==='game');$('home').hidden=v!=='home';$('game').hidden=v!=='game';
+  if(v==='home'){stopSeq();if(location.hash){try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}renderHome();}
+  else renderGame();
+  try{window.scrollTo({top:0});}catch(e){}}
+function openDaily(){G.sess=G.daily;show('game');}
+function openPack(id){let s=G.live[id];if(!s||isDone(s)){s={kind:'pack',packId:id,rounds:packRounds(packById[id]),idx:0};G.live[id]=s;}G.sess=s;show('game');}
+
+/* ---------- challenge links ---------- */
+const SITE='size-up-india.pages.dev/how-old-am-i/';
+const b64e=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const b64d=s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))));
+const baseUrl=()=>/^https?:$/.test(location.protocol)?location.origin+location.pathname:'https://'+SITE;
+function vsLink(s){
+  const v={n:(G.name||'').trim().slice(0,16),k:s.kind==='daily'||(s.vs&&s.vs.k==='d')?'d':'p',r:s.rounds.map(r=>[r.b,r.score||0])};
+  if(v.k==='d')v.d=s.kind==='daily'?s.date:s.vs.d;else v.p=s.packId||(s.vs&&s.vs.p)||'';
+  return baseUrl()+'#vs='+b64e(JSON.stringify(v));
+}
+function readVs(h){
+  try{const j=JSON.parse(b64d(h));if(!j||!Array.isArray(j.r)||j.r.length<1||j.r.length>10)return null;
+    const r=j.r.map(x=>Array.isArray(x)&&byId[x[0]]?[x[0],clamp(Math.round(+x[1]||0),0,100)]:null);
+    if(r.some(x=>!x))return null;
+    const n=typeof j.n==='string'?j.n.replace(/[\u0000-\u001f]/g,'').trim().slice(0,16):'';
+    return {n,k:j.k==='d'?'d':'p',d:typeof j.d==='string'?j.d.slice(0,10):'',p:packById[j.p]?j.p:'',r};
+  }catch(e){return null;}
+}
+const vsName=v=>v.n||'Your friend';
+const vsTotal=v=>v.r.reduce((a,x)=>a+x[1],0);
+function openVs(v){
+  if(v.k==='d'&&v.d===TODAY&&v.r.length===5&&v.r.every((x,i)=>G.daily.rounds[i].b===x[0])){G.daily.vs=v;save();G.sess=G.daily;show('game');return;}
+  G.sess={kind:'vs',vs:v,packId:v.p,rounds:v.r.map(x=>mkRound(x[0])),idx:0};show('game');
+}
+
+/* ---------- game UI ---------- */
+function labelOf(s){
+  if(s.kind==='vs')return(s.vs.k==='d'?'Daily #'+dayNum(s.vs.d||TODAY):s.vs.p?packById[s.vs.p].name:'Challenge')+' · vs '+vsName(s.vs);
+  return s.kind==='daily'?'Daily #'+dayNum(G.daily.date):packById[s.packId].name;}
+const setRunTot=v=>{$('runTot').firstChild.textContent=v;};
+function renderGame(){
+  const s=G.sess,N=s.rounds.length;
+  const dots=$('dots');dots.innerHTML='';
+  s.rounds.forEach((r,i)=>{const d=document.createElement('span');if(r.done)d.className='t'+tier(r.score);else if(i===s.idx)d.className='now';dots.appendChild(d);});
+  if(!seq)setRunTot(totalOf(s));
+  const vb=$('vsBanner');vb.hidden=!(s.vs&&!isDone(s));
+  if(!vb.hidden){vb.textContent='🎯 ';const b=document.createElement('b');b.textContent=vsName(s.vs);vb.append(b,document.createTextNode(' scored '+vsTotal(s.vs)+' / '+s.vs.r.length*100+'. Beat it!'));}
+  if(isDone(s)){$('roundLabel').textContent=labelOf(s)+' · Done';showSummary();renderRound(s.rounds[N-1]);return;}
+  $('summary').hidden=true;
+  $('roundLabel').textContent=labelOf(s)+' · '+(s.idx+1)+' of '+N;
+  renderRound(cur());
+}
+function setDial(age,real,b,guess){
+  $('ageNum').textContent=age;$('ageUnit').textContent=age===1?'year old':'years old';
+  const born=$('born');born.textContent='';
+  if(real){born.append('Born in ');const y=document.createElement('b');y.textContent=String(b.year);born.append(y,' · you said '+(NOW_Y-guess));}
+  else born.textContent='Born in '+(NOW_Y-age)+'?';
+}
+function renderRound(rd){
+  const b=byId[rd.b],A=ageOf(b);
+  const bc=$('bcard');bc.style.background=b.bg;bc.style.color=b.fg;
+  $('bCat').textContent=b.e+'  '+b.cat;$('bName').textContent=b.name;$('bBig').textContent=b.e;
+  const lock=rd.done,live=seq&&seq.rd===rd;
+  $('controls').hidden=lock;
+  $('ageBox').classList.toggle('real',lock&&!live);
+  if(!lock){$('age').value=rd.pos;setDial(posToAge(rd.pos),false,b);$('bubble').textContent='How old am I? 👀';}
+  else if(!live){setDial(A,true,b,rd.guess);$('bubble').textContent=A>=100?'I’m '+A+'! Respect your elders 😎':'I’m '+A+' years old! 😎';}
+  const showRes=lock&&!isDone(G.sess);$('result').hidden=!showRes;
+  $('coach').hidden=!(!G.tut&&!lock);$('lock').classList.toggle('pulse',!G.tut&&!lock&&tutMoved);
+  if(!G.tut&&!lock)$('coach').textContent=tutMoved?'Happy with your guess? Lock it in 👇':'Slide or tap + / − to guess my age';
+  if(showRes){
+    const p=$('pts');
+    if(!live){p.className='pts t'+tier(rd.score);p.firstChild.nodeValue=rd.score;}
+    $('facts').classList.toggle('pending',!!live);
+    $('verdict').textContent=verdictOf(rd.score);
+    const pl=$('pill');pl.className='pill p'+tier(rd.score);pl.textContent=offLabel(rd.guess,A);
+    const vs=G.sess.vs,vl=$('vsLine'),i=G.sess.rounds.indexOf(rd);
+    vl.hidden=!(vs&&vs.r[i]);if(!vl.hidden){const o=vs.r[i][1];vl.textContent=vsName(vs)+' scored '+o+(rd.score>o?' · you win this one 💪':rd.score<o?' · they win this one':' · a tie');}
+    $('wow').textContent=b.wow;
+    const cx=$('ctx');cx.innerHTML='';contextOf(b).forEach(t=>{const li=document.createElement('li');li.textContent=t;cx.appendChild(li);});
+    $('gk').textContent=b.gk;
+    const mo=$('more');mo.innerHTML='';(b.more||[]).forEach(t=>{const li=document.createElement('li');li.textContent=t;mo.appendChild(li);});
+    $('since').textContent='Age counted from: '+b.since+'.';
+    $('next').textContent=G.sess.idx>=G.sess.rounds.length-1?'See your score':'Next brand';
+  }
+}
+
+/* ---------- guessing ---------- */
+let lastDetent=0,tutMoved=false;
+function setPos(v){const rd=cur();if(!rd||rd.done)return;const oldA=posToAge(rd.pos);rd.pos=clamp(Math.round(v),0,1000);$('age').value=rd.pos;
+  const a=posToAge(rd.pos);setDial(a,false,byId[rd.b]);
+  if(a!==oldA){const n=performance.now();if(n-lastDetent>28){sfx.detent();lastDetent=n;}}
+  if(!G.tut&&!tutMoved&&Math.abs(a-START)>=3){tutMoved=true;renderRound(rd);}
+}
+/* + and − move exactly one year */
+function nudge(d){const rd=cur();if(!rd||rd.done)return;const a=clamp(posToAge(rd.pos)+d,0,MAXA);let p=ageToPos(a);
+  if(posToAge(p)===posToAge(rd.pos))p=clamp(rd.pos+(d>0?1:-1)*3,0,1000);setPos(p);}
+$('age').addEventListener('input',e=>setPos(+e.target.value));
+$('minus').addEventListener('click',()=>nudge(-1));
+$('plus').addEventListener('click',()=>nudge(1));
+document.addEventListener('keydown',e=>{if(G.view!=='game'||!$('cardView').hidden||!$('statsView').hidden)return;const rd=cur();if(!rd||rd.done||e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowUp'){e.preventDefault();nudge(1);}else if(e.key==='ArrowDown'){e.preventDefault();nudge(-1);}});
+
+/* ---------- the reveal: thunk → age rolls to the truth → stamp → points count → whaaat ---------- */
+let seq=null;
+function stopSeq(){if(seq){seq.h.forEach(h=>h.stop=true);seq.t.forEach(clearTimeout);}seq=null;}
+function finishReveal(rd){
+  stopSeq();const b=byId[rd.b],A=ageOf(b);
+  renderRound(rd);setRunTot(totalOf(G.sess));
+  $('facts').classList.remove('pending');
+}
+function startReveal(rd){
+  stopSeq();const b=byId[rd.b],A=ageOf(b),g=rd.guess,fast=reduceMotion();
+  const S=seq={rd,h:[],t:[]};
+  const base=totalOf(G.sess)-rd.score;
+  renderGame();
+  const num=$('ageNum'),box=$('ageBox'),p=$('pts'),bub=$('bubble');
+  p.className='pts t3';p.firstChild.nodeValue='0';bub.textContent='Let’s see… 🥁';
+  sfx.thunk();vib(15);
+  let lastV=g,lastT=0;
+  S.h.push(animate(fast?0:Math.min(1400,600+Math.abs(A-g)*12),q=>{
+    const v=Math.round(g+(A-g)*ease(q));
+    if(v!==lastV){num.textContent=v;const n=performance.now();if(n-lastT>40&&q<1){sfx.roll(q);lastT=n;}lastV=v;}
+  },()=>{if(seq!==S)return;
+    setDial(A,true,b,g);box.classList.add('real');popEl(box);sfx.stamp();vib(25);
+    bub.textContent=A>=100?'I’m '+A+'! Respect your elders 😎':'I’m '+A+' years old! 😎';popEl(bub);
+    S.t.push(setTimeout(()=>{if(seq!==S)return;
+      let lt=0;S.h.push(animate(fast?0:650,q=>{const v=Math.round(rd.score*ease(q));p.className='pts t'+tier(v);p.firstChild.nodeValue=v;setRunTot(base+v);
+          const n=performance.now();if(v>0&&q<1&&n-lt>45){sfx.tick(q);lt=n;}},
+        ()=>{if(seq!==S)return;popEl(p);sfx.finish(rd.score);vib(rd.score>=100?[30,60,30]:rd.score>=80?25:12);
+          if(rd.score>=100)confetti(p);
+          S.t.push(setTimeout(()=>{if(seq!==S)return;sfx.whoa();finishReveal(rd);
+            announce(b.name+' is '+A+' years old. You scored '+rd.score+'. '+b.wow);},fast?0:250));}));
+    },fast?0:200));
+  }));
+}
+$('lock').addEventListener('click',()=>{
+  const rd=cur();if(!rd||rd.done)return;
+  rd.guess=posToAge(rd.pos);rd.score=scoreOf(rd.guess,ageOf(byId[rd.b]));rd.done=true;
+  if(!G.tut){G.tut=true;tutMoved=false;}
+  save();startReveal(rd);
+  if(matchMedia('(max-width:560px), (max-height:700px)').matches)setTimeout(()=>{try{$('result').scrollIntoView({behavior:reduceMotion()?'auto':'smooth',block:'start'});}catch(e){}},reduceMotion()?0:1700);
+});
+$('next').addEventListener('click',()=>{
+  const s=G.sess;if(seq){const rd=seq.rd;finishReveal(rd);}
+  s.idx++;
+  if(isDone(s)){const total=totalOf(s);justFinished=true;
+    if(s.kind==='daily'){if(G.lastDone!==s.date){G.streak=G.lastDone===YESTERDAY?G.streak+1:1;G.lastDone=s.date;G.best=Math.max(G.best,total);G.maxStreak=Math.max(G.maxStreak,G.streak);}G.hist[s.date]=total;}
+    else if(s.kind==='pack')G.packBest[s.packId]=Math.max(G.packBest[s.packId]||0,total);}
+  save();renderGame();
+  try{(isDone(s)?$('summary'):$('bcard')).scrollIntoView({behavior:reduceMotion()?'auto':'smooth',block:'start'});}catch(e){}
+});
+
+/* ---------- summary ---------- */
+let justFinished=false;
+function showSummary(){
+  const s=G.sess,N=s.rounds.length,max=N*100,total=totalOf(s),w=s.rounds.filter(close3).length,vs=s.vs;
+  $('result').hidden=true;$('controls').hidden=true;$('summary').hidden=false;$('coach').hidden=true;
+  $('sumLabel').textContent=labelOf(s)+' done';
+  const ti=$('sTitle');ti.textContent=titleOf(total,max);
+  const T=$('total');T.innerHTML='';const tn=document.createTextNode('0');const sp=document.createElement('span');sp.textContent=' / '+max;T.append(tn,sp);
+  $('within').textContent=w+' of '+N+' guesses within 3 years';
+  const vb=$('vsBox');vb.hidden=!vs;vb.textContent='';
+  if(vs){const o=vsTotal(vs),nm=vsName(vs),hd=document.createElement('div');hd.className='vs-head';
+    hd.textContent=total>o?'You beat '+nm+' by '+(total-o)+'! 🏆':total<o?nm+' wins by '+(o-total)+'. Challenge them back!':'A perfect tie with '+nm+'!';
+    const sc=document.createElement('div');sc.className='vs-sc';
+    [['You',total],[nm,o]].forEach(([k,v])=>{const e=document.createElement('span'),b=document.createElement('b');b.textContent=v;e.append(b,document.createTextNode(k));sc.appendChild(e);});
+    vb.append(hd,sc);}
+  const ul=$('rows');ul.innerHTML='';
+  if(vs){const li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('span');b.className='two';
+    const me=document.createElement('b'),them=document.createElement('i');me.textContent='You';them.textContent=vsName(vs).slice(0,8);b.append(me,them);
+    li.style.cssText='font-size:.8rem;color:var(--muted);border-bottom:0;padding-bottom:0';li.append(a,b);ul.appendChild(li);}
+  s.rounds.forEach((r,i)=>{const B=byId[r.b],li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('span');b.className='two';
+    a.textContent=tile(r.score)+' '+B.name;const sm=document.createElement('small');sm.textContent=ageOf(B)+' yrs';a.appendChild(sm);
+    const me=document.createElement('b');me.textContent=r.score;
+    if(vs&&vs.r[i]){const them=document.createElement('i');them.textContent=vs.r[i][1];b.append(me,them);}else b.append(me);
+    li.append(a,b);ul.appendChild(li);});
+  const st=$('stats');st.textContent='';
+  const add=(k,v,cls)=>{const e=document.createElement('span');e.append(document.createTextNode(k+': '));const x=document.createElement('span');if(cls)x.className=cls;x.textContent=v;e.appendChild(x);st.appendChild(e);};
+  if(s.kind==='daily'){const lsk=liveStreak();add('Streak','🔥 '+lsk+(lsk===1?' day':' days'));add('Best',G.best+' / 500');add('New brands in',hms(msToMidnight()),'cd');}
+  else if(s.kind==='pack')add('Best',(G.packBest[s.packId]||total)+' / '+max);
+  $('again').hidden=s.kind!=='pack';$('statsBtn2').hidden=s.kind!=='daily';$('shareBox').hidden=true;
+  $('challenge').textContent=vs?'Challenge back':'Challenge a friend';
+  $('myName').value=G.name;
+  if(justFinished){justFinished=false;const pct=total/max;let lt=0;
+    animate(reduceMotion()?0:1200,q=>{const v=Math.round(total*ease(q));tn.nodeValue=String(v);const n=performance.now();if(v>0&&q<1&&n-lt>45){sfx.tick(q);lt=n;}},()=>{
+      sfx.finish(Math.round(pct*100));popEl(ti);vib(pct>=.8?[30,60,30]:20);
+      if(pct>=.8||(vs&&total>vsTotal(vs)))confetti(T,pct>=.9?200:120);
+      announce('Finished. '+total+' of '+max+'. '+titleOf(total,max)+'.');});}
+  else tn.nodeValue=String(total);
+}
+function whereOf(s){return s.kind==='daily'?'today’s How Old Am I? (Daily #'+dayNum(G.daily.date)+')':s.kind==='vs'?'a How Old Am I? challenge':'How Old Am I? · '+packById[s.packId].name;}
+function shareText(){const s=G.sess,N=s.rounds.length,max=N*100,total=totalOf(s);
+  const sk=s.kind==='daily'&&liveStreak()>1?' · 🔥 '+liveStreak()+'-day streak':'';
+  return '“'+titleOf(total,max)+'” — I scored '+total+'/'+max+' guessing the age of Indian brands in '+whereOf(s)+sk+'. Can you beat me?\n'+s.rounds.map(r=>tile(r.score)).join('')+'\nhttps://'+SITE+'#'+(s.kind==='daily'?'daily':s.packId||'');}
+
+$('copy').addEventListener('click',()=>{
+  const t=shareText(),box=$('shareBox');
+  const fallback=()=>{box.value=t;box.hidden=false;box.focus();box.select();};
+  try{navigator.clipboard.writeText(t).then(()=>{flash('Copied');}).catch(fallback);}catch(e){fallback();}
+});
+function flash(msg){const t=$('toast');t.textContent=msg;t.hidden=false;clearTimeout(flash.t);flash.t=setTimeout(()=>{t.hidden=true;},2000);}
+$('myName').addEventListener('input',e=>{G.name=e.target.value.trim().slice(0,16);save();});
+$('challenge').addEventListener('click',async()=>{
+  const s=G.sess,N=s.rounds.length,total=totalOf(s),url=vsLink(s);
+  const text='I scored '+total+'/'+N*100+' guessing how old Indian brands are — “'+titleOf(total,N*100)+'”. Bet you can’t beat me 👀';
+  if(navigator.share){try{await navigator.share({title:'How Old Am I? challenge',text,url});return;}catch(e){if(e&&e.name==='AbortError')return;}}
+  const all=text+'\n'+url,box=$('shareBox');
+  try{await navigator.clipboard.writeText(all);flash('Challenge link copied');}catch(e){box.value=all;box.hidden=false;box.focus();box.select();}
+});
+
+/* ---------- share picture ---------- */
+const TIER=s=>s>=90?'#1C7F47':s>=60?'#A86F00':s>=30?'#D9701E':'#D1362A';
+async function makeCard(){
+  try{await Promise.all(['800 100px "Bricolage Grotesque"','700 100px "Bricolage Grotesque"','600 40px "DM Sans"','700 40px "DM Sans"'].map(f=>document.fonts.load(f)));}catch(e){}
+  const s=G.sess,N=s.rounds.length,max=N*100,total=totalOf(s),w=s.rounds.filter(close3).length;
+  const W=1080,H=1080,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+  const DISP='"Bricolage Grotesque", Arial, sans-serif',BODY='"DM Sans", Arial, sans-serif',INK='#151A2C',MUTED='#586078',RED='#D1362A';
+  const rr=(x,y,w,h,r)=>{g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();};
+  g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);
+  g.fillStyle='#EDF0F6';g.fillRect(0,0,W,120);
+  g.textBaseline='alphabetic';g.textAlign='left';g.font='800 54px '+DISP;
+  g.fillStyle=INK;g.fillText('How Old ',56,80);g.fillStyle=RED;g.fillText('Am I?',56+g.measureText('How Old ').width,80);
+  g.textAlign='right';g.fillStyle=MUTED;g.font='600 34px '+BODY;
+  g.fillText(s.kind==='daily'?'Daily #'+dayNum(G.daily.date):s.kind==='vs'?'Challenge':packById[s.packId].name,W-56,78);
+  g.textAlign='center';g.fillStyle=INK;
+  {const t=titleOf(total,max);let fs=80;g.font='700 '+fs+'px '+DISP;while(fs>46&&g.measureText(t).width>W-112){fs-=4;g.font='700 '+fs+'px '+DISP;}g.fillText(t,W/2,250);}
+  g.font='800 230px '+DISP;const sc=String(total),sw=g.measureText(sc).width;g.font='700 72px '+DISP;const ow=g.measureText(' / '+max).width;
+  let x=(W-sw-ow)/2;g.textAlign='left';g.fillStyle=RED;g.font='800 230px '+DISP;g.fillText(sc,x,490);
+  g.fillStyle=MUTED;g.font='700 72px '+DISP;g.fillText(' / '+max,x+sw,490);
+  g.textAlign='center';g.font='600 38px '+BODY;g.fillStyle=MUTED;
+  {const sk=s.kind==='daily'&&liveStreak()>1?' · '+liveStreak()+'-day streak':'';g.fillText(w+' of '+N+' within 3 years'+sk,W/2,560);}
+  /* one tile per brand, coloured by score, brand name inside (no logos) */
+  const cols=N>5?5:N,rows=Math.ceil(N/cols),gap=14,tw=Math.min(178,(W-112-gap*(cols-1))/cols),th=rows>1?92:130,y0=600;
+  s.rounds.forEach((r,i)=>{const B=byId[r.b],sc=r.score||0,cx=i%cols,cy=Math.floor(i/cols);
+    const tx=(W-(tw*cols+gap*(cols-1)))/2+cx*(tw+gap),ty=y0+cy*(th+gap);
+    g.fillStyle=TIER(sc);rr(tx,ty,tw,th,16);g.fill();
+    g.fillStyle='#FFFFFF';let fs=Math.round(th*0.24);g.font='800 '+fs+'px '+DISP;
+    let nm=B.name;while(g.measureText(nm).width>tw-20&&fs>14){fs--;g.font='800 '+fs+'px '+DISP;}
+    g.fillText(nm,tx+tw/2,ty+th*0.42);
+    g.font='700 '+Math.round(th*0.3)+'px '+BODY;g.fillText(String(sc),tx+tw/2,ty+th*0.82);});
+  g.fillStyle=INK;g.fillRect(0,H-150,W,150);
+  g.fillStyle='#FFFFFF';g.font='600 34px '+BODY;g.fillText('Can you guess their age? Play free at',W/2,H-92);
+  g.fillStyle='#F0B43C';g.font='800 46px '+DISP;g.fillText(SITE.replace(/\/$/,''),W/2,H-34);
+  return c;
+}
+let cardBlob=null,cardUrl=null;
+async function shareCard(){
+  const btn=$('shareImg');btn.disabled=true;
+  try{
+    const c=await makeCard();cardBlob=await new Promise(r=>c.toBlob(r,'image/jpeg',0.9));
+    const text=shareText(),file=new File([cardBlob],'how-old-am-i.jpg',{type:'image/jpeg'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],text,title:'How Old Am I?'});return;}catch(e){if(e&&e.name==='AbortError')return;}
+    }
+    if(cardUrl)URL.revokeObjectURL(cardUrl);cardUrl=URL.createObjectURL(cardBlob);
+    $('cardImg').src=cardUrl;$('cardDl').href=cardUrl;
+    $('cardDl').hidden=!/^https?:$/.test(location.protocol);
+    $('cardCopy').hidden=!(navigator.clipboard&&window.ClipboardItem);
+    $('cardView').hidden=false;$('cardClose').focus();
+  }finally{btn.disabled=false;}
+}
+$('shareImg').addEventListener('click',shareCard);
+$('cardClose').addEventListener('click',()=>{$('cardView').hidden=true;$('shareImg').focus();});
+$('cardView').addEventListener('click',e=>{if(e.target===$('cardView'))$('cardClose').click();});
+$('cardCopy').addEventListener('click',async()=>{
+  try{const png=await new Promise(r=>{const im=new Image();im.onload=()=>{const k=document.createElement('canvas');k.width=im.naturalWidth;k.height=im.naturalHeight;k.getContext('2d').drawImage(im,0,0);k.toBlob(r,'image/png');};im.src=cardUrl;});await navigator.clipboard.write([new ClipboardItem({'image/png':png})]);$('cardCopy').textContent='Copied';}
+  catch(e){$('cardCopy').textContent='Can’t copy here';}
+  setTimeout(()=>$('cardCopy').textContent='Copy picture',1800);
+});
+$('cardText').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(shareText());$('cardText').textContent='Caption copied';}catch(e){$('cardText').textContent='Can’t copy here';}
+  setTimeout(()=>$('cardText').textContent='Copy caption',1800);
+});
+
+/* ---------- stats ---------- */
+function openStats(){
+  const vals=Object.keys(G.hist).map(d=>G.hist[d]),played=vals.length;
+  const avg=played?Math.round(vals.reduce((a,b)=>a+b,0)/played):0,best=Math.max(G.best,...vals,0);
+  const grid=$('stGrid');grid.textContent='';
+  [[played,'Played'],[avg,'Average'],[best,'Best'],[liveStreak(),'Streak'],[G.maxStreak,'Longest streak']].forEach(([v,k])=>{const d=document.createElement('div'),b=document.createElement('b'),sp=document.createElement('span');b.textContent=v;sp.textContent=k;d.append(b,sp);grid.appendChild(d);});
+  const H=$('hist');H.textContent='';const bk=[0,0,0,0,0];vals.forEach(v=>bk[Math.min(4,Math.floor(v/100))]++);
+  const mx=Math.max(1,...bk),todayB=G.hist[TODAY]!=null?Math.min(4,Math.floor(G.hist[TODAY]/100)):-1;
+  ['0–99','100–199','200–299','300–399','400–500'].forEach((lab,i)=>{const row=document.createElement('div'),l=document.createElement('span'),bar=document.createElement('i');
+    l.textContent=lab;bar.textContent=bk[i];bar.style.width=Math.max(8,bk[i]/mx*100)+'%';if(i===todayB)bar.className='now';row.append(l,bar);H.appendChild(row);});
+  tickClock();$('statsView').hidden=false;$('stClose').focus();
+}
+const closeStats=()=>{$('statsView').hidden=true;};
+$('statsBtn').addEventListener('click',openStats);$('statsBtn2').addEventListener('click',openStats);
+$('stClose').addEventListener('click',closeStats);
+$('statsView').addEventListener('click',e=>{if(e.target===$('statsView'))closeStats();});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('statsView').hidden)closeStats();else if(!$('cardView').hidden)$('cardClose').click();});
+
+$('again').addEventListener('click',()=>{const id=G.sess.packId;delete G.live[id];openPack(id);});
+$('home2').addEventListener('click',()=>show('home'));
+$('back').addEventListener('click',()=>show('home'));
+$('logo').addEventListener('click',e=>{e.preventDefault();show('home');});
+$('dcPlay').addEventListener('click',openDaily);
+
+buildPacks();
+function route(){const h=(location.hash||'').slice(1);
+  const v=h.startsWith('vs=')?readVs(h.slice(3)):null;
+  if(v)openVs(v);else if(h==='daily')openDaily();else if(packById[h])openPack(h);else show('home');}
+route();
+addEventListener('hashchange',()=>{const x=(location.hash||'').slice(1);if(x)route();});
+})();
+</script>
+</body>
+</html>

@@ -9,3 +9,7 @@ A daily size-guessing game. Resize the red shape until it matches the real size 
 - Challenge a friend: a link with the same rounds and your score for each, then a you-vs-them result
 
 A single static `index.html` — no build step. Deployed on Cloudflare Pages.
+
+## How Old Am I?
+
+A second game at `/how-old-am-i/`: Indian brands ask "How old am I?", you guess the age, and the answer comes with a shocking fact, a GK point and "older than…" context. Daily five plus packs (Karnataka Pride, Snacks & Sips, Startups & Tech, Old is Gold, Sarkari GK, All India Mix). Brand data lives in `how-old-am-i/brands.js`; every year and fact was checked against public sources.

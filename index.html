@@ -211,6 +211,12 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .primary,.ghost,.step,.icon,.pack{transition:transform .08s,border-color .15s}
 .primary:active,.ghost:active,.step:active,.icon:active{transform:scale(.96)}
 .in-game .hbtns{display:none}
+.xpromo{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px 14px;text-decoration:none;color:inherit;transition:border-color .15s,transform .15s}
+.xpromo:hover{border-color:var(--tgt);transform:translateY(-2px)}
+.xpromo b{font:800 1.3rem var(--f-display);letter-spacing:-.02em;display:block}
+.xpromo span{color:var(--muted);font-size:.92rem}
+.xpromo i{font-style:normal;font-size:1.4rem;color:var(--tgt)}
+.xpromo .xp-new{position:absolute;top:-9px;left:14px;background:var(--tgt);color:var(--on-tgt);font:700 .7rem var(--f-body);letter-spacing:.07em;text-transform:uppercase;border-radius:999px;padding:2px 9px}
 .view{animation:fadein .22s ease-out}
 @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 h2,.stitle,.vs-head,.runtot b,.st-grid b,.vs-sc b{letter-spacing:-.02em}
@@ -242,6 +248,7 @@ body{font-variant-numeric:tabular-nums}
       </div>
       <button class="primary" id="dcPlay">Play today’s puzzle</button>
     </div>
+    <a class="xpromo" href="/how-old-am-i/"><span class="xp-new">New game</span><div><b>How Old Am I?</b><span>Guess the age of 48 Indian brands like Amul, Jio and Parle-G. Then get the “whaaat?” facts.</span></div><i aria-hidden="true">→</i></a>
     <div class="sec"><h2>Packs</h2><span>10 rounds each · score out of 1000</span></div>
     <div class="packs" id="packs"></div>
     <section class="how" aria-label="How to play">
