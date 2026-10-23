@@ -65,7 +65,6 @@ h1 .q{color:var(--tgt)}
 .pk-best.has{color:var(--good)}
 
 /* game */
-}
 .gbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .gbar .eyebrow{flex:1 1 auto}
 .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px}
@@ -149,7 +148,72 @@ a.primary{text-decoration:none;display:inline-block}
   .gbar{flex-wrap:nowrap}
   .gbar .ghost{padding:9px 12px;flex:none}
   .gbar .eyebrow{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.68rem}
+}
 @media (max-height:600px){.cvwrap{max-height:210px}}
+</style>
+<style>
+/* ---------- hook layer: header icons, streak, running total, count-up, pill, coach, confetti, stats, challenge ---------- */
+header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hbtns{display:flex;gap:8px}
+.icon{flex:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon .off{display:none}.icon.muted .on{display:none}.icon.muted .off{display:inline}
+.daily{position:relative;overflow:hidden}
+.daily::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--tgt)}
+.dc-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.flame{font:600 .8rem var(--f-body);background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold);border-radius:999px;padding:1px 9px}
+.cd{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:500;color:var(--ink)}
+.runtot{flex:none;font:500 .8rem var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.runtot b{font:400 1.25rem var(--f-display);color:var(--ink);margin-right:3px}
+.pts{transform-origin:left center}
+.pts.pop{animation:pop .42s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.28)}100%{transform:scale(1)}}
+.res-body{transition:opacity .25s,transform .25s}
+.res-body.pending{opacity:0;transform:translateY(6px)}
+.vrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{font:600 .82rem var(--f-body);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.pill.p1{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.pill.p2{background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold)}
+.pill.p3{background:color-mix(in srgb,var(--tgt) 14%,transparent);color:var(--tgt)}
+.vsline{font:600 .9rem var(--f-body);color:var(--ref)}
+.coach{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--card);font:600 .9rem var(--f-body);padding:8px 14px;border-radius:999px;pointer-events:none;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.18);max-width:calc(100% - 24px)}
+.coach .hand{display:inline-block;font-size:1.1rem;animation:bob 1.1s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
+#lock.pulse{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--tgt) 55%,transparent)}50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--tgt) 0%,transparent)}}
+.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+.stitle{font:400 1.5rem/1.1 var(--f-display);color:var(--tgt)}
+.stitle.pop{animation:pop .5s cubic-bezier(.2,1.6,.4,1);display:inline-block;transform-origin:left center}
+.vsbanner{background:color-mix(in srgb,var(--ref) 12%,var(--card));border:1px solid color-mix(in srgb,var(--ref) 35%,var(--line));border-radius:12px;padding:10px 14px;font-weight:600}
+.vsbanner b{color:var(--ref)}
+.vsbox{background:var(--bg);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.vs-head{font:400 1.35rem/1.15 var(--f-display)}
+.vs-sc{display:flex;gap:18px;flex-wrap:wrap;font:500 .9rem var(--f-mono);color:var(--muted)}
+.vs-sc b{font:400 1.6rem var(--f-display);color:var(--ink);margin-right:4px}
+.rows .two{display:flex;gap:12px;font:500 .95rem var(--f-mono);font-variant-numeric:tabular-nums}
+.rows .two i{font-style:normal;color:var(--muted);min-width:2.2em;text-align:right}
+.namerow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.92rem}
+.namerow input{font:500 1rem var(--f-body);border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card);color:var(--ink);width:12em;max-width:100%}
+.m-box{background:var(--card);border-radius:16px;padding:18px;max-width:420px;width:100%;max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:14px;color:var(--ink)}
+.m-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.m-head h2{font:400 1.7rem var(--f-display);margin:0}
+.st-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center}
+.st-grid b{display:block;font:400 1.7rem/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.st-grid span{font-size:.75rem;color:var(--muted);line-height:1.2;display:block}
+.m-box h3{font:600 1rem var(--f-body);margin:0}
+.hist{display:flex;flex-direction:column;gap:5px}
+.hist div{display:grid;grid-template-columns:5.6em 1fr;gap:8px;align-items:center;font:500 .78rem var(--f-mono);color:var(--muted)}
+.hist i{display:block;height:20px;min-width:24px;border-radius:5px;background:var(--line);color:var(--ink);font:600 .78rem/20px var(--f-mono);font-style:normal;text-align:right;padding-right:7px;box-sizing:border-box}
+.hist i.now{background:var(--good);color:#fff}
+.st-next{margin:0;color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.toast{transition:opacity .2s}
+.primary,.ghost,.step,.icon,.pack{transition:transform .08s,border-color .15s}
+.primary:active,.ghost:active,.step:active,.icon:active{transform:scale(.96)}
+.in-game .hbtns{display:none}
+.view{animation:fadein .22s ease-out}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 <style>html{-webkit-text-size-adjust:100%}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}</style>
 </head>
@@ -157,13 +221,17 @@ a.primary{text-decoration:none;display:inline-block}
 <div class="wrap">
   <header>
     <h1>Size Up <span class="q">India</span></h1>
+    <div class="hbtns">
+      <button class="icon" id="statsBtn" aria-label="Your stats" title="Your stats"><svg viewBox="0 0 24 24"><path d="M5 20V12M12 20V5M19 20v-6"/></svg></button>
+      <button class="icon snd" aria-label="Sound on" title="Sound and vibration"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+    </div>
   </header>
 
   <section class="view" id="home" aria-label="Home">
     <p class="lede">Guess the real size of Indian monuments, rides and everyday things.</p>
     <div class="daily">
       <div>
-        <span class="eyebrow" id="dcLabel">Daily #1</span>
+        <div class="dc-top"><span class="eyebrow" id="dcLabel">Daily #1</span><span class="flame" id="dcFlame" hidden></span></div>
         <h2>Today’s five</h2>
         <p id="dcStatus">5 rounds, the same for everyone. A new puzzle every midnight.</p>
       </div>
@@ -183,7 +251,10 @@ a.primary{text-decoration:none;display:inline-block}
     <div class="gbar">
       <button class="ghost" id="back">← Home</button>
       <span class="eyebrow" id="roundLabel"></span>
+      <span class="runtot" id="runTot"><b>0</b>pts</span>
+      <button class="icon snd" aria-label="Sound on" title="Sound and vibration"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M17 9l5 6M22 9l-5 6"/></svg></button>
     </div>
+    <div class="vsbanner" id="vsBanner" hidden></div>
     <div class="stage">
       <div class="stage-head">
         <h2 id="prompt">Loading…</h2>
@@ -192,6 +263,7 @@ a.primary{text-decoration:none;display:inline-block}
       <div class="cvwrap" id="cvwrap">
         <canvas id="cv" role="img" aria-label="Size comparison"></canvas>
         <span id="hint">DRAG UP / DOWN</span>
+        <div class="coach" id="coach" hidden><span class="hand" aria-hidden="true">↕</span><span id="coachTxt"></span></div>
       </div>
       <div class="controls" id="controls">
         <button class="step" id="minus" aria-label="Make smaller">−</button>
@@ -203,24 +275,30 @@ a.primary{text-decoration:none;display:inline-block}
         <div class="chip ref"><i></i><div><strong id="refName"></strong><small id="refSize"></small></div></div>
         <div class="chip tgt"><i></i><div><strong id="tgtName"></strong><small id="tgtSize"></small></div></div>
       </div>
-      <div class="result" id="result" hidden aria-live="polite">
-        <div class="pts" id="pts">0<small>of 100</small></div>
-        <div class="res-body">
-          <span class="verdict" id="verdict"></span>
+      <div class="result" id="result" hidden>
+        <div class="pts" id="pts" aria-hidden="true">0<small>of 100</small></div>
+        <div class="res-body" id="resBody">
+          <span class="vrow"><span class="verdict" id="verdict"></span><span class="pill" id="pill"></span></span>
           <span class="nums" id="nums"></span>
+          <span class="vsline" id="vsLine" hidden></span>
           <p class="fact" id="fact"></p>
         </div>
         <div class="actions"><button class="primary" id="next">Next round</button></div>
       </div>
-      <div class="summary" id="summary" hidden aria-live="polite">
+      <div class="summary" id="summary" hidden>
         <span class="eyebrow" id="sumLabel"></span>
+        <span class="stitle" id="sTitle"></span>
         <div class="total" id="total"></div>
         <span class="within" id="within"></span>
+        <div class="vsbox" id="vsBox" hidden></div>
         <ul class="rows" id="rows"></ul>
         <div class="stats" id="stats"></div>
+        <label class="namerow">Your name on the challenge <input id="myName" maxlength="16" placeholder="Your name" autocomplete="given-name"></label>
         <div class="actions">
-          <button class="primary" id="shareImg">Share picture</button>
+          <button class="primary" id="challenge">Challenge a friend</button>
+          <button class="ghost" id="shareImg">Share picture</button>
           <button class="ghost" id="copy">Copy text</button>
+          <button class="ghost" id="statsBtn2">Stats</button>
           <button class="ghost" id="again">Play again</button>
           <button class="ghost" id="home2">Home</button>
           <span class="toast" id="toast" hidden>Copied</span>
@@ -243,6 +321,17 @@ a.primary{text-decoration:none;display:inline-block}
     </div>
   </div>
 </div>
+
+<div class="cardview" id="statsView" hidden role="dialog" aria-modal="true" aria-labelledby="stTitle">
+  <div class="m-box">
+    <div class="m-head"><h2 id="stTitle">Your stats</h2><button class="icon" id="stClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="st-grid" id="stGrid"></div>
+    <h3>Daily scores</h3>
+    <div class="hist" id="hist"></div>
+    <p class="st-next">Next puzzle in <span class="cd">--:--:--</span></p>
+  </div>
+</div>
+<div class="sr" id="sr" aria-live="polite"></div>
 <script>
 (() => {
 /*SHAPES*/
@@ -620,12 +709,22 @@ const tier=s=>s>=80?1:s>=40?2:3;
 const tile=s=>s>=90?'\u{1F7E9}':s>=60?'\u{1F7E8}':s>=30?'\u{1F7E7}':'\u{1F7E5}';
 const verdictOf=s=>s===100?'Spot on!':s>=80?'Very close':s>=60?'Close':s>=30?'A bit off':'Way off';
 const within10=rd=>{const q=rd.guess/byId[rd.t].size;return Math.max(q,1/q)<=1.1;};
+/* a catchy title for a finished set, by share of the max score */
+function titleOf(total,max){const p=total/max;
+  return p>=.95?'Human measuring tape':p>=.85?'Engineer eyes':p>=.7?'Sharp eyes':p>=.55?'Decent guesser':p>=.4?'Just eyeballing it':p>=.25?'Eyes need calibration':'Scale? Never heard of it';}
+/* how far off a guess was, as a short label for the result pill */
+function offLabel(g,T){const q=g/T,off=Math.abs(q-1);if(off<0.01)return 'Almost exact';return (q>1?Math.round(off*100):Math.round((1-q)*100))+'% too '+(q>1?'big':'small');}
 
 function makeRound(tId,rId,rnd){
   const t=byId[tId],r=byId[rId],k=maxDim(t,1),refMax=maxDim(r,r.size);
   const lo=refMax/4/k,hi=refMax*4/k;let s=0.5;
   for(let i=0;i<40;i++){s=0.05+rnd()*0.9;const g=lo*Math.pow(hi/lo,s);if(Math.abs(Math.log(g/t.size))>0.45)break;}
-  return {t:tId,r:rId,lo,hi,pos:Math.round(s*1000),done:false,guess:null,score:null};
+  return {t:tId,r:rId,lo,hi,pos:Math.round(s*1000),start:Math.round(s*1000),done:false,guess:null,score:null};
+}
+/* same round with a known starting position, used to rebuild a friend's challenge exactly */
+function fixedRound(tId,rId,pos){
+  const t=byId[tId],r=byId[rId],k=maxDim(t,1),refMax=maxDim(r,r.size);
+  return {t:tId,r:rId,lo:refMax/4/k,hi:refMax*4/k,pos:clamp(Math.round(pos),0,1000),start:clamp(Math.round(pos),0,1000),done:false,guess:null,score:null};
 }
 function dailyRounds(date){
   const rnd=mulberry(hash('size-up-india:'+date));const pool=shuffle(TARGETS,rnd);
@@ -651,11 +750,15 @@ const gOf=rd=>rd.lo*Math.pow(rd.hi/rd.lo,rd.pos/1000);
 /* ---------- state ---------- */
 const KEY='size-up-india:v1';
 let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){saved={};}
-const G={view:'home',daily:null,live:{},sess:null,streak:saved.streak||0,lastDone:saved.lastDone||null,best:saved.best||0,packBest:saved.packBest||{}};
+const G={view:'home',daily:null,live:{},sess:null,streak:saved.streak||0,lastDone:saved.lastDone||null,best:saved.best||0,packBest:saved.packBest||{},
+  hist:(saved.hist&&typeof saved.hist==='object')?saved.hist:{},maxStreak:Math.max(saved.maxStreak||0,saved.streak||0),
+  sound:saved.sound!==false,tut:!!saved.tut,name:typeof saved.name==='string'?saved.name:''};
+/* the stored streak only counts if the last daily was today or yesterday */
+const liveStreak=()=>(G.lastDone===TODAY||G.lastDone===YESTERDAY)?G.streak:0;
 if(saved.daily&&saved.daily.date===TODAY&&Array.isArray(saved.daily.rounds)&&saved.daily.rounds.length===5&&saved.daily.rounds.every(r=>byId[r.t]&&byId[r.r]))G.daily=saved.daily;
 else G.daily={date:TODAY,rounds:dailyRounds(TODAY),idx:0};
 G.daily.kind='daily';
-function save(){try{localStorage.setItem(KEY,JSON.stringify({daily:G.daily,streak:G.streak,lastDone:G.lastDone,best:G.best,packBest:G.packBest}));}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({daily:G.daily,streak:G.streak,lastDone:G.lastDone,best:G.best,packBest:G.packBest,hist:G.hist,maxStreak:G.maxStreak,sound:G.sound,tut:G.tut,name:G.name}));}catch(e){}}
 const cur=()=>G.sess&&G.sess.rounds[Math.min(G.sess.idx,G.sess.rounds.length-1)];
 const isDone=s=>s.idx>=s.rounds.length;
 const totalOf=s=>s.rounds.reduce((a,r)=>a+(r.score||0),0);
@@ -734,6 +837,86 @@ try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redrawA
 new MutationObserver(redrawAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 try{document.fonts&&document.fonts.ready.then(redrawAll);}catch(e){}
 
+/* ---------- feel: sound (made in code, no files), vibration, count-up, confetti ---------- */
+const reduceMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SND={ctx:null,master:null};
+function ac(){
+  if(!G.sound)return null;
+  try{
+    if(!SND.ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;SND.ctx=new A();
+      const comp=SND.ctx.createDynamicsCompressor();SND.master=SND.ctx.createGain();SND.master.gain.value=0.8;SND.master.connect(comp);comp.connect(SND.ctx.destination);}
+    if(SND.ctx.state==='suspended')SND.ctx.resume();
+  }catch(e){return null;}
+  return SND.ctx;
+}
+/* phones only allow audio after a tap, so wake it on the first one */
+['pointerdown','touchend','keydown'].forEach(ev=>addEventListener(ev,()=>{ac();},{passive:true}));
+function tone(f,dur,o={}){
+  const c=ac();if(!c)return;
+  const t=c.currentTime+(o.at||0),osc=c.createOscillator(),g=c.createGain();
+  osc.type=o.type||'sine';osc.frequency.setValueAtTime(f,t);if(o.slide)osc.frequency.exponentialRampToValueAtTime(o.slide,t+dur);
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(o.vol||0.15,t+(o.attack||0.005));g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  osc.connect(g);g.connect(SND.master);osc.start(t);osc.stop(t+dur+0.03);
+}
+function noise(dur,vol,freq){
+  const c=ac();if(!c)return;
+  const n=Math.max(1,Math.floor(c.sampleRate*dur)),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+  const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();
+  s.buffer=b;f.type='lowpass';f.frequency.value=freq||1800;g.gain.value=vol;s.connect(f);f.connect(g);g.connect(SND.master);s.start();
+}
+const sfx={
+  detent(){tone(1500,0.014,{vol:0.025});},
+  thunk(){tone(170,0.2,{type:'triangle',vol:0.5,slide:55});noise(0.06,0.25,1400);},
+  tick(p){tone(520+780*p,0.035,{type:'triangle',vol:0.09});},
+  finish(score){
+    if(score>=100){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,0.4,{type:'triangle',vol:0.16,at:i*0.075}));tone(2093,0.5,{vol:0.06,at:0.3});}
+    else if(score>=80){tone(659.25,0.3,{type:'triangle',vol:0.16});tone(987.77,0.4,{type:'triangle',vol:0.15,at:0.09});}
+    else if(score>=40){tone(587.33,0.35,{type:'sine',vol:0.18});}
+    else{tone(233,0.42,{type:'triangle',vol:0.24,slide:110});}
+  }
+};
+const vib=p=>{try{if(G.sound&&navigator.vibrate)navigator.vibrate(p);}catch(e){}};
+let lastDetent=0;
+
+/* counts a number up from 0 with ticking sounds; returns a handle to stop it */
+function runCount(to,dur,onVal,onDone){
+  const h={stop:false},t0=performance.now();let lastV=-1,lastT=0;
+  const f=now=>{if(h.stop)return;const p=dur?clamp((now-t0)/dur,0,1):1,v=Math.round(to*ease(p));
+    if(v!==lastV){onVal(v);if(p<1&&v>0&&now-lastT>=45){sfx.tick(p);lastT=now;}lastV=v;}
+    if(p<1)requestAnimationFrame(f);else{h.stop=true;onDone&&onDone();}};
+  if(dur)requestAnimationFrame(f);else{onVal(to);h.stop=true;onDone&&onDone();}
+  return h;
+}
+function confetti(fromEl,n=150){
+  if(reduceMotion())return;
+  const c=document.createElement('canvas');c.className='confetti';c.setAttribute('aria-hidden','true');document.body.appendChild(c);
+  const W=innerWidth,H=innerHeight,k=Math.max(1,window.devicePixelRatio||1);c.width=W*k;c.height=H*k;const g=c.getContext('2d');g.scale(k,k);
+  let ox=W/2,oy=H*0.4;try{const r=fromEl.getBoundingClientRect();ox=r.left+r.width/2;oy=r.top+r.height/2;}catch(e){}
+  const cols=[css('--tgt'),css('--ref'),css('--gold'),css('--good'),'#FF9933'];
+  const ps=Array.from({length:n},(_,i)=>{const a=-Math.PI/2+(Math.random()-.5)*Math.PI*1.1,v=7+Math.random()*11;
+    return {x:ox,y:oy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:Math.random()*6,vr:(Math.random()-.5)*.5,w:6+Math.random()*6,h:3+Math.random()*4,c:cols[i%cols.length]};});
+  const t0=performance.now();
+  const f=now=>{const t=now-t0;g.clearRect(0,0,W,H);
+    ps.forEach(p=>{p.vy+=0.38;p.vx*=0.985;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;g.save();g.translate(p.x,p.y);g.rotate(p.r);g.globalAlpha=Math.max(0,1-t/1900);g.fillStyle=p.c;g.fillRect(-p.w/2,-p.h/2,p.w,p.h);g.restore();});
+    if(t<1900)requestAnimationFrame(f);else c.remove();};
+  requestAnimationFrame(f);
+}
+const popEl=el=>{el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');};
+const announce=t=>{$('sr').textContent=t;};
+function syncSound(){document.querySelectorAll('.snd').forEach(b=>{b.classList.toggle('muted',!G.sound);b.setAttribute('aria-label',G.sound?'Sound on':'Sound off');b.setAttribute('aria-pressed',String(G.sound));});}
+document.querySelectorAll('.snd').forEach(b=>b.addEventListener('click',()=>{G.sound=!G.sound;save();syncSound();if(G.sound){ac();tone(880,0.12,{type:'triangle',vol:0.12});vib(15);}}));
+syncSound();
+
+/* ---------- countdown to the next daily ---------- */
+function msToMidnight(){const n=new Date(),m=new Date(n);m.setHours(24,0,0,0);return m-n;}
+function hms(ms){const s=Math.max(0,Math.floor(ms/1000));return pad(Math.floor(s/3600))+':'+pad(Math.floor(s%3600/60))+':'+pad(s%60);}
+function tickClock(){
+  const t=hms(msToMidnight());document.querySelectorAll('.cd').forEach(e=>{e.textContent=t;});
+  if(dstr(new Date())!==TODAY&&G.view==='home'&&$('statsView').hidden)location.reload();
+}
+setInterval(tickClock,1000);
+
 /* ---------- home ---------- */
 function buildPacks(){
   const wrap=$('packs');wrap.innerHTML='';
@@ -752,10 +935,15 @@ function buildPacks(){
 }
 function renderHome(){
   const n=dayNum(G.daily.date);$('dcLabel').textContent='Daily #'+n;
-  const d=G.daily;
-  if(isDone(d)){$('dcStatus').innerHTML='';const s=document.createElement('span');s.className='score';s.textContent='Done: '+totalOf(d)+' / 500';$('dcStatus').append(s,document.createTextNode(' · Streak '+G.streak+(G.streak===1?' day':' days')+'. Come back tomorrow.'));$('dcPlay').textContent='See today’s result';}
-  else if(d.idx>0){$('dcStatus').textContent='Round '+(d.idx+1)+' of 5 · pick up where you left off.';$('dcPlay').textContent='Continue';}
-  else{$('dcStatus').textContent='5 rounds, the same for everyone. A new puzzle every midnight.';$('dcPlay').textContent='Play today’s puzzle';}
+  const d=G.daily,st=liveStreak(),fl=$('dcFlame');
+  fl.hidden=!st;fl.textContent='🔥 '+st+(st===1?' day':' days');fl.title=st+'-day streak';
+  const S=$('dcStatus');S.textContent='';
+  if(isDone(d)){const s=document.createElement('span');s.className='score';s.textContent='Done: '+totalOf(d)+' / 500';
+    const cd=document.createElement('span');cd.className='cd';cd.textContent=hms(msToMidnight());
+    S.append(s,document.createTextNode(' · Next puzzle in '),cd);$('dcPlay').textContent='See today’s result';}
+  else if(d.idx>0){S.textContent='Round '+(d.idx+1)+' of 5 · pick up where you left off.';$('dcPlay').textContent='Continue';}
+  else if(st){S.textContent='Keep your '+st+'-day streak alive. 5 rounds, the same for everyone.';$('dcPlay').textContent='Play today’s puzzle';}
+  else{S.textContent='5 rounds, the same for everyone. A new puzzle every midnight.';$('dcPlay').textContent='Play today’s puzzle';}
   PACKS.forEach(p=>{const el=$('best-'+p.id),b=G.packBest[p.id],live=G.live[p.id];
     if(live&&!isDone(live)&&live.idx>0){el.className='pk-best';el.textContent='In progress · round '+(live.idx+1)+' of '+live.rounds.length;}
     else if(b!=null){el.className='pk-best has';el.textContent='Best '+b+' / '+(Math.min(10,packItems(p).length)*100);}
@@ -765,21 +953,59 @@ function renderHome(){
 
 /* ---------- navigation ---------- */
 function show(v){G.view=v;document.body.classList.toggle('in-game',v==='game');$('home').hidden=v!=='home';$('game').hidden=v!=='game';
-  if(v==='home')renderHome();else{view.s=null;fit();renderGame();}
+  if(v==='home'){stopCount();if(location.hash){try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}renderHome();}
+  else{view.s=null;fit();renderGame();}
   try{window.scrollTo({top:0});}catch(e){}}
 function openDaily(){G.sess=G.daily;show('game');}
 function openPack(id){let s=G.live[id];if(!s||isDone(s)){s={kind:'pack',packId:id,rounds:packRounds(packById[id]),idx:0};G.live[id]=s;}G.sess=s;show('game');}
 
+/* ---------- challenge links: the friend gets the exact same rounds plus your score for each ---------- */
+const b64e=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const b64d=s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))));
+function vsLink(s){
+  const v={n:(G.name||'').trim().slice(0,16),k:s.kind==='daily'||(s.vs&&s.vs.k==='d')?'d':'p',r:s.rounds.map((r,i)=>[r.t,r.r,r.start!=null?r.start:(s.kind==='daily'?(dailyRounds(s.date)[i]||r).pos:r.pos),r.score||0])};
+  if(v.k==='d')v.d=s.kind==='daily'?s.date:s.vs.d;else v.p=s.packId||(s.vs&&s.vs.p)||'';
+  const base=/^https?:$/.test(location.protocol)?location.origin+location.pathname:'https://'+SITE+'/';
+  return base+'#vs='+b64e(JSON.stringify(v));
+}
+function readVs(h){
+  try{const j=JSON.parse(b64d(h));if(!j||!Array.isArray(j.r)||j.r.length<1||j.r.length>10)return null;
+    const r=j.r.map(x=>Array.isArray(x)&&byId[x[0]]&&!byId[x[0]].refOnly&&byId[x[1]]&&x[0]!==x[1]?[x[0],x[1],clamp(+x[2]||0,0,1000),clamp(Math.round(+x[3]||0),0,100)]:null);
+    if(r.some(x=>!x))return null;
+    const n=typeof j.n==='string'?j.n.replace(/[\u0000-\u001f]/g,'').trim().slice(0,16):'';
+    return {n,k:j.k==='d'?'d':'p',d:typeof j.d==='string'?j.d.slice(0,10):'',p:packById[j.p]?j.p:'',r};
+  }catch(e){return null;}
+}
+const vsName=v=>v.n||'Your friend';
+const vsTotal=v=>v.r.reduce((a,x)=>a+x[3],0);
+function openVs(v){
+  /* today's daily is already the same five rounds, so play it for real and compare */
+  if(v.k==='d'&&v.d===TODAY&&v.r.length===5&&v.r.every((x,i)=>G.daily.rounds[i].t===x[0]&&G.daily.rounds[i].r===x[1])){G.daily.vs=v;save();G.sess=G.daily;show('game');return;}
+  G.sess={kind:'vs',vs:v,packId:v.p,rounds:v.r.map(x=>fixedRound(x[0],x[1],x[2])),idx:0};show('game');
+}
+
 /* ---------- game UI ---------- */
-function labelOf(s){return s.kind==='daily'?'Daily #'+dayNum(G.daily.date):packById[s.packId].name;}
+function labelOf(s){
+  if(s.kind==='vs')return(s.vs.k==='d'?'Daily #'+dayNum(s.vs.d||TODAY):s.vs.p?packById[s.vs.p].name:'Challenge')+' · vs '+vsName(s.vs);
+  return s.kind==='daily'?'Daily #'+dayNum(G.daily.date):packById[s.packId].name;}
+function setRunTot(v){const b=$('runTot').firstChild;b.textContent=v;}
 function renderGame(){
   const s=G.sess,N=s.rounds.length;
   const dots=$('dots');dots.innerHTML='';
   s.rounds.forEach((r,i)=>{const d=document.createElement('span');if(r.done)d.className='t'+tier(r.score);else if(i===s.idx)d.className='now';dots.appendChild(d);});
-  if(isDone(s)){$('roundLabel').textContent=labelOf(s)+' · Finished';showSummary();renderRound(s.rounds[N-1]);return;}
+  if(!counting)setRunTot(totalOf(s));
+  const vb=$('vsBanner');vb.hidden=!(s.vs&&!isDone(s));
+  if(!vb.hidden){vb.textContent='🎯 ';const b=document.createElement('b');b.textContent=vsName(s.vs);vb.append(b,document.createTextNode(' scored '+vsTotal(s.vs)+' / '+s.vs.r.length*100+'. Beat it!'));}
+  if(isDone(s)){$('roundLabel').textContent=labelOf(s)+' · Done';$('coach').hidden=true;showSummary();renderRound(s.rounds[N-1]);return;}
   $('summary').hidden=true;
-  $('roundLabel').textContent=labelOf(s)+' · Round '+(s.idx+1)+' of '+N;
+  $('roundLabel').textContent=labelOf(s)+' · '+(s.idx+1)+' of '+N;
   renderRound(cur());
+}
+/* first-ever round: show how to drag, then point at the lock button */
+let tutStage=0;
+function renderCoach(rd){
+  const on=!G.tut&&!rd.done;$('coach').hidden=!on;$('lock').classList.toggle('pulse',on&&tutStage===1);
+  if(on)$('coachTxt').textContent=tutStage===0?'Drag up or down to resize the red one':'Looks right? Tap Lock it in';
 }
 function renderRound(rd){
   const ref=byId[rd.r],tgt=byId[rd.t];
@@ -794,33 +1020,68 @@ function renderRound(rd){
   const showRes=lock&&!isDone(G.sess);
   $('result').hidden=!showRes;
   if(showRes){
-    const p=$('pts');p.className='pts t'+tier(rd.score);p.firstChild.nodeValue=rd.score;
+    const p=$('pts'),live=counting===rd;
+    if(!live){p.className='pts t'+tier(rd.score);p.firstChild.nodeValue=rd.score;}
+    $('resBody').classList.toggle('pending',live);
     $('verdict').textContent=verdictOf(rd.score);
-    const q=rd.guess/tgt.size,off=Math.abs(q-1);
-    $('nums').textContent='Your guess '+fmt(rd.guess)+' · Real '+fmt(tgt.size)+' · '+(off<0.01?'almost exact':Math.round(off*100)+'% too '+(q>1?'big':'small'));
+    const pl=$('pill');pl.className='pill p'+tier(rd.score);pl.textContent=offLabel(rd.guess,tgt.size);
+    $('nums').textContent='Your guess '+fmt(rd.guess)+' · Real '+fmt(tgt.size);
+    const vs=G.sess.vs,vl=$('vsLine'),i=G.sess.rounds.indexOf(rd);
+    vl.hidden=!(vs&&vs.r[i]);if(!vl.hidden){const o=vs.r[i][3];vl.textContent=vsName(vs)+' scored '+o+' here'+(rd.score>o?' · you win this one 💪':rd.score<o?' · they win this one':' · a tie');}
     $('fact').textContent=tgt.fact;
     $('next').textContent=G.sess.idx>=G.sess.rounds.length-1?'See your score':'Next round';
   }
+  renderCoach(rd);
   kick();
 }
+let justFinished=false;
 function showSummary(){
-  const s=G.sess,N=s.rounds.length,total=totalOf(s),w=s.rounds.filter(within10).length;
+  const s=G.sess,N=s.rounds.length,max=N*100,total=totalOf(s),w=s.rounds.filter(within10).length,vs=s.vs;
   $('result').hidden=true;$('controls').hidden=true;$('summary').hidden=false;
   $('sumLabel').textContent=labelOf(s)+' done';
-  $('total').innerHTML='';$('total').append(String(total)+' ');const sp=document.createElement('span');sp.textContent='/ '+N*100;$('total').append(sp);
+  const ti=$('sTitle');ti.textContent=titleOf(total,max);
+  const T=$('total');T.innerHTML='';const tn=document.createTextNode('0');const sp=document.createElement('span');sp.textContent=' / '+max;T.append(tn,sp);
   $('within').textContent=w+' of '+N+' guesses within 10%';
+  /* you vs friend */
+  const vb=$('vsBox');vb.hidden=!vs;vb.textContent='';
+  if(vs){const o=vsTotal(vs),nm=vsName(vs),hd=document.createElement('div');hd.className='vs-head';
+    hd.textContent=total>o?'You beat '+nm+' by '+(total-o)+'! 🏆':total<o?nm+' wins by '+(o-total)+'. Challenge them back!':'A perfect tie with '+nm+'!';
+    const sc=document.createElement('div');sc.className='vs-sc';
+    [['You',total],[nm,o]].forEach(([k,v])=>{const e=document.createElement('span'),b=document.createElement('b');b.textContent=v;e.append(b,document.createTextNode(k));sc.appendChild(e);});
+    vb.append(hd,sc);}
   const ul=$('rows');ul.innerHTML='';
-  s.rounds.forEach(r=>{const li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('b');a.textContent=tile(r.score)+' '+byId[r.t].name;b.textContent=r.score;li.append(a,b);ul.appendChild(li);});
+  if(vs){const li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('span');b.className='two';
+    const me=document.createElement('b'),them=document.createElement('i');me.textContent='You';them.textContent=vsName(vs).slice(0,8);b.append(me,them);
+    li.style.cssText='font-size:.8rem;color:var(--muted);border-bottom:0;padding-bottom:0';li.append(a,b);ul.appendChild(li);}
+  s.rounds.forEach((r,i)=>{const li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('span');b.className='two';
+    a.textContent=tile(r.score)+' '+byId[r.t].name;const me=document.createElement('b');me.textContent=r.score;
+    if(vs&&vs.r[i]){const them=document.createElement('i');them.textContent=vs.r[i][3];them.title=vsName(vs);b.append(me,them);}else b.append(me);
+    li.append(a,b);ul.appendChild(li);});
   const st=$('stats');st.textContent='';
-  const pairs=s.kind==='daily'?[['Streak',G.streak+(G.streak===1?' day':' days')],['Best',G.best+' / 500'],['Next puzzle','tomorrow']]:[['Best',(G.packBest[s.packId]||total)+' / '+N*100]];
-  pairs.forEach(([k,v])=>{const e=document.createElement('span');e.textContent=k+': '+v;st.appendChild(e);});
-  $('again').hidden=s.kind==='daily';$('shareBox').hidden=true;
+  const add=(k,v,cls)=>{const e=document.createElement('span');e.append(document.createTextNode(k+': '));const x=document.createElement('span');if(cls)x.className=cls;x.textContent=v;e.appendChild(x);st.appendChild(e);};
+  if(s.kind==='daily'){const lsk=liveStreak();add('Streak','🔥 '+lsk+(lsk===1?' day':' days'));add('Best',G.best+' / 500');add('Next puzzle in',hms(msToMidnight()),'cd');}
+  else if(s.kind==='pack')add('Best',(G.packBest[s.packId]||total)+' / '+max);
+  $('again').hidden=s.kind!=='pack';$('statsBtn2').hidden=s.kind!=='daily';$('shareBox').hidden=true;
+  $('challenge').textContent=vs?'Challenge back':'Challenge a friend';
+  $('myName').value=G.name;
+  /* count the total up only right after the last round */
+  if(justFinished){justFinished=false;const pct=total/max;
+    setTimeout(()=>{try{$('summary').scrollIntoView({behavior:reduceMotion()?'auto':'smooth',block:'start'});}catch(e){}},60);
+    runCount(total,reduceMotion()?0:1200,v=>{tn.nodeValue=String(v);},()=>{
+      sfx.finish(Math.round(pct*100));popEl(ti);vib(pct>=.8?[30,60,30]:20);
+      if(pct>=.8||(vs&&total>vsTotal(vs)))confetti(T,pct>=.9?200:120);
+      announce('Finished. '+total+' of '+max+'. '+titleOf(total,max)+'.');});}
+  else tn.nodeValue=String(total);
 }
-function shareText(){const s=G.sess,N=s.rounds.length,w=s.rounds.filter(within10).length;
-  const where=s.kind==='daily'?'today’s Size Up India (Daily #'+dayNum(G.daily.date)+')':'Size Up India, '+packById[s.packId].name+' pack';
-  return 'I scored '+totalOf(s)+'/'+N*100+' in '+where+'. Can you beat me?\n'+s.rounds.map(r=>tile(r.score)).join('')+'\nhttps://'+SITE+'/#'+(s.kind==='daily'?'daily':s.packId);}
+function shareText(){const s=G.sess,N=s.rounds.length,max=N*100,total=totalOf(s);
+  const where=s.kind==='daily'?'today’s Size Up India (Daily #'+dayNum(G.daily.date)+')':s.kind==='vs'?'a Size Up India challenge':'Size Up India, '+packById[s.packId].name+' pack';
+  const sk=s.kind==='daily'&&liveStreak()>1?' · 🔥 '+liveStreak()+'-day streak':'';
+  return '“'+titleOf(total,max)+'” — I scored '+total+'/'+max+' in '+where+sk+'. Can you beat me?\n'+s.rounds.map(r=>tile(r.score)).join('')+'\nhttps://'+SITE+'/#'+(s.kind==='daily'?'daily':s.packId||'');}
 
-function setPos(v){const rd=cur();if(!rd||rd.done)return;rd.pos=clamp(Math.round(v),0,1000);slider.value=rd.pos;kick();}
+function setPos(v){const rd=cur();if(!rd||rd.done)return;const old=rd.pos;rd.pos=clamp(Math.round(v),0,1000);slider.value=rd.pos;
+  if(Math.floor(old/25)!==Math.floor(rd.pos/25)){const n=performance.now();if(n-lastDetent>30){sfx.detent();lastDetent=n;}}
+  if(!G.tut&&tutStage===0&&Math.abs(rd.pos-rd.start)>60){tutStage=1;renderCoach(rd);}
+  kick();}
 slider.addEventListener('input',()=>setPos(+slider.value));
 $('minus').addEventListener('click',()=>setPos(cur().pos-8));
 $('plus').addEventListener('click',()=>setPos(cur().pos+8));
@@ -829,18 +1090,37 @@ cv.addEventListener('pointerdown',e=>{const rd=cur();if(!rd||rd.done)return;drag
 cv.addEventListener('pointermove',e=>{if(!drag)return;setPos(drag.p+(drag.y-e.clientY)*1000/(cv.clientHeight*1.3));});
 const endDrag=()=>{drag=null;};cv.addEventListener('pointerup',endDrag);cv.addEventListener('pointercancel',endDrag);
 
+/* ---------- the lock-in moment: thunk, shape grows, score counts up, then the verdict lands ---------- */
+let counting=null,countH=null;
+function stopCount(){if(countH)countH.stop=true;countH=null;counting=null;}
+function finishRound(rd){
+  counting=null;countH=null;
+  const p=$('pts');p.className='pts t'+tier(rd.score);p.firstChild.nodeValue=rd.score;popEl(p);
+  $('resBody').classList.remove('pending');setRunTot(totalOf(G.sess));
+  sfx.finish(rd.score);vib(rd.score>=100?[30,60,30]:rd.score>=80?25:12);
+  if(rd.score>=100)confetti(p);
+  announce(rd.score+' of 100. '+verdictOf(rd.score)+'. '+offLabel(rd.guess,byId[rd.t].size)+'.');
+}
 $('lock').addEventListener('click',()=>{
   const rd=cur();if(!rd||rd.done)return;rd.guess=gOf(rd);rd.score=scoreOf(rd.guess,byId[rd.t].size);rd.done=true;
-  revealStart=matchMedia('(prefers-reduced-motion: reduce)').matches?0:performance.now();
-  if(G.sess.kind==='daily')save();
-  renderGame();$('next').focus({preventScroll:true});
+  if(!G.tut){G.tut=true;tutStage=0;}
+  revealStart=reduceMotion()?0:performance.now();
+  save();
+  sfx.thunk();vib(15);
+  stopCount();counting=rd;
+  const base=totalOf(G.sess)-rd.score;
+  renderGame();
+  const p=$('pts');p.className='pts t3';p.firstChild.nodeValue='0';
+  countH=runCount(rd.score,revealStart?900:0,v=>{if(counting!==rd)return;p.className='pts t'+tier(v);p.firstChild.nodeValue=v;setRunTot(base+v);},()=>{if(counting===rd)finishRound(rd);});
+  $('next').focus({preventScroll:true});
   if(matchMedia('(max-width:560px), (max-height:600px)').matches)setTimeout(()=>{try{$('result').scrollIntoView({behavior:revealStart?'smooth':'auto',block:'nearest'});}catch(e){}},revealStart?950:0);
 });
 $('next').addEventListener('click',()=>{
-  const s=G.sess;revealStart=0;view.s=null;s.idx++;
-  if(isDone(s)){const total=totalOf(s);
-    if(s.kind==='daily'){if(G.lastDone!==s.date){G.streak=G.lastDone===YESTERDAY?G.streak+1:1;G.lastDone=s.date;G.best=Math.max(G.best,total);}}
-    else G.packBest[s.packId]=Math.max(G.packBest[s.packId]||0,total);}
+  const s=G.sess;if(counting){const rd=counting;stopCount();finishRound(rd);}
+  revealStart=0;view.s=null;s.idx++;
+  if(isDone(s)){const total=totalOf(s);justFinished=true;
+    if(s.kind==='daily'){if(G.lastDone!==s.date){G.streak=G.lastDone===YESTERDAY?G.streak+1:1;G.lastDone=s.date;G.best=Math.max(G.best,total);G.maxStreak=Math.max(G.maxStreak,G.streak);}G.hist[s.date]=total;}
+    else if(s.kind==='pack')G.packBest[s.packId]=Math.max(G.packBest[s.packId]||0,total);}
   save();renderGame();
 });
 $('copy').addEventListener('click',()=>{
@@ -865,14 +1145,15 @@ async function makeCard(){
   g.fillStyle=INK;g.fillText('Size Up ',56,82);g.fillStyle=RED;g.fillText('India',56+g.measureText('Size Up ').width,82);
   g.textAlign='right';g.fillStyle=MUTED;g.font='600 34px '+BODY;
   g.fillText(s.kind==='daily'?'Daily #'+dayNum(G.daily.date):packById[s.packId].name,W-56,80);
-  // challenge
-  g.textAlign='center';g.fillStyle=INK;g.font='400 84px '+DISP;g.fillText('Can you beat me?',W/2,262);
+  // title for the score
+  g.textAlign='center';g.fillStyle=INK;g.font='400 84px '+DISP;
+  {const t=titleOf(total,N*100);let fs=84;while(fs>48&&g.measureText(t).width>W-112){fs-=4;g.font='400 '+fs+'px '+DISP;}g.fillText(t,W/2,262);}
   // score
   g.font='400 250px '+DISP;const sc=String(total),sw=g.measureText(sc).width;g.font='400 80px '+DISP;const ow=g.measureText(' / '+N*100).width;
   let x=(W-sw-ow)/2;g.textAlign='left';g.fillStyle=RED;g.font='400 250px '+DISP;g.fillText(sc,x,520);
   g.fillStyle=MUTED;g.font='400 80px '+DISP;g.fillText(' / '+N*100,x+sw,520);
   g.textAlign='center';g.font='600 40px '+BODY;g.fillStyle=MUTED;
-  g.fillText(w+' of '+N+' guesses within 10%',W/2,590);
+  {const sk=s.kind==='daily'&&liveStreak()>1?' · '+liveStreak()+'-day streak':'';g.fillText(w+' of '+N+' within 10%'+sk,W/2,590);}
   // one coloured tile per round with the place's shape inside
   const gap=14,tw=Math.min(150,(W-112-gap*(N-1))/N),y0=640;let tx=(W-(tw*N+gap*(N-1)))/2;
   const oc2=document.createElement('canvas'),o2=oc2.getContext('2d');
@@ -885,7 +1166,7 @@ async function makeCard(){
     tx+=tw+gap;});
   // footer link
   g.fillStyle=INK;g.fillRect(0,H-150,W,150);
-  g.fillStyle='#FFFFFF';g.font='600 34px '+BODY;g.fillText('Guess the size of India’s famous places',W/2,H-92);
+  g.fillStyle='#FFFFFF';g.font='600 34px '+BODY;g.fillText('Can you beat me? Play free at',W/2,H-92);
   g.fillStyle='#F0B43C';g.font='400 54px '+DISP;g.fillText(SITE,W/2,H-30);
   return c;
 }
@@ -918,6 +1199,33 @@ $('cardText').addEventListener('click',async()=>{
   const t=shareText();try{await navigator.clipboard.writeText(t);$('cardText').textContent='Caption copied';}catch(e){$('cardText').textContent='Can’t copy here';}
   setTimeout(()=>$('cardText').textContent='Copy caption',1800);
 });
+/* challenge a friend: native share sheet on phones, copy on desktop */
+$('myName').addEventListener('input',e=>{G.name=e.target.value.trim().slice(0,16);save();});
+$('challenge').addEventListener('click',async()=>{
+  const s=G.sess,N=s.rounds.length,total=totalOf(s),url=vsLink(s);
+  const text='I scored '+total+'/'+N*100+' on Size Up India — “'+titleOf(total,N*100)+'”. Think you can beat me? 👀';
+  if(navigator.share){try{await navigator.share({title:'Size Up India challenge',text,url});return;}catch(e){if(e&&e.name==='AbortError')return;}}
+  const all=text+'\n'+url,box=$('shareBox');
+  const ok=()=>{const t=$('toast');t.textContent='Challenge link copied';t.hidden=false;setTimeout(()=>{t.hidden=true;t.textContent='Copied';},2000);};
+  try{await navigator.clipboard.writeText(all);ok();}catch(e){box.value=all;box.hidden=false;box.focus();box.select();}
+});
+/* stats */
+function openStats(){
+  const days=Object.keys(G.hist),vals=days.map(d=>G.hist[d]),played=vals.length;
+  const avg=played?Math.round(vals.reduce((a,b)=>a+b,0)/played):0,best=Math.max(G.best,...vals,0);
+  const grid=$('stGrid');grid.textContent='';
+  [[played,'Played'],[avg,'Average'],[best,'Best'],[liveStreak(),'Streak'],[G.maxStreak,'Longest streak']].forEach(([v,k])=>{const d=document.createElement('div'),b=document.createElement('b'),sp=document.createElement('span');b.textContent=v;sp.textContent=k;d.append(b,sp);grid.appendChild(d);});
+  const H=$('hist');H.textContent='';const bk=[0,0,0,0,0];vals.forEach(v=>bk[Math.min(4,Math.floor(v/100))]++);
+  const mx=Math.max(1,...bk),todayB=G.hist[TODAY]!=null?Math.min(4,Math.floor(G.hist[TODAY]/100)):-1;
+  ['0–99','100–199','200–299','300–399','400–500'].forEach((lab,i)=>{const row=document.createElement('div'),l=document.createElement('span'),bar=document.createElement('i');
+    l.textContent=lab;bar.textContent=bk[i];bar.style.width=Math.max(8,bk[i]/mx*100)+'%';if(i===todayB)bar.className='now';row.append(l,bar);H.appendChild(row);});
+  tickClock();$('statsView').hidden=false;$('stClose').focus();
+}
+const closeStats=()=>{$('statsView').hidden=true;};
+$('statsBtn').addEventListener('click',openStats);$('statsBtn2').addEventListener('click',openStats);
+$('stClose').addEventListener('click',closeStats);
+$('statsView').addEventListener('click',e=>{if(e.target===$('statsView'))closeStats();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('statsView').hidden)closeStats();});
 $('again').addEventListener('click',()=>{const id=G.sess.packId;delete G.live[id];openPack(id);});
 $('home2').addEventListener('click',()=>show('home'));
 $('back').addEventListener('click',()=>show('home'));
@@ -925,7 +1233,9 @@ $('dcPlay').addEventListener('click',openDaily);
 
 buildPacks();
 const h=(location.hash||'').slice(1);
-if(h==='daily')openDaily();else if(packById[h])openPack(h);else show('home');
+const vsIn=h.startsWith('vs=')?readVs(h.slice(3)):null;
+if(vsIn)openVs(vsIn);else if(h==='daily')openDaily();else if(packById[h])openPack(h);else show('home');
+addEventListener('hashchange',()=>{const x=(location.hash||'').slice(1);if(x.startsWith('vs=')){const v=readVs(x.slice(3));if(v)openVs(v);}});
 })();
 </script>
 </body>
